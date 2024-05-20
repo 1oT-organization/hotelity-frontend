@@ -296,3 +296,9 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}

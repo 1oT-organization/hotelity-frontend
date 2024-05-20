@@ -180,27 +180,109 @@
             </nav>
             <!-- Navbar End -->
 
-
+<!-- Table Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded-top p-4">
+        <h3 class="mb-4">고객 리스트</h3>
+        <div class="search-container">
+            <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">필터 아이콘</span> &#128269;
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#">고객코드</a></li>
+                    <li><a class="dropdown-item" href="#">이름</a></li>
+                    <li><a class="dropdown-item" href="#">전화번호</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" placeholder="Search" style="width: 200px;">
+            <button class="btn btn-primary ms-2">검색</button>
+        </div>
+        <div class="filter-container">
+            <div class="btn-group me-2">
+                <select class="form-select">
+                    <option selected>고객타입 선택</option>
+                    <option value="1">개인</option>
+                    <option value="2">법인</option>
+                </select>
+            </div>
+            <div class="btn-group me-2">
+                <select class="form-select">
+                    <option selected>멤버십 등급 선택</option>
+                    <option value="1">브론즈</option>
+                    <option value="2">실버</option>
+                    <option value="3">골드</option>
+                    <option value="4">플래티넘</option>
+                    <option value="5">다이아</option>
+                    <option value="6">아이언</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">적용</button>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">고객 코드</th>
+                            <th scope="col">한글 이름</th>
+                            <th scope="col">영문 이름</th>
+                            <th scope="col">성별</th>
+                            <th scope="col">전화번호</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">주소</th>
+                            <th scope="col">멤버십 등급</th>
+                            <th scope="col">국가</th>
+                            <th scope="col">고객 타입</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>이준형</td>
+                            <td>Lee Junhyeong</td>
+                            <td>M</td>
+                            <td>010-1234-1234</td>
+                            <td>jhlee@gmail.com</td>
+                            <td>느그서장 남천동살제</td>
+                            <td>VIP</td>
+                            <td>KR</td>
+                            <td>개인</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>소우주</td>
+                            <td>So U Ju</td>
+                            <td>M</td>
+                            <td>010-3211-1233</td>
+                            <td>universe@gmail.com</td>
+                            <td>소주소주소주</td>
+                            <td>플래티넘</td>
+                            <td>KR</td>
+                            <td>개인</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>배성민</td>
+                            <td>Bae Seongmin</td>
+                            <td>M</td>
+                            <td>010-1111-1111</td>
+                            <td>baebae@gmail.com</td>
+                            <td>주소주소주소</td>
+                            <td>골드</td>
+                            <td>KR</td>
+                            <td>개인</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Table End -->
             
 
-        
 
-            <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                            <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer End -->
         </div>
         <!-- Content End -->
 
