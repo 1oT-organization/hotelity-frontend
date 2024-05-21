@@ -29,6 +29,37 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <style>
+        .filter-container {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            width: 500px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+        }
+
+        .position-relative-container {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,16 +87,8 @@
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>고객 리스트</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
-                        </div>
-                    </div>
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>고객 등록</a>
+                    <a href="" class="nav-item nav-link active"><i class="fa fa-laptop me-2"></i>고객 리스트</a>
+                    <a href="" class="nav-item nav-link"><i class="fa fa-th me-2"></i>고객 등록</a>
                     
                 </div>
             </nav>
@@ -184,10 +207,10 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
         <h3 class="mb-4">고객 리스트</h3>
-        <div class="search-container">
+        <div class="search-container d-flex align-items-center">
             <div class="btn-group">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="visually-hidden">필터 아이콘</span> &#128269;
+                    <i class="bi bi-search"></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item" href="#">고객코드</a></li>
@@ -195,30 +218,37 @@
                     <li><a class="dropdown-item" href="#">전화번호</a></li>
                 </ul>
             </div>
-            <input type="text" class="form-control" placeholder="Search" style="width: 200px;">
+            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
             <button class="btn btn-primary ms-2">검색</button>
         </div>
-        <div class="filter-container">
-            <div class="btn-group me-2">
-                <select class="form-select">
-                    <option selected>고객타입 선택</option>
-                    <option value="1">개인</option>
-                    <option value="2">법인</option>
-                </select>
+        <div class="position-relative-container mt-3">
+            <div class="excel button" style="display: flex;justify-content:left">
+            <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
+            <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
             </div>
-            <div class="btn-group me-2">
-                <select class="form-select">
-                    <option selected>멤버십 등급 선택</option>
-                    <option value="1">브론즈</option>
-                    <option value="2">실버</option>
-                    <option value="3">골드</option>
-                    <option value="4">플래티넘</option>
-                    <option value="5">다이아</option>
-                    <option value="6">아이언</option>
-                </select>
+            <button id="filter-icon" class="btn btn-secondary"><i class="bi bi-funnel"></i></button>
+            <div class="filter-container">
+                <div class="btn-group me-2">
+                    <select class="form-select">
+                        <option selected>고객타입 선택</option>
+                        <option value="1">개인</option>
+                        <option value="2">법인</option>
+                    </select>
+                </div>
+                <div class="btn-group me-2">
+                    <select class="form-select">
+                        <option selected>멤버십 등급 선택</option>
+                        <option value="1">일반</option>
+                        <option value="2">골드</</option>
+                        <option value="3">플래티넘</option>
+                        <option value="4">프리미엄</option>
+                        <option value="5">VIP</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary">적용</button>
             </div>
-            <button class="btn btn-primary">적용</button>
         </div>
+        <br>
         <div class="row">
             <div class="col-12">
                 <table class="table table-striped">
@@ -304,6 +334,14 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#filter-icon').on('click', function() {
+            $('.filter-container').toggle();
+        });
+    });
+</script>
 </body>
 
 </html>
