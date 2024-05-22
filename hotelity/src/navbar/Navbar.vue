@@ -19,24 +19,25 @@
       </div>
   
       <div class="navbar-nav align-items-center ms-auto">
-        <NotificationDropdown />
-        <ProfileDropdown />
+        
       </div>
     </nav>
   </template>
   
   <script>
-  import NotificationDropdown from './NotificationDropdown.vue';
-  import ProfileDropdown from './ProfileDropdown.vue';
+//   import NotificationDropdown from './NotificationDropdown.vue';
+//   import ProfileDropdown from './ProfileDropdown.vue';
   
-  export default {
-    components: {
-      NotificationDropdown,
-      ProfileDropdown,
-    },
-  };
+//   export default {
+//     components: {
+//       NotificationDropdown,
+//       ProfileDropdown,
+//     },
+//   };
   </script>
   
   <style scoped>
-  /* Add your styles here */
+
+  @import "../css/style.css";
+
   </style>
