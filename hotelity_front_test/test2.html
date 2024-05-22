@@ -59,6 +59,70 @@
             display: flex;
             justify-content: space-between;
         }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 300px;
+            padding: 8px 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+        .form-group select {
+            width: 100px;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #4c724d;
+            outline: none;
+        }
+        .form-group .half {
+            display: inline-block;
+            width: calc(50% - 10px);
+        }
+        .form-group .half:first-child {
+            margin-right: 10px;
+        }
+        .form-group .third {
+            display: inline-block;
+            width: calc(33% - 10px);
+        }
+        .form-group .third:first-child {
+            margin-right: 10px;
+        }
+        /*
+        .form-group .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        */
+        .form-group .checkbox-group label {
+            margin: 0 0 0 5px;
+        }
+        .btn-submit {
+            width: 60px;
+            padding: 6px;
+            border: none;
+            border-radius: 5px;
+            background-color: #7f6739;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-submit:hover {
+            background-color: #7eb17f;
+        }
+
+        .form-submit {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            height: 40px;
+        }
     </style>
 </head>
 
@@ -87,8 +151,8 @@
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="test.html" class="nav-item nav-link active"><i class="fa fa-laptop me-2"></i>고객 리스트</a>
-                    <a href="test2.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>고객 등록</a>
+                    <a href="test.html" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>고객 리스트</a>
+                    <a href="test2.html" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>고객 등록</a>
                     
                 </div>
             </nav>
@@ -206,107 +270,73 @@
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">고객 리스트</h3>
-        <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
-                    <i class="bi bi-search"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">고객코드</a></li>
-                    <li><a class="dropdown-item" href="#">이름</a></li>
-                    <li><a class="dropdown-item" href="#">전화번호</a></li>
-                </ul>
+        <h3 class="mb-4">고객 등록</h3>
+        <div class="form-submit">
+        <button type="submit" class="btn-submit">등록</button><br><br>
+    </div>
+        <form>
+
+
+            <div class="form-group">
+                <div class="half">
+                <label for="korean-name">한글 이름:</label>
+                <input type="text" id="korean-name" name="korean-name">
+                </div>
+            
+                <div class="half">
+                <label for="english-name">영문 이름:</label>
+                <input type="text" id="english-name" name="english-name">
+                </div>
             </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
-            <button class="btn btn-primary ms-2">검색</button>
-        </div>
-        <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-            <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
-            <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
+            <div class="form-group">
+                <div class="half">
+                <label for="phone">전화번호:</label>
+                <input type="text" id="phone" name="phone">
+                </div>
+
+                <div class="half">
+                <label for="customer-type">고객 타입:</label>
+                <select id="customer-type" name="customer-type">
+                    <option value="personal">개인</option>
+                    <option value="business">비즈니스</option>
+                </select>
+                </div>
             </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
-            <div class="filter-container">
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>고객타입 선택</option>
-                        <option value="1">개인</option>
-                        <option value="2">법인</option>
+            <div class="form-group">
+                <div class="third">
+                    <label for="country">국가:</label>
+                    <select id="country" name="country">
+                        <option value="kr">대한민국</option>
+                        <option value="us">미국</option>
+                        <option value="jp">일본</option>
+                        <!-- 필요한 다른 국가들 추가 -->
                     </select>
                 </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>멤버십 등급 선택</option>
-                        <option value="1">일반</option>
-                        <option value="2">골드</</option>
-                        <option value="3">플래티넘</option>
-                        <option value="4">프리미엄</option>
-                        <option value="5">VIP</option>
+                <div class="third">
+                    <label for="gender">성별:</label>
+                    <select id="gender" name="gender">
+                        <option value="male">남성</option>
+                        <option value="female">여성</option>
+                        <option value="other">기타</option>
                     </select>
                 </div>
-                <button class="btn btn-primary">적용</button>
+                <div class="third">
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="privacy-consent" name="privacy-consent">
+                    <label for="privacy-consent">개인정보제공동의</label>
+                </div>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">고객 코드</th>
-                            <th scope="col">한글 이름</th>
-                            <th scope="col">영문 이름</th>
-                            <th scope="col">성별</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">주소</th>
-                            <th scope="col">멤버십 등급</th>
-                            <th scope="col">국가</th>
-                            <th scope="col">고객 타입</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>이준형</td>
-                            <td>Lee Junhyeong</td>
-                            <td>M</td>
-                            <td>010-1234-1234</td>
-                            <td>jhlee@gmail.com</td>
-                            <td>느그서장 남천동살제</td>
-                            <td>VIP</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>소우주</td>
-                            <td>So U Ju</td>
-                            <td>M</td>
-                            <td>010-3211-1233</td>
-                            <td>universe@gmail.com</td>
-                            <td>소주소주소주</td>
-                            <td>플래티넘</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>배성민</td>
-                            <td>Bae Seongmin</td>
-                            <td>M</td>
-                            <td>010-1111-1111</td>
-                            <td>baebae@gmail.com</td>
-                            <td>주소주소주소</td>
-                            <td>골드</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email">
             </div>
-        </div>
+            <div class="form-group">
+                <label for="address">주소:</label>
+                <input type="text" id="address" name="address" style="width: 500px;">
+            </div>
+            
+        </form>
     </div>
 </div>
 <!-- Table End -->
