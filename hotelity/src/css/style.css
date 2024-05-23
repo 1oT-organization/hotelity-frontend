@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'LINESeedKR-Bd';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+* {
+    font-family: LINESeedKR-Bd;
+}
+
 /********** Template CSS **********/
 :root {
     --primary: #468143;
@@ -156,7 +167,7 @@
     right: 15px;
     border: none;
     content: "\f107";
-    font-family: "Font Awesome 5 Free";
+    font-family: "LINESeedKR-Bd";
     font-weight: 900;
     transition: .5s;
 }
@@ -213,7 +224,7 @@
     vertical-align: middle;
     border: none;
     content: "\f107";
-    font-family: "Font Awesome 5 Free";
+    font-family: "LINESeedKR-Bd";
     font-weight: 900;
     transition: .5s;
 }
