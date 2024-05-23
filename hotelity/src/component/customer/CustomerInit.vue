@@ -31,9 +31,9 @@
           </div>
   
           <div class="navbar-nav w-100">
-            <router-link to="/test" class="nav-item nav-link"
-              ><i class="fa fa-laptop me-2"></i>고객 리스트</router-link
-            >
+  <router-link to="/test" class="nav-item nav-link">
+    <i class="bi bi-people-fill"></i>고객 리스트
+  </router-link>
             <router-link to="/test2" class="nav-item nav-link active"
               ><i class="fa fa-th me-2"></i>고객 등록</router-link
             >
