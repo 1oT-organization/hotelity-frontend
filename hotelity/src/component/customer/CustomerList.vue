@@ -1,5 +1,54 @@
 
 <script setup>
+
+    import { useRouter } from 'vue-router';
+
+import { ref, onMounted } from 'vue';
+
+const isLoading = ref(true);
+
+onMounted(() => {
+    
+    $('#filter-icon').on('click', function() {
+        $('.filter-container').toggle();
+    });
+});
+
+onMounted(() => {
+  fetchData().then(() => {
+    isLoading.value = false;
+  });
+
+  function fetchData() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 1000); 
+    });
+  }
+
+  // Clock
+  const h1 = document.getElementById("time");
+
+function getTime() {
+  const date = new Date();
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  const second = String(date.getSeconds()).padStart(2, '0');
+  const time = `${hour}:${minute}:${second}`;
+  h1.textContent = time;
+}
+
+// 최초에 한 번 시간 설정
+getTime();
+
+// 1초마다 getTime 함수를 호출하도록 타이머 설정
+setInterval(getTime, 1000);
+
+});
+
+const router = useRouter();
+
 $(document).ready(function() {
         $('#filter-icon').on('click', function() {
             $('.filter-container').toggle();
@@ -8,35 +57,34 @@ $(document).ready(function() {
 </script>
 
 <template>
-  <body>
+    <body>
     <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
+    <div v-if="isLoading" id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
 
 
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary" margin-left="40px"><img src="img/hotelity_logo.png" width="80%"></h3>
+                    <h3 class="text-primary" margin-left="40px"><img src="@/assets/img/hotelity_logo.png" width="80%"></h3>
                 </a>
                 
                 <div class="container">
                     <div class="clock">
-                        <h1 id="time"></h1>
+                        <h1 id="time" style="display: flex; justify-content: center;"></h1>
                     </div>
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="test.html" class="nav-item nav-link active"><i class="fa fa-laptop me-2"></i>고객 리스트</a>
-                    <a href="test2.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>고객 등록</a>
-                    
-                </div>
+                    <router-link to="/customerList" class="nav-item nav-link active"><i class="bi bi-people-fill"></i>고객 리스트</router-link>
+                    <router-link to="/" class="nav-item nav-link"><i class="bi bi-person-fill-add"></i>고객 등록</router-link>
+          </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -71,13 +119,14 @@ $(document).ready(function() {
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-envelope me-lg-2"></i>
+                            <i class="bi bi-envelope-fill"></i>
                             <span class="d-none d-lg-inline-flex">Message</span>
+                            <i class="bi bi-caret-down-fill dropdown-icon"  style="background: none"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -87,7 +136,7 @@ $(document).ready(function() {
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -97,7 +146,7 @@ $(document).ready(function() {
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -110,8 +159,9 @@ $(document).ready(function() {
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
+                            <i class="bi bi-bell-fill"></i>
                             <span class="d-none d-lg-inline-flex">Notificatin</span>
+                            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
@@ -134,8 +184,9 @@ $(document).ready(function() {
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -266,10 +317,18 @@ $(document).ready(function() {
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-    </body>
+</body>
 </template>
 
-<style scoped>
+<style>
+
+@import "@/css/style.css";
+  @import "@/css/bootstrap.min.css"; 
+
+  .dropdown-icon {
+    transition: transform 0.5s;
+}
+
 .filter-container {
             display: none;
             position: absolute;

@@ -1,3 +1,34 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function (event) {
+            event.stopPropagation(); 
+            
+            const icon = toggle.querySelector('.dropdown-icon');
+            if (icon) {
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                icon.style.transform = !isExpanded ? 'rotate(-180deg)' : 'rotate(0deg)';
+            }
+        });
+    });
+
+    document.addEventListener('click', function () {
+        dropdownToggles.forEach(toggle => {
+            const icon = toggle.querySelector('.dropdown-icon');
+            if (icon) {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+});
+
+$(document).ready(function() {
+    $('#filter-icon').on('click', function() {
+        $('.filter-container').toggle();
+    });
+});
+
 (function ($) {
     "use strict";
 
