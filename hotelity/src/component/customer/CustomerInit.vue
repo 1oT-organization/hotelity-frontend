@@ -19,8 +19,8 @@
       <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-secondary navbar-dark">
           <a href="index.html" class="navbar-brand mx-4 mb-3">
-            <h3 class="text-primary" margin-left="40px">
-              <img src='@/assets/img/hotelity_logo.png' width="80%" />
+            <h3 class="text-primary">
+              <img src='@/assets/img/hotelity_logo.png' width="60%" />
             </h3>
           </a>
   
