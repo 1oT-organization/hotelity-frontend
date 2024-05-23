@@ -1,12 +1,20 @@
 <script setup>
+// import CustomerInit from './component/customer/CustomerInit.vue';
+
+// export default {
+//   name: 'App',
+//   components: {
+//     CustomerInit
+//   }
+// };
+
+  import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <header>
-  </header>
 
-  <main>
-  </main>
+  <RouterView/>
+
 </template>
 
 <style scoped>
