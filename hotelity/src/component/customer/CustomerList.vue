@@ -101,7 +101,7 @@ $(document).ready(function() {
                     <i class="fa fa-bars"></i>
                 </a>
                 
-                <div class="navbar-nav align-items-center ms-auto">
+                <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
                 
                     <!-- Existing dropdowns and items -->
             
