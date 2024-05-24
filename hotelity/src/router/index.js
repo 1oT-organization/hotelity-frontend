@@ -5,6 +5,7 @@ import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
 import TestChart from '@/component/TestChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
+import Login from '@/component/login/Login.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,7 +33,12 @@ const router = createRouter({
     {
       path: '/employeeInfo',
       component: EmployeeInfo
+    },
+    {
+      path: '/login',
+      component: Login
     }
+
 ]
 });
 
