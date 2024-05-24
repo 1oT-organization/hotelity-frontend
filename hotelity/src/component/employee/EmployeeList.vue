@@ -82,8 +82,7 @@ $(document).ready(function() {
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
-                    <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
+                    <router-link to="/employeeList" class="nav-item nav-link active"><i class="emoji bi bi-person-vcard-fill"></i>직원 관리</router-link>
           </div>
             </nav>
         </div>
@@ -203,14 +202,14 @@ $(document).ready(function() {
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">고객 리스트</h3>
+        <h3 class="mb-4">직원 리스트</h3>
         <div class="search-container d-flex align-items-center">
             <div class="btn-group">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
                     <i class="bi bi-search"></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">고객코드</a></li>
+                    <li><a class="dropdown-item" href="#">직원코드</a></li>
                     <li><a class="dropdown-item" href="#">이름</a></li>
                     <li><a class="dropdown-item" href="#">전화번호</a></li>
                 </ul>
@@ -227,19 +226,41 @@ $(document).ready(function() {
             <div class="filter-container">
                 <div class="btn-group me-2">
                     <select class="form-select">
-                        <option selected>고객타입 선택</option>
-                        <option value="1">개인</option>
-                        <option value="2">법인</option>
+                        <option selected>지점 선택</option>
+                        <option value="1">HQ</option>
+                        <option value="2">SE</option>
                     </select>
                 </div>
                 <div class="btn-group me-2">
                     <select class="form-select">
-                        <option selected>멤버십 등급 선택</option>
-                        <option value="1">일반</option>
-                        <option value="2">골드</option>
-                        <option value="3">플래티넘</option>
-                        <option value="4">프리미엄</option>
-                        <option value="5">VIP</option>
+                        <option selected>직급 선택</option>
+                        <option value="1">부장</option>
+                        <option value="2">차장</option>
+                        <option value="3">과장</option>
+                        <option value="4">대리</option>
+                        <option value="5">사원</option>
+                        <option value="6">인턴</option>
+                    </select>
+                </div>
+                <div class="btn-group me-2">
+                    <select class="form-select">
+                        <option selected>직급 선택</option>
+                        <option value="1">CEO</option>
+                        <option value="2">본부장</option>
+                        <option value="3">실장</option>
+                        <option value="4">팀장</option>
+                        <option value="5">파트장</option>
+                    </select>
+                </div>
+                <div class="btn-group me-2">
+                    <select class="form-select">
+                        <option selected>부서 선택</option>
+                        <option value="1">운영</option>
+                        <option value="2">기술</option>
+                        <option value="3">마케팅</option>
+                        <option value="4">시설</option>
+                        <option value="5">영업</option>
+                        <option value="6">호텔관리</option>
                     </select>
                 </div>
                 <button class="btn btn-primary">적용</button>
@@ -251,30 +272,30 @@ $(document).ready(function() {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">고객 코드</th>
-                            <th scope="col">한글 이름</th>
-                            <th scope="col">영문 이름</th>
-                            <th scope="col">성별</th>
+                            <th scope="col">직원 코드</th>
+                            <th scope="col">이름</th>
+                            <th scope="col">지점</th>
+                            <th scope="col">직급</th>
+                            <th scope="col">부서</th>
+                            <th scope="col">직책</th>
+                            <th scope="col">내선번호</th>
                             <th scope="col">전화번호</th>
                             <th scope="col">Email</th>
                             <th scope="col">주소</th>
-                            <th scope="col">멤버십 등급</th>
-                            <th scope="col">국가</th>
-                            <th scope="col">고객 타입</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td>이준형</td>
-                            <td>Lee Junhyeong</td>
-                            <td>M</td>
-                            <td>010-1234-1234</td>
-                            <td>jhlee@gmail.com</td>
-                            <td>느그서장 남천동살제</td>
-                            <td>VIP</td>
-                            <td>KR</td>
-                            <td>개인</td>
+                            <td>1</td>
+                            <td>아무개</td>
+                            <td>HQ</td>
+                            <td>높음</td>
+                            <td>좋은 팀</td>
+                            <td>좋은 직책</td>
+                            <td>000</td>
+                            <td>010-4564-4564</td>
+                            <td>으잉?</td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
