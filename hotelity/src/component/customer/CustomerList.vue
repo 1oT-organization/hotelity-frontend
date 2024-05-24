@@ -72,18 +72,18 @@ $(document).ready(function() {
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary" margin-left="40px"><img src="@/assets/img/hotelity_logo.png" width="80%"></h3>
+                    <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="@/assets/img/hotelity_logo.png" width="60%"></h3>
                 </a>
                 
                 <div class="container">
                     <div class="clock">
-                        <h1 id="time" style="display: flex; justify-content: center;"></h1>
+                        <h1 id="time" style="display: flex; justify-content: center; font-family: fantasy; color:#798a69;"></h1>
                     </div>
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <router-link to="/customerList" class="nav-item nav-link active"><i class="bi bi-people-fill"></i>고객 리스트</router-link>
-                    <router-link to="/" class="nav-item nav-link"><i class="bi bi-person-fill-add"></i>고객 등록</router-link>
+                    <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
+                    <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
           </div>
             </nav>
         </div>
@@ -101,7 +101,7 @@ $(document).ready(function() {
                     <i class="fa fa-bars"></i>
                 </a>
                 
-                <div class="navbar-nav align-items-center ms-auto">
+                <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
                 
                     <!-- Existing dropdowns and items -->
             
@@ -119,7 +119,7 @@ $(document).ready(function() {
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-envelope-fill"></i>
+                            <i class="emoji bi bi-envelope-fill"></i>
                             <span class="d-none d-lg-inline-flex">Message</span>
                             <i class="bi bi-caret-down-fill dropdown-icon"  style="background: none"></i>
                         </a>
@@ -159,7 +159,7 @@ $(document).ready(function() {
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell-fill"></i>
+                            <i class="emoji bi bi-bell-fill"></i>
                             <span class="d-none d-lg-inline-flex">Notificatin</span>
                             <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
                         </a>
@@ -357,5 +357,9 @@ $(document).ready(function() {
             position: relative;
             display: flex;
             justify-content: space-between;
+        }
+
+        .emoji {
+            margin-right: 10px;
         }
 </style>
