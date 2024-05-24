@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CustomerInit from '@/component/customer/CustomerInit.vue';
 import CustomerList from '@/component/customer/CustomerList.vue';
+import EmployeeList from '@/component/employee/EmployeeList.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +14,10 @@ const router = createRouter({
       path: '/customerList',
       component: CustomerList
     },
+    {
+      path: '/employeeList',
+      component: EmployeeList
+    }
 ]
 });
 
