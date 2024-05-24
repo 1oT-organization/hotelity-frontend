@@ -223,7 +223,7 @@ $(document).ready(function() {
             <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
-            <div class="filter-container">
+            <div class="filter-container" style="width: 600px;">
                 <div class="btn-group me-2">
                     <select class="form-select">
                         <option selected>지점 선택</option>
@@ -287,7 +287,6 @@ $(document).ready(function() {
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td>1</td>
                             <td>아무개</td>
                             <td>HQ</td>
                             <td>높음</td>
@@ -295,7 +294,8 @@ $(document).ready(function() {
                             <td>좋은 직책</td>
                             <td>000</td>
                             <td>010-4564-4564</td>
-                            <td>으잉?</td>
+                            <td>example@gmail.com</td>
+                            <td>뭐 좋은데 살긋지</td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
