@@ -1,3 +1,26 @@
+// options: {
+//     responsive: true,
+//     maintainAspectRatio: false,
+//     plugins: {
+//       title: {
+//         display: true,
+//         text: 'Custom Chart Title'
+//       },
+//       tooltip: {
+//         callbacks: {
+//           label: function(context) {
+//             let label = context.dataset.label || '';
+//             if (label) {
+//               label += ': ';
+//             }
+//             label += Math.round(context.parsed.y * 100) / 100;
+//             return label;
+//           }
+//         }
+//       }
+//     }
+//   }
+
 document.addEventListener('DOMContentLoaded', function () {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
@@ -89,58 +112,45 @@ $(document).ready(function() {
         nav : false
     });
 
- // Clock
-const h1 = document.getElementById("time");
-
-function getTime() {
-    const date = new Date();
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
-    const second = String(date.getSeconds()).padStart(2, '0');
-    const time = `${hour}:${minute}:${second}`;
-    h1.textContent = time;
-}
-
-// 최초에 한 번 시간 설정
-getTime();
-
-// 1초마다 getTime 함수를 호출하도록 타이머 설정
-setInterval(getTime, 1000);
-    
-
 
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
 
 
-    // Worldwide Sales Chart
     var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
-    var myChart1 = new Chart(ctx1, {
-        type: "bar",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "Test",
-                    data: [15, 30, 55, 65, 60, 80, 95],
-                    backgroundColor: "rgba(57, 81, 68, .7)"
-                },
-                {
-                    label: "Test1",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(79, 111, 82, .5)"
-                },
-                {
-                    label: "Test2",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(131, 168, 135, .3)"
-                }
-            ]
+var myChart1 = new Chart(ctx1, {
+    type: "bar",
+    data: {
+        labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+        datasets: [{
+                label: "USA",
+                data: [15, 30, 55, 65, 60, 80, 95],
+                backgroundColor: "rgba(235, 22, 22, .7)"
             },
-        options: {
-            responsive: true
+            {
+                label: "UK",
+                data: [8, 35, 40, 60, 70, 55, 75],
+                backgroundColor: "rgba(235, 22, 22, .5)"
+            },
+            {
+                label: "AU",
+                data: [12, 25, 45, 55, 65, 70, 60],
+                backgroundColor: "rgba(235, 22, 22, .3)"
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Worldwide Sales'
+            }
         }
-    });
+    }
+});
 
 
     // Salse & Revenue Chart
@@ -152,13 +162,13 @@ setInterval(getTime, 1000);
             datasets: [{
                     label: "Salse",
                     data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(57, 81, 68, .7)",
+                    backgroundColor: "rgba(235, 22, 22, .7)",
                     fill: true
                 },
                 {
                     label: "Revenue",
                     data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(79, 111, 82, .5)",
+                    backgroundColor: "rgba(235, 22, 22, .5)",
                     fill: true
                 }
             ]
@@ -259,4 +269,23 @@ setInterval(getTime, 1000);
 
     
 })(jQuery);
+
+
+ // Clock
+const h1 = document.getElementById("time");
+
+function getTime() {
+    const date = new Date();
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+    const time = `${hour}:${minute}:${second}`;
+    h1.textContent = time;
+}
+
+// 최초에 한 번 시간 설정
+getTime();
+
+// 1초마다 getTime 함수를 호출하도록 타이머 설정
+setInterval(getTime, 1000);
 

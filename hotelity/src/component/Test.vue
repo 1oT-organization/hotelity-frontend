@@ -1,13 +1,46 @@
 
 <script setup>
-
+import { Line } from 'vue-chartjs'
+import { Chart, registerables } from 'chart.js'
     import { useRouter } from 'vue-router';
 
-import { ref, onMounted } from 'vue';
+import { reactive ,ref, onMounted } from 'vue';
+
+Chart.register(...registerables)
+
+const datacollection = reactive({
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'Data One',
+      backgroundColor: '#f87979',
+      data: [40, 39, 10, 40, 39, 80, 40]
+    }
+  ]
+})
+
+const options = reactive({
+  responsive: true,
+  maintainAspectRatio: false
+})
 
 const isLoading = ref(true);
 
+const form = ref({
+  koreanName: '',
+  englishName: '',
+  phone: '',
+  customerType: 'personal',
+  country: 'kr',
+  gender: 'male',
+  birthdate: '',
+  memo: '',
+  visitPurpose: 'leisure',
+  howFind: 'online'
+});
+
 onMounted(() => {
+  
     
     $('#filter-icon').on('click', function() {
         $('.filter-container').toggle();
@@ -47,6 +80,14 @@ setInterval(getTime, 1000);
 
 });
 
+function navigateToCustomerList() {
+  router.push('/customerList');
+}
+
+function navigateToCustomerInit() {
+  router.push('/');
+}
+
 const router = useRouter();
 
 $(document).ready(function() {
@@ -81,9 +122,7 @@ $(document).ready(function() {
                     </div>
                 </div>
 
-                <div class="navbar-nav w-100">
-                    <router-link to="/employeeList" class="nav-item nav-link active"><i class="emoji bi bi-person-vcard-fill"></i>직원 관리</router-link>
-          </div>
+                
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -199,144 +238,72 @@ $(document).ready(function() {
             </nav>
             <!-- Navbar End -->
 
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">직원 리스트</h3>
-        <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
-                    <i class="bi bi-search"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">직원코드</a></li>
-                    <li><a class="dropdown-item" href="#">이름</a></li>
-                    <li><a class="dropdown-item" href="#">전화번호</a></li>
-                </ul>
-            </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
-            <button class="btn btn-primary ms-2">검색</button>
-        </div>
-        <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-            <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
-            <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
-            </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
-            <div class="filter-container" style="width: 600px;">
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>지점 선택</option>
-                        <option value="1">HQ</option>
-                        <option value="2">SE</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">부장</option>
-                        <option value="2">차장</option>
-                        <option value="3">과장</option>
-                        <option value="4">대리</option>
-                        <option value="5">사원</option>
-                        <option value="6">인턴</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">CEO</option>
-                        <option value="2">본부장</option>
-                        <option value="3">실장</option>
-                        <option value="4">팀장</option>
-                        <option value="5">파트장</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>부서 선택</option>
-                        <option value="1">운영</option>
-                        <option value="2">기술</option>
-                        <option value="3">마케팅</option>
-                        <option value="4">시설</option>
-                        <option value="5">영업</option>
-                        <option value="6">호텔관리</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary">적용</button>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">직원 코드</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">지점</th>
-                            <th scope="col">직급</th>
-                            <th scope="col">부서</th>
-                            <th scope="col">직책</th>
-                            <th scope="col">내선번호</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">주소</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>아무개</td>
-                            <td>HQ</td>
-                            <td>높음</td>
-                            <td>좋은 팀</td>
-                            <td>좋은 직책</td>
-                            <td>000</td>
-                            <td>010-4564-4564</td>
-                            <td>example@gmail.com</td>
-                            <td>뭐 좋은데 살긋지</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>소우주</td>
-                            <td>So U Ju</td>
-                            <td>M</td>
-                            <td>010-3211-1233</td>
-                            <td>universe@gmail.com</td>
-                            <td>소주소주소주</td>
-                            <td>플래티넘</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>배성민</td>
-                            <td>Bae Seongmin</td>
-                            <td>M</td>
-                            <td>010-1111-1111</td>
-                            <td>baebae@gmail.com</td>
-                            <td>주소주소주소</td>
-                            <td>골드</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+
+
+
+            <div class="chart" style="font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;">
+    <line-chart :chart-data="datacollection" :options="options"></line-chart>
+  </div>
+
+  <div>
+    <line-chart :chart-data="datacollection" :options="options"></line-chart>
+  </div>
+
+  <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Single Line Chart</h6>
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
 </div>
-<!-- Table End -->
-            
 
 
-        </div>
-        <!-- Content End -->
+      </div>
 
+      <!-- Sales Chart Start -->
+      <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Worldwide Sales</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="worldwide-sales"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Salse & Revenue</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="salse-revenue"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sales Chart End -->
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+            <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Pie Chart</h6>
+                            <canvas id="pie-chart"></canvas>
+                        </div>
+                    </div>
+
+      <!-- Content End -->
+  
+      <!-- Back to Top -->
+      <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
+        ><i class="bi bi-arrow-up"></i
+      ></a>
     </div>
 </body>
 </template>
@@ -383,4 +350,75 @@ $(document).ready(function() {
         .emoji {
             margin-right: 10px;
         }
+
+        .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 300px;
+    padding: 8px 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-group input[type="checkbox"] {
+    width: auto;
+  }
+  
+  .form-group select {
+    width: 100px;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #4c724d;
+    outline: none;
+  }
+  
+  .form-group .half {
+    display: inline-block;
+    width: calc(50% - 10px);
+  }
+  
+  .form-group .half:first-child {
+    margin-right: 10px;
+  }
+  
+  .form-group .third {
+    display: inline-block;
+    width: calc(33% - 10px);
+  }
+  
+  .form-group .third:first-child {
+    margin-right: 10px;
+  }
+  
+  .form-group .checkbox-group label {
+    margin: 0 0 0 5px;
+  }
+  
+  .btn-submit {
+    width: 60px;
+    padding: 6px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7f6739;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn-submit:hover {
+    background-color: #7eb17f;
+  }
+  
+  .form-submit {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    height: 40px;
+  }
+
 </style>
