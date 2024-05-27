@@ -7,6 +7,8 @@ import axios from "axios";
 
 const isLoading = ref(true);
 
+const countries = ref([]);
+
 const form = ref({
   customerName: '',
   customerEmail: '',
@@ -24,6 +26,19 @@ async function handleSubmit() {
   try {
     const response = await axios.post('http://localhost:8888/customers', form.value);
     console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+onMounted(async () => {
+  countries.value = await nationList();
+})
+
+async function nationList() {
+  try {
+    const response = await axios.get('http://localhost:8888/nations');
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -276,11 +291,10 @@ $(document).ready(function () {
             <div class="form-group">
               <div class="third">
                 <label for="country">국가:</label>
-                <select id="country" v-model="form.nationCodeFk">
-                  <option value="1">대한민국</option>
-                  <option value="2">미국</option>
-                  <option value="3">일본</option>
-                  <!-- 필요한 다른 국가들 추가 -->
+                <select id="country" v-model="form.nationCodeFk" v-if="countries.length">
+                  <option v-for="country in countries" :value="country.nationCodePk">
+                    {{ country.nationName }}
+                  </option>
                 </select>
               </div>
               <div class="third">
