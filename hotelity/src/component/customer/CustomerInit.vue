@@ -15,7 +15,7 @@ const form = ref({
   customerPhoneNumber: '',
   customerEnglishName: '',
   customerAddress: '',
-  customerInfoAgreement: 1,
+  customerInfoAgreement: 0,
   customerStatus: 0,
   customerType: '',
   nationCodeFk: 1,
