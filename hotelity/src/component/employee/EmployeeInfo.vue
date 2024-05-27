@@ -3,7 +3,35 @@
 
     import { useRouter } from 'vue-router';
 
-import { ref, onMounted } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
+
+const employee = reactive({
+  id: 'AE010001',
+  office: '본사',
+  name: '손세림',
+  position: '과장',
+  department: '영업지원',
+  extension: '100',
+  phone: '010-1234-1234',
+  email: 'example@iot.com',
+  address: '서울시 구로구',
+  rooms: [
+    {
+      stayCode: 2983,
+      bookingCode: 4748,
+      checkIn: '2021-05-22, 15:00:02',
+      checkOut: '2021-05-23, 11:00:00',
+      days: 2
+    },
+    {
+      stayCode: 2965,
+      bookingCode: 8465,
+      checkIn: '2023-08-09, 16:23:03',
+      checkOut: '2023-08-11, 11:00:00',
+      days: 4
+    }
+  ]
+});
 
 const isLoading = ref(true);
 
@@ -198,138 +226,78 @@ $(document).ready(function() {
             
             </nav>
             <!-- Navbar End -->
-
-<!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">직원 리스트</h3>
-        <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
-                    <i class="bi bi-search"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">직원코드</a></li>
-                    <li><a class="dropdown-item" href="#">이름</a></li>
-                    <li><a class="dropdown-item" href="#">전화번호</a></li>
-                </ul>
-            </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
-            <button class="btn btn-primary ms-2">검색</button>
-        </div>
-        <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-            <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
-            <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
-            </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
-            <div class="filter-container" style="width: 600px;">
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>지점 선택</option>
-                        <option value="1">HQ</option>
-                        <option value="2">SE</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">부장</option>
-                        <option value="2">차장</option>
-                        <option value="3">과장</option>
-                        <option value="4">대리</option>
-                        <option value="5">사원</option>
-                        <option value="6">인턴</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">CEO</option>
-                        <option value="2">본부장</option>
-                        <option value="3">실장</option>
-                        <option value="4">팀장</option>
-                        <option value="5">파트장</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>부서 선택</option>
-                        <option value="1">운영</option>
-                        <option value="2">기술</option>
-                        <option value="3">마케팅</option>
-                        <option value="4">시설</option>
-                        <option value="5">영업</option>
-                        <option value="6">호텔관리</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary">적용</button>
-            </div>
-        </div>
-        <br>
+            <div class="employee-info">
+    <h2>직원 정보</h2>
+    <div class="employee-details">
+      <div class="photo">
+        <img src="" alt="Employee Photo" />
+      </div>
+      <div class="details">
         <div class="row">
-            <div class="col-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">직원 코드</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">지점</th>
-                            <th scope="col">직급</th>
-                            <th scope="col">부서</th>
-                            <th scope="col">직책</th>
-                            <th scope="col">내선번호</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">주소</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>아무개</td>
-                            <td>HQ</td>
-                            <td>높음</td>
-                            <td>좋은 팀</td>
-                            <td>좋은 직책</td>
-                            <td>000</td>
-                            <td>010-4564-4564</td>
-                            <td>example@gmail.com</td>
-                            <td>뭐 좋은데 살긋지</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>소우주</td>
-                            <td>So U Ju</td>
-                            <td>M</td>
-                            <td>010-3211-1233</td>
-                            <td>universe@gmail.com</td>
-                            <td>소주소주소주</td>
-                            <td>플래티넘</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>배성민</td>
-                            <td>Bae Seongmin</td>
-                            <td>M</td>
-                            <td>010-1111-1111</td>
-                            <td>baebae@gmail.com</td>
-                            <td>주소주소주소</td>
-                            <td>골드</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+          <label>사원번호:</label>
+          <span>{{ employee.id }}</span>
         </div>
+        <div class="row">
+          <label>근무지점:</label>
+          <span>{{ employee.office }}</span>
+        </div>
+        <div class="row">
+          <label>직원명:</label>
+          <span>{{ employee.name }}</span>
+        </div>
+        <div class="row">
+          <label>직:</label>
+          <span>{{ employee.position }}</span>
+        </div>
+        <div class="row">
+          <label>부서:</label>
+          <span>{{ employee.department }}</span>
+        </div>
+        <div class="row">
+          <label>내선번호:</label>
+          <span>{{ employee.extension }}</span>
+        </div>
+        <div class="row">
+          <label>전화번호:</label>
+          <span>{{ employee.phone }}</span>
+        </div>
+        <div class="row">
+          <label>이메일:</label>
+          <span>{{ employee.email }}</span>
+        </div>
+        <div class="row">
+          <label>주소:</label>
+          <span>{{ employee.address }}</span>
+        </div>
+      </div>
     </div>
-</div>
-<!-- Table End -->
+    <h2>담당 투숙 객실</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>투숙코드</th>
+          <th>예약코드</th>
+          <th>체크인시간</th>
+          <th>체크아웃시간</th>
+          <th>투숙일수</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="room in employee.rooms" :key="room.stayCode">
+          <td>{{ room.stayCode }}</td>
+          <td>{{ room.bookingCode }}</td>
+          <td>{{ room.checkIn }}</td>
+          <td>{{ room.checkOut }}</td>
+          <td>{{ room.days }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
             
-
+</div>
+</div>
 
         </div>
         <!-- Content End -->
@@ -341,46 +309,102 @@ $(document).ready(function() {
 </body>
 </template>
 
-<style>
+<style scoped>
 
 @import "@/css/style.css";
-  @import "@/css/bootstrap.min.css"; 
+@import "@/css/bootstrap.min.css";
 
-  .dropdown-icon {
-    transition: transform 0.5s;
+.employee-info {
+  width: 100%; 
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.employee-details {
+  display: flex;
+  flex-wrap: wrap; 
+}
+
+.details {
+  display: flex;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap; 
+}
+
+.row label {
+  width: 100px;
+  font-weight: bold;
+  flex-shrink: 0; 
+}
+
+.photo {
+  flex-shrink: 0;
+}
+
+.photo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+
+.dropdown-icon {
+  transition: transform 0.5s;
 }
 
 .filter-container {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            width: 500px;
-            padding: 10px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            gap: 10px;
-        }
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 500px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+}
 
-        .filter-container::before {
-            content: "";
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            border-width: 0 10px 10px 10px;
-            border-style: solid;
-            border-color: transparent transparent white transparent;
-        }
+.filter-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
 
-        .position-relative-container {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-        }
+.position-relative-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
 
-        .emoji {
-            margin-right: 10px;
-        }
+.emoji {
+  margin-right: 10px;
+}
 </style>
