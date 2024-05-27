@@ -4,6 +4,7 @@ import CustomerList from '@/component/customer/CustomerList.vue';
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
 import TestChart from '@/component/TestChart.vue';
+import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +28,11 @@ const router = createRouter({
     {
       path: '/chartTest',
       component: TestChart
+    }
+    ,
+    {
+      path: '/reservationPage',
+      component: ReservationPage
     }
 ]
 });
