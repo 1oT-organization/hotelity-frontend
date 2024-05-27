@@ -7,6 +7,7 @@ import TestChart from '@/component/TestChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import TestCalendar from '@/component/TestCalendar.vue';
+import BranchList from '@/component/hotel-management/BranchList.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -42,6 +43,10 @@ const router = createRouter({
     {
       path: '/calendarTest',
       component: TestCalendar
+    },
+    {
+      path: '/branchList',
+      component: BranchList
     }
 
 ]
