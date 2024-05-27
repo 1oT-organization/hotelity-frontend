@@ -6,12 +6,17 @@
 import { ref, onMounted } from 'vue';
 
 const isLoading = ref(true);
+const showFilter = ref(false);
+
+
 
 onMounted(() => {
   // Initialize datepicker
   $("#payment-date").datepicker({
     dateFormat: "yy-mm-dd"
   });
+
+  $('.filter-container').hide();
 
   // Toggle filter container
   $('#filter-icon').on('click', function() {
@@ -20,12 +25,29 @@ onMounted(() => {
   });
 });
 
-onMounted(() => {
-    
-    $('#filter-icon').on('click', function() {
-        $('.filter-container').toggle();
-    });
+const showModal = ref(false);
+
+
+// 폼 데이터 상태
+const formData = ref({
+  branchCode: '',
+  branchName: '',
+  address: '',
+  phoneNumber: ''
 });
+
+// 모달 가시성 토글 함수
+const toggleModal = () => {
+  console.log("오냐?");
+  showModal.value = !showModal.value;
+};
+
+// 폼 제출 함수
+const submitForm = () => {
+  console.log(formData.value);
+  // API 호출
+  toggleModal();  // 폼 제출 후 모달 닫기
+};
 
 onMounted(() => {
   fetchData().then(() => {
@@ -39,6 +61,7 @@ onMounted(() => {
       }, 1000); 
     });
   }
+
 
   // Clock
   const h1 = document.getElementById("time");
@@ -232,7 +255,11 @@ $(document).ready(function() {
     <button class="btn btn-primary ms-2">검색</button>
 </div>
 <div class="position-relative-container mt-3">
+
     <div class="excel button" style="display: flex; justify-content: left;">
+        <div class="button">
+              <button @click="toggleModal" class="btn btn-success me-2">지점 등록</button>
+        </div>
         <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
         <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
     </div>
@@ -260,6 +287,8 @@ $(document).ready(function() {
         </div>
         <button class="btn btn-primary">적용</button>
     </div>
+
+    
 </div>
         <br>
         <div class="row">
@@ -285,6 +314,51 @@ $(document).ready(function() {
 </div>
 <!-- Table End -->
             
+<!-- 모달 시작 -->
+<div v-if="showModal" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">지점 등록</h5>
+                <button type="button" class="btn-close" @click="toggleModal"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="branchCode" class="form-label">쿠폰명</label>
+                    <input type="text" class="form-control" id="couponName" v-model="formData.couponName">
+                  </div>
+                  <div class="mb-3">
+                    <label for="branchName" class="form-label">할인율</label>
+                    <input type="text" class="form-control" id="couponDiscountRate" v-model="formData.couponDiscountRate">
+                  </div>
+                  <div class="mb-3">
+  <label for="address" class="form-label">쿠폰 종류</label>
+  <select class="form-select" v-model="formData.couponType">
+    <option disabled value="">쿠폰 종류</option>
+    <option value="객실 쿠폰">객실</option>
+    <option value="조식 쿠폰">조식</option>
+    <option value="호텔 레스토랑 쿠폰">레스토랑</option>
+    <option value="호텔 라운지바 쿠폰">라운지바</option>
+    <option value="스파 쿠폰">스파</option>
+    <option value="워터파크 쿠폰">워터파크</option>
+    <option value="베이커리 쿠폰">베이커리</option>
+  </select>
+  <input type="text" class="form-control mt-2" id="couponType" v-model="formData.couponType" readonly>
+</div>
+                  <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">상세설명</label>
+                    <input type="text" class="form-control" id="couponInfo" v-model="formData.couponInfo">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @click="toggleModal">닫기</button>
+                <button type="button" class="btn btn-primary" @click="submitForm">저장</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
         </div>
@@ -301,6 +375,18 @@ $(document).ready(function() {
 
 @import "@/css/style.css";
   @import "@/css/bootstrap.min.css"; 
+
+  .modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-dialog {
+  max-width: 500px;
+  margin: 1.75rem auto;
+}
+
 
   .dropdown-icon {
     transition: transform 0.5s;

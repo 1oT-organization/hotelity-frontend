@@ -95,9 +95,10 @@ $(document).ready(function() {
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-check-circle-fill"></i>예약</router-link>
-                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-house-heart-fill"></i>투숙</router-link>
-                    <router-link to="" class="nav-item nav-link active"><i class="emoji bi bi-credit-card-fill"></i>결제 내역</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-ear-fill"></i>VOC</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-megaphone-fill"></i>공지</router-link>
+                    <router-link to="" class="nav-item nav-link active"><i class="emoji bi bi-gift-fill"></i>쿠폰</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-person-heart"></i>멤버십</router-link>
           </div>
             </nav>
         </div>
@@ -217,14 +218,14 @@ $(document).ready(function() {
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">결제 내역</h3>
+        <h3 class="mb-4">쿠폰 종류</h3>
         <div class="search-container d-flex align-items-center">
     <div class="btn-group">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
             <i class="bi bi-search"></i>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">고객명</a></li>
+            <li><a class="dropdown-item" href="#">쿠폰명</a></li>
         </ul>
     </div>
     <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
@@ -239,19 +240,19 @@ $(document).ready(function() {
     <div class="filter-container" style="width: 600px;">
         <div class="btn-group me-2">
             <select class="form-select">
-                <option selected>결제 수단</option>
-                <option value="1">신용카드</option>
-                <option value="2">현금</option>
-                <option value="3">계좌이체</option>
-                <option value="4">모바일 결제</option>
+                <option selected>할인율</option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
             </select>
         </div>
         <div class="btn-group me-2">
             <select class="form-select">
-                <option selected>결제 종류</option>
-                <option value="1">예약 결제</option>
-                <option value="2">현장 결제</option>
-                <option value="3">온라인 결제</option>
+                <option selected>쿠폰 종류</option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
             </select>
         </div>
         <div class="btn-group me-2">
@@ -266,13 +267,12 @@ $(document).ready(function() {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">결제내역 코드</th>
-                            <th scope="col">고객</th>
-                            <th scope="col">결제 금액</th>
-                            <th scope="col">결제 일자</th>
-                            <th scope="col">결제 수단</th>
-                            <th scope="col">결제 종류</th>
-                            <th scope="col">결제 취소여부</th>
+                            <th scope="col">쿠폰 코드</th>
+                            <th scope="col">쿠폰명</th>
+                            <th scope="col">할인율</th>
+                            <th scope="col">쿠폰 종류</th>
+                            <th scope="col">출시일자</th>
+                            <th scope="col">상세설명</th>
                         </tr>
                     </thead>
                     <tbody>
