@@ -8,6 +8,19 @@ import { ref, onMounted } from 'vue';
 const isLoading = ref(true);
 
 onMounted(() => {
+  // Initialize datepicker
+  $("#payment-date").datepicker({
+    dateFormat: "yy-mm-dd"
+  });
+
+  // Toggle filter container
+  $('#filter-icon').on('click', function() {
+    showFilter.value = !showFilter.value;
+    $('.filter-container').toggle();
+  });
+});
+
+onMounted(() => {
     
     $('#filter-icon').on('click', function() {
         $('.filter-container').toggle();
@@ -47,29 +60,6 @@ setInterval(getTime, 1000);
 
 });
 
-// 모달 가시성 상태
-const showModal = ref(false);
-
-// 폼 데이터 상태
-const formData = ref({
-  branchCode: '',
-  branchName: '',
-  address: '',
-  phoneNumber: ''
-});
-
-// 모달 가시성 토글 함수
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
-
-// 폼 제출 함수
-const submitForm = () => {
-  console.log(formData.value);
-  // API 호출
-  toggleModal();  // 폼 제출 후 모달 닫기
-};
-
 const router = useRouter();
 
 $(document).ready(function() {
@@ -105,10 +95,10 @@ $(document).ready(function() {
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <router-link to="" class="nav-item nav-link active"><i class="emoji bi bi-building-fill"></i>지점 리스트</router-link>
-                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-door-open-fill"></i>객실</router-link>
-                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-pin-map-fill"></i>부대 시설</router-link>
-                </div>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-check-circle-fill"></i>예약</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-house-heart-fill"></i>투숙</router-link>
+                    <router-link to="" class="nav-item nav-link active"><i class="emoji bi bi-credit-card-fill"></i>결제 내역</router-link>
+          </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -133,8 +123,8 @@ $(document).ready(function() {
     
                     <a href="" class="nav-item nav-link">고객</a>
                     <a href="" class="nav-item nav-link">직원</a>
-                    <a href="" class="nav-item nav-link">호텔 서비스</a>
-                    <a href="" class="nav-item nav-link active">호텔 관리</a>
+                    <a href="" class="nav-item nav-link active">호텔 서비스</a>
+                    <a href="" class="nav-item nav-link">호텔 관리</a>
                     <a href="" class="nav-item nav-link">마케팅</a>
                     <a href="" class="nav-item nav-link">영업관리</a>
 
@@ -227,40 +217,65 @@ $(document).ready(function() {
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">지점 리스트</h3>
-    
-
-        <div class="button" style="display: flex; justify-content: right;">
-              <button @click="toggleModal" class="btn btn-success me-2">지점 등록</button>
-            </div>
-
-       
+        <h3 class="mb-4">결제 내역</h3>
+        <div class="search-container d-flex align-items-center">
+    <div class="btn-group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
+            <i class="bi bi-search"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">고객명</a></li>
+        </ul>
+    </div>
+    <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
+    <button class="btn btn-primary ms-2">검색</button>
+</div>
+<div class="position-relative-container mt-3">
+    <div class="excel button" style="display: flex; justify-content: left;">
+        <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
+        <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
+    </div>
+    <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
+    <div class="filter-container" style="width: 600px;">
+        <div class="btn-group me-2">
+            <select class="form-select">
+                <option selected>결제 수단</option>
+                <option value="1">신용카드</option>
+                <option value="2">현금</option>
+                <option value="3">계좌이체</option>
+                <option value="4">모바일 결제</option>
+            </select>
+        </div>
+        <div class="btn-group me-2">
+            <select class="form-select">
+                <option selected>결제 종류</option>
+                <option value="1">예약 결제</option>
+                <option value="2">현장 결제</option>
+                <option value="3">온라인 결제</option>
+            </select>
+        </div>
+        <div class="btn-group me-2">
+            <input type="text" class="form-control" id="payment-date" placeholder="결제 일자 선택">
+        </div>
+        <button class="btn btn-primary">적용</button>
+    </div>
+</div>
         <br>
         <div class="row">
             <div class="col-12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">지점 코드</th>
-                            <th scope="col">지점명</th>
-                            <th scope="col">주소</th>
-                            <th scope="col">전화번호</th>
-                            
+                            <th scope="col">결제내역 코드</th>
+                            <th scope="col">고객</th>
+                            <th scope="col">결제 금액</th>
+                            <th scope="col">결제 일자</th>
+                            <th scope="col">결제 수단</th>
+                            <th scope="col">결제 종류</th>
+                            <th scope="col">결제 취소여부</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">HQ</th>
-                            <td>본사</td>
-                            <td>서울특별시 동작구 보라매로 87</td>
-                            <td>02-486-0246</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">SE</th>
-                            <td>서울 종로점</td>
-                            <td>서울특별시 종로구 오키로 79 마우스빌딩</td>
-                            <td>02-777-7777</td>
-                        </tr>
                        
                     </tbody>
                 </table>
@@ -270,43 +285,6 @@ $(document).ready(function() {
 </div>
 <!-- Table End -->
             
-<!-- 모달 시작 -->
-<div v-if="showModal" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">지점 등록</h5>
-                <button type="button" class="btn-close" @click="toggleModal"></button>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="mb-3">
-                    <label for="branchCode" class="form-label">지점 코드</label>
-                    <input type="text" class="form-control" id="branchCode" v-model="formData.branchCode">
-                  </div>
-                  <div class="mb-3">
-                    <label for="branchName" class="form-label">지점명</label>
-                    <input type="text" class="form-control" id="branchName" v-model="formData.branchName">
-                  </div>
-                  <div class="mb-3">
-                    <label for="address" class="form-label">주소</label>
-                    <input type="text" class="form-control" id="address" v-model="formData.address">
-                  </div>
-                  <div class="mb-3">
-                    <label for="phoneNumber" class="form-label">전화번호</label>
-                    <input type="text" class="form-control" id="phoneNumber" v-model="formData.phoneNumber">
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="toggleModal">닫기</button>
-                <button type="button" class="btn btn-primary" @click="submitForm">저장</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 모달 끝 -->
-
 
 
         </div>
@@ -323,17 +301,6 @@ $(document).ready(function() {
 
 @import "@/css/style.css";
   @import "@/css/bootstrap.min.css"; 
-
-  .modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-dialog {
-  max-width: 500px;
-  margin: 1.75rem auto;
-}
 
   .dropdown-icon {
     transition: transform 0.5s;

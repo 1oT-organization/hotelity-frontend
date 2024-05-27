@@ -8,6 +8,8 @@ import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import TestCalendar from '@/component/TestCalendar.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
+import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
+import PaymentList from '@/component/hotel-service/PaymentList.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +49,14 @@ const router = createRouter({
     {
       path: '/branchList',
       component: BranchList
+    },
+    {
+      path: '/branchInfo',
+      component: BranchInfo
+    },
+    {
+      path: '/paymentList',
+      component: PaymentList
     }
 
 ]
