@@ -1,14 +1,13 @@
 <template>
     <div>
-<h1>tq</h1>
-<ReservationNavbar/>
+        <ReservationSidevar />
+        <ReservationNavbar />
     </div>
 </template>
 
 <script setup>
-    import ReservationNavbar from "@/component/hotel-service/reservation/ReservationNavbar.vue";
+import ReservationNavbar from "@/component/hotel-service/reservation/ReservationNavbar.vue";
+import ReservationSidevar from "@/component/hotel-service/reservation/ReservationSidevar.vue";
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

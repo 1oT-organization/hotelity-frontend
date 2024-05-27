@@ -12,8 +12,15 @@
         </div>
 
         <div class="navbar-nav w-100">
-            <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
-            <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
+            <router-link to="/reservationPage" class="nav-item nav-link active">
+                <i class="emoji bi bi-people-fill"></i>예약 일정
+            </router-link>
+            <router-link to="/" class="nav-item nav-link">
+                <i class="emoji bi bi-person-fill-add"></i>투숙
+            </router-link>
+            <router-link to="/" class="nav-item nav-link">
+                <i class="emoji bi bi-person-fill-add"></i>결제
+            </router-link>
         </div>
     </nav>
 </div>
