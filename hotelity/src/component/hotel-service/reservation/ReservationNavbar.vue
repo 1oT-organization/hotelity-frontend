@@ -106,10 +106,18 @@
 
 
         </nav>
+      <div class="container-fluid pt-4 px-4">
+      <ReservationCalendar />
+      </div>
+
     </div>
+
 </template>
 
 <script setup>
+
+import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+
 
 </script>
 

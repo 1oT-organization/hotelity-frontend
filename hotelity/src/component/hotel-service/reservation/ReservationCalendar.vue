@@ -20,8 +20,15 @@
   events: [
   // 이벤트 데이터를 여기에 추가하세요.
   ],
+    aspectRatio: 3.5
 });
   calendar.render(); // FullCalendar를 렌더링합니다.
 },
 });
+
+
+  // var calendar = new FullCalendar.Calendar(calendarEl, {
+
+  // });
+  // calendar.setOption('contentHeight', 650);
 </script>

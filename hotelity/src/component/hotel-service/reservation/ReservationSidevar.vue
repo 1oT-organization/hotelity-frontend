@@ -1,4 +1,6 @@
 <template>
+  <ReservationNavbar />
+
 <div class="sidebar pe-4 pb-3">
     <nav class="navbar bg-secondary navbar-dark">
         <a href="index.html" class="navbar-brand mx-4 mb-3">
@@ -23,10 +25,13 @@
             </router-link>
         </div>
     </nav>
+
 </div>
+
 </template>
 
 <script setup>
+import ReservationNavbar from "@/component/hotel-service/reservation/ReservationNavbar.vue";
 
 </script>
 
