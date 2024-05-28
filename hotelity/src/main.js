@@ -2,8 +2,6 @@ import './css/style.css';
 import router from './router/index.js';
 import CustomerInit from './component/customer/CustomerInit.vue';
 
-// import ReservationCalendar from './component/reservation/ReservationCalendar.vue';
-
 import { createApp } from 'vue';
 import App from './App.vue';
 

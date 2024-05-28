@@ -113,9 +113,9 @@
 
 </script>
 
-<style lang="scss" scoped>
+<style>
 @import "@/css/style.css";
-  @import "@/css/bootstrap.min.css"; 
+ @import "@/css/bootstrap.min.css";
 
   .dropdown-icon {
     transition: transform 0.5s;

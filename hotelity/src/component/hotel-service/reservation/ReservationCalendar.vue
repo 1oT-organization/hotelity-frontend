@@ -1,22 +1,27 @@
 <template>
-    <div id="app">
-        <CalendarComponent />
-    </div>
+  <div id='calendar'></div>
 </template>
 
 <script>
 
-import '@/assets/fullcalendar/index.global.js';
+  import { defineComponent } from 'vue';
+  import { Calendar } from '@fullcalendar/core';
+  import dayGridPlugin from '@fullcalendar/daygrid';
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-        });
-        calendar.render();
-    });
+  export default defineComponent({
+  components: {
+  FullCalendar: Calendar, // FullCalendar를 Calendar로 임포트합니다.
+},
+  mounted() {
+  const calendarEl = document.getElementById('calendar'); // FullCalendar를 삽입할 요소를 가져옵니다.
+  const calendar = new Calendar(calendarEl, {
+  plugins: [dayGridPlugin],
+  initialView: 'dayGridMonth',
+  events: [
+  // 이벤트 데이터를 여기에 추가하세요.
+  ],
+});
+  calendar.render(); // FullCalendar를 렌더링합니다.
+},
+});
 </script>
-
-<style>
-/* 스타일 추가 */
-</style>

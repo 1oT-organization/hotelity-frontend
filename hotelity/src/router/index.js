@@ -5,6 +5,8 @@ import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
 import TestChart from '@/component/TestChart.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
+import TestCalendar from "@/component/TestCalendar.vue";
+import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,11 +30,14 @@ const router = createRouter({
     {
       path: '/chartTest',
       component: TestChart
-    }
-    ,
+    },
     {
       path: '/reservationPage',
       component: ReservationPage
+    },
+    {
+      path: '/reservationCalendar',
+      component: ReservationCalendar
     }
 ]
 });
