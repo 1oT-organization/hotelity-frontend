@@ -15,7 +15,8 @@
     </div>
     <div class="btn-group me-2">
       <DatePicker v-model="selectedReservationCheckinDate" format="yyyy-MM-dd"
-                  style="width: 120px; text-align: center" placeholder="체크인 일자"></DatePicker>
+                  style="width: 120px; text-align: center" placeholder="체크인 일자"
+                  @change="handleChange"></DatePicker>
     </div>
     <div class="btn-group me-2">
       <DatePicker v-model="selectedReservationCheckoutDate" format="yyyy-MM-dd"
@@ -23,6 +24,9 @@
     </div>
 
     <button class="btn btn-primary">적용</button>
+  </div>
+  <div>
+    Selected Check-in Date: {{ selectedReservationCheckinDate }}
   </div>
 </template>
 
@@ -34,15 +38,20 @@ export default defineComponent({
   components: {
     DatePicker
   },
-  setup() {
+  setup(props, { emit }) {
     const selectedReservationDate = ref(null);
     const selectedReservationCheckinDate = ref(null);
     const selectedReservationCheckoutDate = ref(null);
 
+    const handleChange = () => {
+      emit('change-checkin-date', selectedReservationCheckinDate.value);
+    };
+
     return {
       selectedReservationDate,
       selectedReservationCheckinDate,
-      selectedReservationCheckoutDate
+      selectedReservationCheckoutDate,
+      handleChange
     };
   }
 });
