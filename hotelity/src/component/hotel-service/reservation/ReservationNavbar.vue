@@ -14,7 +14,6 @@
                 <!-- Existing dropdowns and items -->
 
                 <!-- New Menu Items -->
-
                 <a href="" class="nav-item nav-link">고객</a>
                 <a href="" class="nav-item nav-link">직원</a>
                 <a href="" class="nav-item nav-link">호텔 서비스</a>
@@ -107,8 +106,9 @@
 
         </nav>
       <div class="container-fluid pt-4 px-4">
-      <ReservationCalendar />
+        <ReservationCalendar />
       </div>
+      <ReservationList/>
 
     </div>
 
@@ -117,6 +117,7 @@
 <script setup>
 
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 
 
 </script>
