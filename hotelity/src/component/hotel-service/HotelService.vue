@@ -13,9 +13,9 @@
 </style>
 
 <!-- <template>
-    
+
     <MainHeader/>
-    
+
     <body>
     <div class="board-container">
     <h1>자유게시판</h1>
@@ -54,7 +54,7 @@
 </body>
     <MainFooter/>
   </template>
-  
+
   <script setup>
 
   import MainHeader from '@/components/Header.vue';
@@ -98,7 +98,7 @@ onMounted(async () => {
 };
 
   </script>
-  
+
   <style>
 /*
 .board-container {
@@ -164,7 +164,7 @@ body {
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin-top: 150px; 
+  margin-top: 150px;
 }
 
 /* 테이블 스타일을 좀 더 현대적으로 만듦 */

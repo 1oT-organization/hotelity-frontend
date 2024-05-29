@@ -47,6 +47,29 @@ setInterval(getTime, 1000);
 
 });
 
+// 모달 가시성 상태
+const showModal = ref(false);
+
+// 폼 데이터 상태
+const formData = ref({
+  branchCode: '',
+  branchName: '',
+  address: '',
+  phoneNumber: ''
+});
+
+// 모달 가시성 토글 함수
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
+
+// 폼 제출 함수
+const submitForm = () => {
+  console.log(formData.value);
+  // API 호출
+  toggleModal();  // 폼 제출 후 모달 닫기
+};
+
 const router = useRouter();
 
 $(document).ready(function() {
@@ -82,8 +105,10 @@ $(document).ready(function() {
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <router-link to="/employeeList" class="nav-item nav-link active"><i class="emoji bi bi-person-vcard-fill"></i>직원 관리</router-link>
-          </div>
+                    <router-link to="" class="nav-item nav-link active"><i class="emoji bi bi-building-fill"></i>지점 리스트</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-door-open-fill"></i>객실</router-link>
+                    <router-link to="" class="nav-item nav-link"><i class="emoji bi bi-pin-map-fill"></i>부대 시설</router-link>
+                </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -107,9 +132,9 @@ $(document).ready(function() {
                     <!-- New Menu Items -->
     
                     <a href="" class="nav-item nav-link">고객</a>
-                    <a href="" class="nav-item nav-link active">직원</a>
+                    <a href="" class="nav-item nav-link">직원</a>
                     <a href="" class="nav-item nav-link">호텔 서비스</a>
-                    <a href="" class="nav-item nav-link">호텔 관리</a>
+                    <a href="" class="nav-item nav-link active">호텔 관리</a>
                     <a href="" class="nav-item nav-link">마케팅</a>
                     <a href="" class="nav-item nav-link">영업관리</a>
 
@@ -202,125 +227,41 @@ $(document).ready(function() {
 <!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">직원 리스트</h3>
-        <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
-                    <i class="bi bi-search"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">직원코드</a></li>
-                    <li><a class="dropdown-item" href="#">이름</a></li>
-                    <li><a class="dropdown-item" href="#">전화번호</a></li>
-                </ul>
+        <h3 class="mb-4">지점 리스트</h3>
+    
+
+        <div class="button" style="display: flex; justify-content: right;">
+              <button @click="toggleModal" class="btn btn-success me-2">지점 등록</button>
             </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
-            <button class="btn btn-primary ms-2">검색</button>
-        </div>
-        <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-            <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
-            <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
-            </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
-            <div class="filter-container" style="width: 600px;">
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>지점 선택</option>
-                        <option value="1">HQ</option>
-                        <option value="2">SE</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">부장</option>
-                        <option value="2">차장</option>
-                        <option value="3">과장</option>
-                        <option value="4">대리</option>
-                        <option value="5">사원</option>
-                        <option value="6">인턴</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>직급 선택</option>
-                        <option value="1">CEO</option>
-                        <option value="2">본부장</option>
-                        <option value="3">실장</option>
-                        <option value="4">팀장</option>
-                        <option value="5">파트장</option>
-                    </select>
-                </div>
-                <div class="btn-group me-2">
-                    <select class="form-select">
-                        <option selected>부서 선택</option>
-                        <option value="1">운영</option>
-                        <option value="2">기술</option>
-                        <option value="3">마케팅</option>
-                        <option value="4">시설</option>
-                        <option value="5">영업</option>
-                        <option value="6">호텔관리</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary">적용</button>
-            </div>
-        </div>
+
+       
         <br>
         <div class="row">
             <div class="col-12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">직원 코드</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">지점</th>
-                            <th scope="col">직급</th>
-                            <th scope="col">부서</th>
-                            <th scope="col">직책</th>
-                            <th scope="col">내선번호</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">지점 코드</th>
+                            <th scope="col">지점명</th>
                             <th scope="col">주소</th>
+                            <th scope="col">전화번호</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>아무개</td>
-                            <td>HQ</td>
-                            <td>높음</td>
-                            <td>좋은 팀</td>
-                            <td>좋은 직책</td>
-                            <td>000</td>
-                            <td>010-4564-4564</td>
-                            <td>example@gmail.com</td>
-                            <td>뭐 좋은데 살긋지</td>
+                            <th scope="row">HQ</th>
+                            <td>본사</td>
+                            <td>서울특별시 동작구 보라매로 87</td>
+                            <td>02-486-0246</td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
-                            <td>소우주</td>
-                            <td>So U Ju</td>
-                            <td>M</td>
-                            <td>010-3211-1233</td>
-                            <td>universe@gmail.com</td>
-                            <td>소주소주소주</td>
-                            <td>플래티넘</td>
-                            <td>KR</td>
-                            <td>개인</td>
+                            <th scope="row">SE</th>
+                            <td>서울 종로점</td>
+                            <td>서울특별시 종로구 오키로 79 마우스빌딩</td>
+                            <td>02-777-7777</td>
                         </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>배성민</td>
-                            <td>Bae Seongmin</td>
-                            <td>M</td>
-                            <td>010-1111-1111</td>
-                            <td>baebae@gmail.com</td>
-                            <td>주소주소주소</td>
-                            <td>골드</td>
-                            <td>KR</td>
-                            <td>개인</td>
-                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
@@ -329,6 +270,43 @@ $(document).ready(function() {
 </div>
 <!-- Table End -->
             
+<!-- 모달 시작 -->
+<div v-if="showModal" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">지점 등록</h5>
+                <button type="button" class="btn-close" @click="toggleModal"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="branchCode" class="form-label">지점 코드</label>
+                    <input type="text" class="form-control" id="branchCode" v-model="formData.branchCode">
+                  </div>
+                  <div class="mb-3">
+                    <label for="branchName" class="form-label">지점명</label>
+                    <input type="text" class="form-control" id="branchName" v-model="formData.branchName">
+                  </div>
+                  <div class="mb-3">
+                    <label for="address" class="form-label">주소</label>
+                    <input type="text" class="form-control" id="address" v-model="formData.address">
+                  </div>
+                  <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">전화번호</label>
+                    <input type="text" class="form-control" id="phoneNumber" v-model="formData.phoneNumber">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @click="toggleModal">닫기</button>
+                <button type="button" class="btn btn-primary" @click="submitForm">저장</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 모달 끝 -->
+
 
 
         </div>
@@ -345,6 +323,17 @@ $(document).ready(function() {
 
 @import "@/css/style.css";
   @import "@/css/bootstrap.min.css"; 
+
+  .modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-dialog {
+  max-width: 500px;
+  margin: 1.75rem auto;
+}
 
   .dropdown-icon {
     transition: transform 0.5s;
