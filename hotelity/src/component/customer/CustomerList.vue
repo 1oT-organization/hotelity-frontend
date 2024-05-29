@@ -13,6 +13,8 @@ const totalPages = ref(0);
 const pageGroup = ref(1);
 const pageSize = 10; // 한 그룹당 페이지 수
 const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
+const searchValue = ref(null);
+const isFilterContainerVisible = ref(false);
 
 const defaultParams = {
   customerCodePk: null,
@@ -71,6 +73,7 @@ async function loadList() {
 }
 
 async function loadCustomers(page) {
+  console.log(defaultParams)
   customers.value = await fetchData({
     ...defaultParams,
     orderBy: null,
@@ -99,22 +102,31 @@ function prevPageGroup() {
   }
 }
 
-onMounted(() => {
-  loadCustomers(currentPage.value);
-});
+function setSearchCriteria(criteria) {
+  defaultParams[criteria] = searchValue.value;
+}
+
+function toggleFilterContainer() {
+  isFilterContainerVisible.value = !isFilterContainerVisible.value;
+}
 
 onMounted(() => {
   loadCustomers(currentPage.value);
 });
 
+onMounted(() => {
+  loadCustomers(currentPage.value);
+});
+
 
 onMounted(() => {
+  // 페이지가 로드될 때 filter-container를 숨김
+  $('.filter-container').hide();
 
   $('#filter-icon').on('click', function () {
     $('.filter-container').toggle();
   });
 });
-
 onMounted(() => {
   fetchData().then(() => {
     isLoading.value = false;
@@ -315,13 +327,13 @@ $(document).ready(function () {
                 <i class="bi bi-search"></i>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">고객코드</a></li>
-                <li><a class="dropdown-item" href="#">이름</a></li>
-                <li><a class="dropdown-item" href="#">전화번호</a></li>
+                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerCodePk')">고객코드</a></li>
+                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">이름</a></li>
+                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerPhoneNumber')">전화번호</a></li>
               </ul>
             </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
-            <button class="btn btn-primary ms-2">검색</button>
+            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
+            <button class="btn btn-primary ms-2" @click="loadCustomers(1)">검색</button>
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
@@ -330,25 +342,25 @@ $(document).ready(function () {
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
                 class="bi bi-funnel"></i></button>
-            <div class="filter-container">
+            <div class="filter-container" v-show="isFilterContainerVisible">
               <div class="btn-group me-2">
-                <select class="form-select">
-                  <option selected>고객타입 선택</option>
-                  <option value="1">개인</option>
-                  <option value="2">법인</option>
+                <select class="form-select" v-model="defaultParams.customerType">
+                  <option :value="null">고객타입 선택</option>
+                  <option value="개인">개인</option>
+                  <option value="법인">법인</option>
                 </select>
               </div>
               <div class="btn-group me-2">
-                <select class="form-select">
-                  <option selected>멤버십 등급 선택</option>
-                  <option value="1">일반</option>
-                  <option value="2">골드</option>
-                  <option value="3">플래티넘</option>
-                  <option value="4">프리미엄</option>
-                  <option value="5">VIP</option>
+                <select class="form-select" v-model="defaultParams.membershipLevelName">
+                  <option :value="null">멤버십 등급 선택</option>
+                  <option value="일반">일반</option>
+                  <option value="골드">골드</option>
+                  <option value="플래티넘">플래티넘</option>
+                  <option value="프리미엄">프리미엄</option>
+                  <option value="VIP">VIP</option>
                 </select>
               </div>
-              <button class="btn btn-primary">적용</button>
+              <button class="btn btn-primary" @click=loadCustomers(1)>적용</button>
             </div>
           </div>
           <br>
