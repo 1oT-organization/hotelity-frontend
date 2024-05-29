@@ -1,19 +1,19 @@
-
 <script setup>
-
-    import { useRouter } from 'vue-router';
-
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+import axios from "axios";
+import { useRouter } from 'vue-router';
 
 const isLoading = ref(true);
 const customers = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(0);
 const pageGroup = ref(1);
-const pageSize = 10; // 한 그룹당 페이지 수
-const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
-const searchValue = ref(null);
+const pageSize = 10;
+const selectedPage = ref(1);
+const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
+const isDropdownOpen = ref(false);
+const selectedCriteria = ref('');
 
 const defaultParams = {
   customerCodePk: null,
@@ -32,33 +32,38 @@ const defaultParams = {
   membershipLevelName: null
 };
 
+watch(searchValue, (newValue) => {
+  if (selectedCriteria.value) {
+    defaultParams[selectedCriteria.value] = newValue;
+  }
+});
+
 async function fetchData(params) {
   try {
     const response = await axios.get('http://localhost:8888/customers/page', { params });
     console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount; // 총 페이지 수를 업데이트
+    totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
   } catch (error) {
     console.error(error);
   }
 }
 
-async function downloadExcel(){
-  try{
+async function downloadExcel() {
+  try {
     const response = await axios.get('http://localhost:8888/customers/excel/download', {
       params: defaultParams,
-      responseType: 'blob' // 응답을 blob 형식으로 받음
+      responseType: 'blob'
     });
 
-    // Blob 데이터를 다운로드 가능한 URL로 변환
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'customers.xlsx'); // 파일 이름 설정
+    link.setAttribute('download', 'customers.xlsx');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  } catch(error){
+  } catch (error) {
     console.error(error);
   }
 }
@@ -72,18 +77,18 @@ async function loadList() {
 }
 
 async function loadCustomers(page) {
-  console.log(defaultParams)
+  console.log(defaultParams);
   customers.value = await fetchData({
     ...defaultParams,
     orderBy: null,
     sortBy: null,
-    pageNum: page - 1 // 백엔드 페이지 번호가 0부터 시작한다면 -1 필요
+    pageNum: page - 1
   });
   isLoading.value = false;
 }
 
 function changePage(page) {
-  selectedPage.value = page; // 클릭한 페이지 번호를 업데이트
+  selectedPage.value = page;
   currentPage.value = page;
   isLoading.value = true;
   loadCustomers(page);
@@ -102,69 +107,29 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  defaultParams[criteria] = searchValue.value;
+  // 이전 검색 기준 값 초기화
+  if (selectedCriteria.value) {
+    defaultParams[selectedCriteria.value] = null;
+  }
+
+  selectedCriteria.value = criteria;
+  searchValue.value = ''; // 검색값 초기화
+  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
 }
 
-onMounted(() => {
-  loadCustomers(currentPage.value);
-});
+function toggleDropdownMenu() {
+  isDropdownOpen.value = !isDropdownOpen.value;
+}
 
 onMounted(() => {
   loadCustomers(currentPage.value);
-});
 
-
-onMounted(() => {
-  // 페이지가 로드될 때 filter-container를 숨김
-  $('.filter-container').hide();
-
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
-});
-onMounted(() => {
-  fetchData().then(() => {
-    isLoading.value = false;
-  });
-
-  function fetchData() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  }
-
-  // Clock
-  const h1 = document.getElementById("time");
-
-  function getTime() {
-    const date = new Date();
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
-    const second = String(date.getSeconds()).padStart(2, '0');
-    const time = `${hour}:${minute}:${second}`;
-    h1.textContent = time;
-  }
-
-// 최초에 한 번 시간 설정
-  getTime();
-
-// 1초마다 getTime 함수를 호출하도록 타이머 설정
-  setInterval(getTime, 1000);
-
-});
-
-const router = useRouter();
-
-$(document).ready(function () {
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
+  // Bootstrap 드롭다운 초기화
+  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
@@ -180,13 +145,11 @@ $(document).ready(function () {
     </div>
     <!-- Spinner End -->
 
-
     <!-- Sidebar Start -->
     <div class="sidebar pe-4 pb-3">
       <nav class="navbar bg-secondary navbar-dark">
         <a href="index.html" class="navbar-brand mx-4 mb-3">
-          <h3 class="text-primary" style="display: flex; justify-content: center;"><img
-              src="@/assets/img/hotelity_logo.png" width="60%"></h3>
+          <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="@/assets/img/hotelity_logo.png" width="60%"></h3>
         </a>
 
         <div class="container">
@@ -196,14 +159,12 @@ $(document).ready(function () {
         </div>
 
         <div class="navbar-nav w-100">
-          <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트
-          </router-link>
+          <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
           <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
         </div>
       </nav>
     </div>
     <!-- Sidebar End -->
-
 
     <!-- Content Start -->
     <div class="content">
@@ -217,18 +178,12 @@ $(document).ready(function () {
         </a>
 
         <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
-
-          <!-- Existing dropdowns and items -->
-
-          <!-- New Menu Items -->
-
           <a href="" class="nav-item nav-link">고객</a>
           <a href="" class="nav-item nav-link">직원</a>
           <a href="" class="nav-item nav-link">호텔 서비스</a>
           <a href="" class="nav-item nav-link">호텔 관리</a>
           <a href="" class="nav-item nav-link">마케팅</a>
           <a href="" class="nav-item nav-link">영업관리</a>
-
         </div>
 
         <div class="navbar-nav align-items-center ms-auto">
@@ -275,7 +230,7 @@ $(document).ready(function () {
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <i class="emoji bi bi-bell-fill"></i>
-              <span class="d-none d-lg-inline-flex">Notificatin</span>
+              <span class="d-none d-lg-inline-flex">Notification</span>
               <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
@@ -310,8 +265,6 @@ $(document).ready(function () {
             </div>
           </div>
         </div>
-
-
       </nav>
       <!-- Navbar End -->
 
@@ -322,10 +275,12 @@ $(document).ready(function () {
           <div class="search-container d-flex align-items-center">
             <div class="btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-bs-toggle="dropdown" aria-expanded="false" style="background-color: saddlebrown;">
+                      @click="toggleDropdownMenu"
+                      :class="{ 'btn-primary': isDropdownOpen }"
+                      style="background-color: saddlebrown;">
                 <i class="bi bi-search"></i>
               </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerCodePk')">고객코드</a></li>
                 <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">이름</a></li>
                 <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerPhoneNumber')">전화번호</a></li>
@@ -339,8 +294,9 @@ $(document).ready(function () {
               <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
               <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
             </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
-                class="bi bi-funnel"></i></button>
+            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer">
+              <i class="bi bi-funnel"></i>
+            </button>
             <div class="filter-container" v-show="isFilterContainerVisible">
               <div class="btn-group me-2">
                 <select class="form-select" v-model="defaultParams.customerType">
@@ -359,7 +315,7 @@ $(document).ready(function () {
                   <option value="VIP">VIP</option>
                 </select>
               </div>
-              <button class="btn btn-primary" @click=loadCustomers(1)>적용</button>
+              <button class="btn btn-primary" @click="loadCustomers(1)">적용</button>
             </div>
           </div>
           <br>
@@ -412,11 +368,8 @@ $(document).ready(function () {
         </div>
       </div>
       <!-- Table End -->
-
-
     </div>
     <!-- Content End -->
-
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -425,7 +378,6 @@ $(document).ready(function () {
 </template>
 
 <style>
-
 @import "@/css/style.css";
 @import "@/css/bootstrap.min.css";
 
@@ -445,7 +397,6 @@ $(document).ready(function () {
 }
 
 .filter-container {
-  display: none;
   position: absolute;
   top: 50px;
   right: 10px;
@@ -481,5 +432,9 @@ $(document).ready(function () {
 .selected {
   background-color: rgba(255, 170, 0, 0.38);
   color: black;
+}
+
+.dropdown-menu.show {
+  display: block;
 }
 </style>
