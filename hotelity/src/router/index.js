@@ -12,6 +12,7 @@ import PaymentList from '@/component/hotel-service/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 import BranchPage from "@/component/hotel-management/branch/BranchPage.vue";
+import RoomPage from "@/component/hotel-management/room/RoomPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -67,6 +68,10 @@ const router = createRouter({
     {
       path: '/branchPage',
       component: BranchPage
+    },
+    {
+      path: '/roomPage',
+      component: RoomPage
     }
 ]
 });

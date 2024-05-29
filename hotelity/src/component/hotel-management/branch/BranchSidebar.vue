@@ -14,10 +14,10 @@
       </div>
 
       <div class="navbar-nav w-100">
-        <router-link to="/reservationPage" class="nav-item nav-link active">
+        <router-link to="/branchPage" class="nav-item nav-link active">
           <i class="emoji bi bi-people-fill"></i>지점
         </router-link>
-        <router-link to="/" class="nav-item nav-link">
+        <router-link to="/roomPage" class="nav-item nav-link">
           <i class="emoji bi bi-person-fill-add"></i>객실
         </router-link>
         <router-link to="/" class="nav-item nav-link">
@@ -32,8 +32,40 @@
 
 <script setup>
 import BranchNavbar from "@/component/hotel-management/branch/BranchNavbar.vue";
-import BranchList from "@/component/hotel-management/branch/BranchList.vue";
+import {onMounted} from "vue";
 
+onMounted(() => {
+  fetchData().then(() => {
+    isLoading.value = false;
+  });
+
+  function fetchData() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+  }
+
+  // Clock
+  const h1 = document.getElementById("time");
+
+  function getTime() {
+    const date = new Date();
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+    const time = `${hour}:${minute}:${second}`;
+    h1.textContent = time;
+  }
+
+// 최초에 한 번 시간 설정
+  getTime();
+
+// 1초마다 getTime 함수를 호출하도록 타이머 설정
+  setInterval(getTime, 1000);
+
+});
 </script>
 
 <style>
