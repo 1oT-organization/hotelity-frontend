@@ -10,6 +10,9 @@ import TestCalendar from '@/component/TestCalendar.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import PaymentList from '@/component/hotel-service/PaymentList.vue';
+import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
+import TestCalendar from "@/component/TestCalendar.vue";
+import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -57,8 +60,15 @@ const router = createRouter({
     {
       path: '/paymentList',
       component: PaymentList
+    },
+    {
+      path: '/reservationPage',
+      component: ReservationPage
+    },
+    {
+      path: '/reservationCalendar',
+      component: ReservationCalendar
     }
-
 ]
 });
 
