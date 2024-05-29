@@ -25,10 +25,4 @@
   calendar.render(); // FullCalendar를 렌더링합니다.
 },
 });
-
-
-  // var calendar = new FullCalendar.Calendar(calendarEl, {
-
-  // });
-  // calendar.setOption('contentHeight', 650);
 </script>
