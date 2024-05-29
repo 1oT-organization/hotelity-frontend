@@ -8,9 +8,10 @@ import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
-import PaymentList from '@/component/hotel-service/PaymentList.vue';
+import PaymentList from '@/component/hotel-service/payment/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
-import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+import StayPage from "@/component/hotel-service/stay/StayPage.vue";
+import PaymentPage from "@/component/hotel-service/payment/PaymentPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -60,8 +61,12 @@ const router = createRouter({
       component: ReservationPage
     },
     {
-      path: '/reservationCalendar',
-      component: ReservationCalendar
+      path: '/stayPage',
+      component: StayPage
+    },
+    {
+      path: '/paymentPage',
+      component: PaymentPage
     }
 ]
 });
