@@ -1,24 +1,49 @@
 <template>
   <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i>
   </button>
-  <div class="filter-container">
+  <div class="filter-container" style="width: auto">
     <div class="btn-group me-2">
       <select class="form-select">
-        <option selected>객실 등급</option>
-        <option value="1">개인</option>
-        <option value="2">법인</option>
+        <option selected>지점 코드</option>
+        <option value="1">SE</option>
+        <option value="2">HQ</option>
       </select>
     </div>
     <div class="btn-group me-2">
-      <select class="form-select">
-        <option selected>멤버십 등급 선택</option>
-        <option value="1">일반</option>
-        <option value="2">골드</option>
-        <option value="3">플래티넘</option>
-        <option value="4">프리미엄</option>
-        <option value="5">VIP</option>
-      </select>
+      <DatePicker v-model="selectedReservationDate" format="yyyy-MM-dd"
+                  style="width: 120px; text-align: center" placeholder="예약 일자"></DatePicker>
     </div>
+    <div class="btn-group me-2">
+      <DatePicker v-model="selectedReservationCheckinDate" format="yyyy-MM-dd"
+                  style="width: 120px; text-align: center" placeholder="체크인 일자"></DatePicker>
+    </div>
+    <div class="btn-group me-2">
+      <DatePicker v-model="selectedReservationCheckoutDate" format="yyyy-MM-dd"
+                  style="width: 120px; text-align: center" placeholder="체크아웃 일자"></DatePicker>
+    </div>
+
     <button class="btn btn-primary">적용</button>
   </div>
 </template>
+
+<script>
+import {ref, defineComponent} from 'vue';
+import DatePicker from 'vue3-datepicker';
+
+export default defineComponent({
+  components: {
+    DatePicker
+  },
+  setup() {
+    const selectedReservationDate = ref(null);
+    const selectedReservationCheckinDate = ref(null);
+    const selectedReservationCheckoutDate = ref(null);
+
+    return {
+      selectedReservationDate,
+      selectedReservationCheckinDate,
+      selectedReservationCheckoutDate
+    };
+  }
+});
+</script>
