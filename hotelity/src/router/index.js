@@ -6,13 +6,12 @@ import Test from '@/component/Test.vue';
 import TestChart from '@/component/TestChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
-import TestCalendar from '@/component/TestCalendar.vue';
-import BranchList from '@/component/hotel-management/BranchList.vue';
+import BranchList from '@/component/hotel-management/branch/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import PaymentList from '@/component/hotel-service/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
-import TestCalendar from "@/component/TestCalendar.vue";
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+import BranchPage from "@/component/hotel-management/branch/BranchPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,10 +45,6 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/calendarTest',
-      component: TestCalendar
-    },
-    {
       path: '/branchList',
       component: BranchList
     },
@@ -68,6 +63,10 @@ const router = createRouter({
     {
       path: '/reservationCalendar',
       component: ReservationCalendar
+    },
+    {
+      path: '/branchPage',
+      component: BranchPage
     }
 ]
 });
