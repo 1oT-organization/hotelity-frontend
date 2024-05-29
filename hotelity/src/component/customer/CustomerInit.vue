@@ -5,6 +5,17 @@ import {useRouter} from 'vue-router';
 import {ref, onMounted} from 'vue';
 import axios from "axios";
 
+
+function navigateToCustomerList() {
+  router.push('/customerList');
+}
+
+function navigateToCustomerInit() {
+  router.push('/');
+}
+
+const router = useRouter();
+
 const isLoading = ref(true);
 
 const countries = ref([]);
@@ -22,18 +33,32 @@ const form = ref({
   customerGender: ''
 });
 
+let initialFormState = {
+  customerName: '',
+  customerEmail: '',
+  customerPhoneNumber: '',
+  customerEnglishName: '',
+  customerAddress: '',
+  customerInfoAgreement: 0,
+  customerStatus: 0,
+  customerType: '',
+  nationCodeFk: 1,
+  customerGender: ''
+};
+
 async function handleSubmit() {
   try {
     const response = await axios.post('http://localhost:8888/customers', form.value);
     console.log(response.data);
+    window.alert(response.data.data.content); // 상태 체크 팝업 창
+    navigateToCustomerList();
   } catch (error) {
     console.error(error);
+    window.alert(error); // 상태 체크 팝업 창
+    form.value = JSON.parse(JSON.stringify(initialFormState)); // form 객체를 초기 상태로 재설정
+    navigateToCustomerInit();
   }
 }
-
-onMounted(async () => {
-  countries.value = await nationList();
-})
 
 async function nationList() {
   try {
@@ -43,6 +68,10 @@ async function nationList() {
     console.error(error);
   }
 }
+
+onMounted(async () => {
+  countries.value = await nationList();
+})
 
 onMounted(() => {
 
@@ -84,16 +113,6 @@ onMounted(() => {
   setInterval(getTime, 1000);
 
 });
-
-function navigateToCustomerList() {
-  router.push('/customerList');
-}
-
-function navigateToCustomerInit() {
-  router.push('/');
-}
-
-const router = useRouter();
 
 $(document).ready(function () {
   $('#filter-icon').on('click', function () {
@@ -256,7 +275,6 @@ $(document).ready(function () {
           <h3 class="mb-4">고객 등록</h3>
           <div class="form-submit">
             <form @submit.prevent="handleSubmit">
-
               <!-- 등록 버튼 누를 시 고객 데이터 저장 -->
               <button type="submit" class="btn-submit">등록</button>
               <br/><br/>
@@ -312,7 +330,6 @@ $(document).ready(function () {
                       v-model="form.customerInfoAgreement"
                       false-value=0
                       true-value=1
-
                   />
                   <label for="privacy-consent">개인정보제공동의</label>
                 </div>
