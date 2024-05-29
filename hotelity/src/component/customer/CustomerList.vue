@@ -14,6 +14,8 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
+const sortBy = ref(0);  // 0: ascending, 1: descending
+const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
 const defaultParams = {
   customerCodePk: null,
@@ -46,6 +48,7 @@ async function fetchData(params) {
     return response.data.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
@@ -76,22 +79,26 @@ async function loadList() {
   }
 }
 
-async function loadCustomers(page) {
-  console.log(defaultParams);
-  customers.value = await fetchData({
-    ...defaultParams,
-    orderBy: null,
-    sortBy: null,
-    pageNum: page - 1
-  });
-  isLoading.value = false;
+async function loadCustomers(page, orderByValue = 'customerCodePk', sortByValue = 0) {
+  try {
+    const data = await fetchData({
+      ...defaultParams,
+      orderBy: orderByValue,
+      sortBy: sortByValue,
+      pageNum: page - 1
+    });
+    customers.value = data;
+    isLoading.value = false;
+  } catch (error) {
+    console.error('Error loading customers:', error);
+  }
 }
 
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
   isLoading.value = true;
-  loadCustomers(page);
+  loadCustomers(page, orderBy.value, sortBy.value);
 }
 
 function nextPageGroup() {
@@ -125,8 +132,18 @@ function toggleDropdownMenu() {
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
+function sort(column) {
+  if (orderBy.value === column) {
+    sortBy.value = sortBy.value === 0 ? 1 : 0;
+  } else {
+    orderBy.value = column;
+    sortBy.value = 0;
+  }
+  loadCustomers(currentPage.value, orderBy.value, sortBy.value);
+}
+
 onMounted(() => {
-  loadCustomers(currentPage.value);
+  loadCustomers(currentPage.value, orderBy.value, sortBy.value);
 
   // Bootstrap 드롭다운 초기화
   new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
@@ -287,7 +304,7 @@ onMounted(() => {
               </ul>
             </div>
             <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
-            <button class="btn btn-primary ms-2" @click="loadCustomers(1)">검색</button>
+            <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
@@ -315,7 +332,7 @@ onMounted(() => {
                   <option value="VIP">VIP</option>
                 </select>
               </div>
-              <button class="btn btn-primary" @click="loadCustomers(1)">적용</button>
+              <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
             </div>
           </div>
           <br>
@@ -324,16 +341,46 @@ onMounted(() => {
               <table class="table table-striped">
                 <thead>
                 <tr>
-                  <th scope="col">고객 코드</th>
-                  <th scope="col">한글 이름</th>
-                  <th scope="col">영문 이름</th>
-                  <th scope="col">성별</th>
-                  <th scope="col">전화번호</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">주소</th>
-                  <th scope="col">멤버십 등급</th>
-                  <th scope="col">국가</th>
-                  <th scope="col">고객 타입</th>
+                  <th scope="col" @click="sort('customerCodePk')">고객 코드
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerName')">한글 이름
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerEnglishName')">영문 이름
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEnglishName' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEnglishName' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerGender')">성별
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerPhoneNumber')">전화번호
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerEmail')">Email
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerAddress')">주소
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('membershipLevelName')">멤버십 등급
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'membershipLevelName' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'membershipLevelName' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('nationName')">국가
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'nationName' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'nationName' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col" @click="sort('customerType')">고객 타입
+                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerType' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerType' && sortBy === 1 }"></i>
+                  </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -436,5 +483,9 @@ onMounted(() => {
 
 .dropdown-menu.show {
   display: block;
+}
+
+.bi-caret-up-fill, .bi-caret-down-fill {
+  visibility: visible;
 }
 </style>
