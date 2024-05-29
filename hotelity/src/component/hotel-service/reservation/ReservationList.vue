@@ -36,9 +36,7 @@
 
           <button class="btn btn-primary">적용</button>
         </div>
-        <div>
-          Selected Check-in Date: {{ selectedReservationCheckinDate }}
-        </div>
+
 <!--        ReservationFilter end-->
 
       </div>
@@ -61,13 +59,13 @@
               <th scope="col">예약 체크인 일자</th>
               <th scope="col">예약 체크아웃 일자</th>
               <th scope="col">예약 인원</th>
-              <th scope="col">예약 취소 여부</th>
+              <th scope="col">예약 취소</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="reservation in reservations.content" :key="reservation.reservationCodePk">
               <td>{{ reservation.reservationCodePk }}</td>
-              <td>{{ reservation.customerCodePk }}</td>
+              <td>{{ reservation.customerCodeFk }}</td>
               <td>{{ reservation.customerName }}</td>
               <td>{{ reservation.customerEnglishName }}</td>
               <td>{{ reservation.roomCodeFk }}</td>
@@ -75,11 +73,14 @@
               <td>{{ reservation.roomLevelName }}</td>
 <!--              <td>{{ reservation.roomCapacity }}</td>-->
               <td>{{ reservation.branchCodeFk }}</td>
-              <td>{{ reservation.reservationDate }}</td>
-              <td>{{ reservation.reservationCheckinDate }}</td>
-              <td>{{ reservation.reservationCheckoutDate }}</td>
+              <td>{{ formatDate(reservation.reservationDate) }}</td>
+              <td>{{ formatDate(reservation.reservationCheckinDate) }}</td>
+              <td>{{ formatDate(reservation.reservationCheckoutDate) }}</td>
               <td>{{ reservation.reservationPersonnel }}</td>
-              <td>{{ reservation.reservationCancelStatus }}</td>
+              <td>
+                <span v-if="reservation.reservationCancelStatus === 0">N</span>
+                <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -91,7 +92,7 @@
 
 <script setup>
 
-import {ref, defineComponent, onMounted} from 'vue';
+import {ref, defineComponent, onMounted, watch} from 'vue';
 import axios from 'axios';
 
 import ReservationSearch from "@/component/hotel-service/reservation/ReservationSearch.vue";
@@ -107,7 +108,8 @@ const selectedReservationCheckoutDate = ref(null);
 
 async function fetchData(params) {
   try {
-    const response = await axios.get(`http://localhost:8888/hotel-service/reservations/2023-05-05T00:00:00`, {params});
+    const formattedDate = formatDateTime(selectedReservationCheckinDate.value);
+    const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${formattedDate}`, {params});
     console.log(response.data);
     return response.data.data;
   } catch (error) {
@@ -115,7 +117,10 @@ async function fetchData(params) {
   }
 }
 
+watch(selectedReservationCheckinDate, loadReservations, { immediate: true });
+
 async function loadReservations() {
+  console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
   reservations.value = await fetchData({
     reservationCodePk: null,
     customerCodeFk: null,
@@ -137,11 +142,31 @@ async function loadReservations() {
   isLoading.value = false;
 }
 
-onMounted(() => {
+onMounted( async () => {
+  await loadReservations();
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();
   });
 });
+
+// LocalDateTime -> yyyy-MM-dd로 변환
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  return `${year}-${month}`;
+}
+
+// Datepicker 값 -> yyyy-MM-ddTHH:mm:ss로 변환
+function formatDateTime(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
 
 </script>
 
