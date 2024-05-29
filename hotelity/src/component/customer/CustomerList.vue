@@ -1,10 +1,9 @@
+
 <script setup>
 
-import {useRouter} from 'vue-router';
+    import { useRouter } from 'vue-router';
 
-import {ref, onMounted} from 'vue';
-import axios from "axios";
-
+import { ref, onMounted } from 'vue';
 
 const isLoading = ref(true);
 const customers = ref([]);
@@ -12,6 +11,24 @@ const currentPage = ref(1);
 const totalPages = ref(0);
 const pageGroup = ref(1);
 const pageSize = 10; // 한 그룹당 페이지 수
+const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
+
+const defaultParams = {
+  customerCodePk: null,
+  customerName: null,
+  customerEmail: null,
+  customerPhoneNumber: null,
+  customerEnglishName: null,
+  customerAddress: null,
+  customerInfoAgreement: null,
+  customerStatus: null,
+  customerRegisteredDate: null,
+  nationCodeFk: null,
+  customerGender: null,
+  nationName: null,
+  customerType: null,
+  membershipLevelName: null
+};
 
 async function fetchData(params) {
   try {
@@ -24,22 +41,37 @@ async function fetchData(params) {
   }
 }
 
+async function downloadExcel(){
+  try{
+    const response = await axios.get('http://localhost:8888/customers/excel/download', {
+      params: defaultParams,
+      responseType: 'blob' // 응답을 blob 형식으로 받음
+    });
+
+    // Blob 데이터를 다운로드 가능한 URL로 변환
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'customers.xlsx'); // 파일 이름 설정
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch(error){
+    console.error(error);
+  }
+}
+
+async function loadList() {
+  try {
+    await downloadExcel();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function loadCustomers(page) {
   customers.value = await fetchData({
-    customerCodePk: null,
-    customerName: null,
-    customerEmail: null,
-    customerPhoneNumber: null,
-    customerEnglishName: null,
-    customerAddress: null,
-    customerInfoAgreement: null,
-    customerStatus: null,
-    customerRegisteredDate: null,
-    nationCodeFk: null,
-    customerGender: null,
-    nationName: null,
-    customerType: null,
-    membershipLevelName: null,
+    ...defaultParams,
     orderBy: null,
     sortBy: null,
     pageNum: page - 1 // 백엔드 페이지 번호가 0부터 시작한다면 -1 필요
@@ -48,6 +80,7 @@ async function loadCustomers(page) {
 }
 
 function changePage(page) {
+  selectedPage.value = page; // 클릭한 페이지 번호를 업데이트
   currentPage.value = page;
   isLoading.value = true;
   loadCustomers(page);
@@ -291,7 +324,7 @@ $(document).ready(function () {
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
+              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
               <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
@@ -318,52 +351,6 @@ $(document).ready(function () {
             </div>
           </div>
           <br>
-          <!--          <div class="row">-->
-          <!--            <div class="col-12">-->
-          <!--              <table class="table table-striped">-->
-          <!--                <thead>-->
-          <!--                <tr>-->
-          <!--                  <th scope="col">고객 코드</th>-->
-          <!--                  <th scope="col">한글 이름</th>-->
-          <!--                  <th scope="col">영문 이름</th>-->
-          <!--                  <th scope="col">성별</th>-->
-          <!--                  <th scope="col">전화번호</th>-->
-          <!--                  <th scope="col">Email</th>-->
-          <!--                  <th scope="col">주소</th>-->
-          <!--                  <th scope="col">멤버십 등급</th>-->
-          <!--                  <th scope="col">국가</th>-->
-          <!--                  <th scope="col">고객 타입</th>-->
-          <!--                </tr>-->
-          <!--                </thead>-->
-          <!--                <tbody>-->
-          <!--                <tr v-for="customer in customers.content" :key="customer.customerCodePk">-->
-          <!--                  &lt;!&ndash; 각 필드에 대한 데이터 출력 &ndash;&gt;-->
-          <!--                  <td>{{ customer.customerCodePk }}</td>-->
-          <!--                  <td>{{ customer.customerName }}</td>-->
-          <!--                  <td>{{ customer.customerEnglishName }}</td>-->
-          <!--                  <td>{{ customer.customerGender }}</td>-->
-          <!--                  <td>{{ customer.customerPhoneNumber }}</td>-->
-          <!--                  <td>{{ customer.customerEmail }}</td>-->
-          <!--                  <td>{{ customer.customerAddress }}</td>-->
-          <!--                  <td>{{ customer.membershipLevelName }}</td>-->
-          <!--                  <td>{{ customer.nationName }}</td>-->
-          <!--                  <td>{{ customer.customerType }}</td>-->
-
-          <!--                  &lt;!&ndash; ... 기타 필드 ... &ndash;&gt;-->
-          <!--                </tr>-->
-          <!--                <div class = "pagination">-->
-          <!--                  <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>-->
-          <!--                  <button v-for="page in pageSize" :key="page"-->
-          <!--                          @click="changePage((pageGroup - 1) * pageSize + page)"-->
-          <!--                          :disabled="(pageGroup - 1) * pageSize + page > totalPages">-->
-          <!--                    {{ (pageGroup - 1) * pageSize + page }}-->
-          <!--                  </button>-->
-          <!--                  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>-->
-          <!--                </div>-->
-          <!--                </tbody>-->
-          <!--              </table>-->
-          <!--            </div>-->
-          <!--          </div>-->
           <div class="row">
             <div class="col-12">
               <table class="table table-striped">
@@ -403,7 +390,8 @@ $(document).ready(function () {
               <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
               <button v-for="page in pageSize" :key="page"
                       @click="changePage((pageGroup - 1) * pageSize + page)"
-                      :disabled="(pageGroup - 1) * pageSize + page > totalPages">
+                      :disabled="(pageGroup - 1) * pageSize + page > totalPages"
+                      :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
                 {{ (pageGroup - 1) * pageSize + page }}
               </button>
               <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
@@ -476,5 +464,10 @@ $(document).ready(function () {
 
 .emoji {
   margin-right: 10px;
+}
+
+.selected {
+  background-color: rgba(255, 170, 0, 0.38);
+  color: black;
 }
 </style>
