@@ -6,7 +6,7 @@ import Test from '@/component/Test.vue';
 import TestChart from '@/component/TestChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
-import BranchList from '@/component/hotel-management/branch/BranchList.vue';
+import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import PaymentList from '@/component/hotel-service/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
