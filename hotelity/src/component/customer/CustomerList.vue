@@ -14,6 +14,23 @@ const pageGroup = ref(1);
 const pageSize = 10; // 한 그룹당 페이지 수
 const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
 
+const defaultParams = {
+  customerCodePk: null,
+  customerName: null,
+  customerEmail: null,
+  customerPhoneNumber: null,
+  customerEnglishName: null,
+  customerAddress: null,
+  customerInfoAgreement: null,
+  customerStatus: null,
+  customerRegisteredDate: null,
+  nationCodeFk: null,
+  customerGender: null,
+  nationName: null,
+  customerType: null,
+  membershipLevelName: null
+};
+
 async function fetchData(params) {
   try {
     const response = await axios.get('http://localhost:8888/customers/page', { params });
@@ -25,22 +42,37 @@ async function fetchData(params) {
   }
 }
 
+async function downloadExcel(){
+  try{
+    const response = await axios.get('http://localhost:8888/customers/excel/download', {
+      params: defaultParams,
+      responseType: 'blob' // 응답을 blob 형식으로 받음
+    });
+
+    // Blob 데이터를 다운로드 가능한 URL로 변환
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'customers.xlsx'); // 파일 이름 설정
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch(error){
+    console.error(error);
+  }
+}
+
+async function loadList() {
+  try {
+    await downloadExcel();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function loadCustomers(page) {
   customers.value = await fetchData({
-    customerCodePk: null,
-    customerName: null,
-    customerEmail: null,
-    customerPhoneNumber: null,
-    customerEnglishName: null,
-    customerAddress: null,
-    customerInfoAgreement: null,
-    customerStatus: null,
-    customerRegisteredDate: null,
-    nationCodeFk: null,
-    customerGender: null,
-    nationName: null,
-    customerType: null,
-    membershipLevelName: null,
+    ...defaultParams,
     orderBy: null,
     sortBy: null,
     pageNum: page - 1 // 백엔드 페이지 번호가 0부터 시작한다면 -1 필요
@@ -293,7 +325,7 @@ $(document).ready(function () {
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2">Excel <i class="bi bi-download"></i></button>
+              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
               <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
