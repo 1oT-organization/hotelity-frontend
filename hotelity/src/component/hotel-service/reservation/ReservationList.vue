@@ -8,10 +8,8 @@
       </div>
       <div class="position-relative-container mt-3">
         <ExcelButton/>
-        <!--        <ReservationFilter @change-checkin-date="handleCheckinDateChange"/>-->
 
         <div style="display: flex;justify-content:right">
-<!--          <ReservationCheckinBtn  :checkedRows="checkedRows" :reservations="reservations.content"/>-->
           <ReservationCheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>
 
           <!--        ReservationFilter start -->
