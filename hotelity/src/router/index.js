@@ -10,8 +10,10 @@ import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import PaymentList from '@/component/hotel-service/payment/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
-import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 import Customer from "@/component/customer/Customer.vue";
+import Coupon from "@/component/sales/Coupon.vue";
+import Membership from "@/component/sales/Membership.vue";
+import StayPage from "@/component/hotel-service/stay/StayPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -53,20 +55,24 @@ const router = createRouter({
       component: BranchInfo
     },
     {
-      path: '/paymentList',
-      component: PaymentList
-    },
-    {
       path: '/reservationPage',
       component: ReservationPage
     },
     {
-      path: '/reservationCalendar',
-      component: ReservationCalendar
-    },
-    {
         path: '/customer/:id',
         component: Customer
+    },
+    {
+      path: '/stayPage',
+      component: StayPage
+    },
+    {
+        path: '/coupon',
+        component: Coupon
+    },
+    {
+        path: '/membership',
+        component: Membership
     }
 ]
 });
