@@ -75,40 +75,6 @@ import ReservationNavbar from "@/component/hotel-service/reservation/Reservation
 @import "@/css/style.css";
 @import "@/css/bootstrap.min.css";
 
-.dropdown-icon {
-  transition: transform 0.5s;
-}
-
-.filter-container {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 500px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 10px;
-}
-
-.filter-container::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
-}
-
-.position-relative-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
-
 .emoji {
   margin-right: 10px;
 }
