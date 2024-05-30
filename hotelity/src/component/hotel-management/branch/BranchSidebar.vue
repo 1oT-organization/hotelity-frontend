@@ -1,5 +1,4 @@
 <template>
-  <BranchNavbar />
 
   <div class="sidebar pe-4 pb-3">
     <nav class="navbar bg-secondary navbar-dark">
@@ -32,7 +31,9 @@
 
 <script setup>
 import BranchNavbar from "@/component/hotel-management/branch/BranchNavbar.vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
+
+const isLoading = ref(true);
 
 onMounted(() => {
   fetchData().then(() => {
