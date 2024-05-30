@@ -9,9 +9,11 @@
       <div class="position-relative-container mt-3">
         <ExcelButton/>
 
-        <!--        StayFilter start -->
-        <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i>
-        </button>
+        <div style="display: flex;justify-content:right">
+          <StayCheckoutBtn/>
+          <!--        StayFilter start -->
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
+        </div>
         <div class="filter-container" style="width: auto">
           <div class="btn-group me-2">
             <select class="form-select">
@@ -105,6 +107,7 @@ import axios from 'axios';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import StaySearch from "@/component/hotel-service/stay/StaySearch.vue";
+import StayCheckoutBtn from "@/component/hotel-service/stay/StayCheckoutBtn.vue";
 
 const isLoading = ref(true);
 const stays = ref([]);
@@ -227,5 +230,4 @@ function formatDateTime(date) {
   margin: 0 5px;
   padding: 5px 10px;
 }
-
 </style>
