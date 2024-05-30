@@ -11,6 +11,7 @@ import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import PaymentList from '@/component/hotel-service/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+import Customer from "@/component/customer/Customer.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,6 +63,10 @@ const router = createRouter({
     {
       path: '/reservationCalendar',
       component: ReservationCalendar
+    },
+    {
+        path: '/customer/:id',
+        component: Customer
     }
 ]
 });

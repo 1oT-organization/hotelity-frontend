@@ -25,9 +25,6 @@
 
     <button class="btn btn-primary">적용</button>
   </div>
-  <div>
-    Selected Check-in Date: {{ selectedReservationCheckinDate }}
-  </div>
 </template>
 
 <script>
