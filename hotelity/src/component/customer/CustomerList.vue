@@ -1,7 +1,12 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import axios from "axios";
-import { useRouter } from 'vue-router';
+import axios from 'axios';
+import router from '@/router/index.js';
+import Clock from '@/component/common/Clock.vue';
+
+function navigateToCustomer(id) {
+  router.push(`/customer/${id}`);
+}
 
 const isLoading = ref(true);
 const customers = ref([]);
@@ -33,6 +38,43 @@ const defaultParams = {
   customerType: null,
   membershipLevelName: null
 };
+const fileToUpload = ref(null);
+
+function openFileInput() {
+  const fileInput = document.getElementById('fileInput');
+  fileInput.click();
+}
+
+function handleFileUpload(event) {
+  fileToUpload.value = event.target.files[0];
+}
+
+async function submitFile() {
+  if (!fileToUpload.value) {
+    alert('파일을 선택해주세요.');
+    return;
+  }
+
+  // FormData 객체 생성
+  const formData = new FormData();
+
+  // 선택한 파일 추가
+  formData.append('file', fileToUpload.value);
+
+  try {
+    // 파일 전송
+    const response = await axios.post('http://localhost:8888/customers/excel/read', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    // 응답 처리
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 watch(searchValue, (newValue) => {
   if (selectedCriteria.value) {
@@ -168,12 +210,7 @@ onMounted(() => {
         <a href="index.html" class="navbar-brand mx-4 mb-3">
           <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="@/assets/img/hotelity_logo.png" width="60%"></h3>
         </a>
-
-        <div class="container">
-          <div class="clock">
-            <h1 id="time" style="display: flex; justify-content: center; font-family: fantasy; color:#798a69;"></h1>
-          </div>
-        </div>
+        <Clock/>
 
         <div class="navbar-nav w-100">
           <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
@@ -202,73 +239,7 @@ onMounted(() => {
           <a href="" class="nav-item nav-link">마케팅</a>
           <a href="" class="nav-item nav-link">영업관리</a>
         </div>
-
         <div class="navbar-nav align-items-center ms-auto">
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              <i class="emoji bi bi-envelope-fill"></i>
-              <span class="d-none d-lg-inline-flex">Message</span>
-              <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-              <a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                  <div class="ms-2">
-                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                    <small>15 minutes ago</small>
-                  </div>
-                </div>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                  <div class="ms-2">
-                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                    <small>15 minutes ago</small>
-                  </div>
-                </div>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item">
-                <div class="d-flex align-items-center">
-                  <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                  <div class="ms-2">
-                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                    <small>15 minutes ago</small>
-                  </div>
-                </div>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item text-center">See all message</a>
-            </div>
-          </div>
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              <i class="emoji bi bi-bell-fill"></i>
-              <span class="d-none d-lg-inline-flex">Notification</span>
-              <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-              <a href="#" class="dropdown-item">
-                <h6 class="fw-normal mb-0">Profile updated</h6>
-                <small>15 minutes ago</small>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item">
-                <h6 class="fw-normal mb-0">New user added</h6>
-                <small>15 minutes ago</small>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item">
-                <h6 class="fw-normal mb-0">Password changed</h6>
-                <small>15 minutes ago</small>
-              </a>
-              <hr class="dropdown-divider">
-              <a href="#" class="dropdown-item text-center">See all notifications</a>
-            </div>
-          </div>
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <img class="rounded-circle me-lg-2" src="" alt="" style="width: 40px; height: 40px;">
@@ -309,7 +280,9 @@ onMounted(() => {
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
               <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
-              <button id="upload-icon" class="btn btn-success me-2">Excel <i class="bi bi-upload"></i></button>
+              <button id="upload-icon" class="btn btn-success me-2" @click="openFileInput">Excel <i class="bi bi-upload"></i></button>
+              <input type="file" id="fileInput" style="display: none" @change="handleFileUpload"/>
+              <button class="btn btn-primary" @click="submitFile">전송</button>
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer">
               <i class="bi bi-funnel"></i>
@@ -384,7 +357,7 @@ onMounted(() => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="customer in customers.content" :key="customer.customerCodePk">
+                <tr v-for="customer in customers.content" :key="customer.customerCodePk" @click=navigateToCustomer(customer.customerCodePk)>
                   <td>{{ customer.customerCodePk }}</td>
                   <td>{{ customer.customerName }}</td>
                   <td>{{ customer.customerEnglishName }}</td>
@@ -442,7 +415,9 @@ onMounted(() => {
 .dropdown-icon {
   transition: transform 0.5s;
 }
-
+tr {
+  cursor: pointer;
+}
 .filter-container {
   position: absolute;
   top: 50px;
