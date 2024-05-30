@@ -10,6 +10,8 @@ import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import Customer from "@/component/customer/Customer.vue";
+import Coupon from "@/component/sales/Coupon.vue";
+import Membership from "@/component/sales/Membership.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
 
 const router = createRouter({
@@ -62,6 +64,14 @@ const router = createRouter({
     {
       path: '/stayPage',
       component: StayPage
+    },
+    {
+        path: '/coupon',
+        component: Coupon
+    },
+    {
+        path: '/membership',
+        component: Membership
     }
 ]
 });
