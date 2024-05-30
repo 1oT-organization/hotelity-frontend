@@ -222,7 +222,7 @@ onMounted(() => {
       <!-- Table Start -->
       <div class="container-fluid pt-4 px-4">
         <div class="bg-secondary rounded-top p-4">
-          <h3 class="mb-4">고객 리스트</h3>
+          <h3 class="mb-4">직원 리스트</h3>
           <div class="search-container d-flex align-items-center">
             <div class="btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
