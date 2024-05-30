@@ -10,7 +10,7 @@
         <ExcelButton/>
 
         <div style="display: flex;justify-content:right">
-          <StayCheckoutBtn/>
+          <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
           <!--        StayFilter start -->
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
         </div>
@@ -45,12 +45,11 @@
             <tr>
               <th scope="col">체크아웃</th>
               <th scope="col">투숙 코드</th>
-              <th scope="col">고객 코드</th>
               <th scope="col">한글 이름</th>
-              <th scope="col">영문 이름</th>
               <th scope="col">객실 코드</th>
               <th scope="col">객실명</th>
               <th scope="col">객실 등급</th>
+              <th scope="col">객실 수용 인원</th>
               <th scope="col">투숙 인원</th>
               <th scope="col">체크인 일자</th>
               <th scope="col">체크아웃 일자</th>
@@ -61,19 +60,17 @@
             </thead>
             <tbody>
             <tr v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
-              <td><input type="checkbox" v-model="checkedRows[index]"></td>
+              <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
               <td>{{ stay.stayCodePk }}</td>
-              <td>{{ stay.customerCodeFk }}</td>
               <td>{{ stay.customerName }}</td>
               <td>{{ stay.roomCode }}</td>
               <td>{{ stay.roomName }}</td>
               <td>{{ stay.roomLevelName }}</td>
               <td>{{ stay.roomCapacity }}</td>
               <td>{{ stay.stayPeopleCount }}</td>
-              <td>{{ stay.stayCheckinTime }}</td>
-              <td>{{ stay.stayCheckoutTime }}</td>
+              <td>{{ formatDate(stay.stayCheckinTime) }}</td>
+              <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
               <td>{{ stay.employeeCodeFk }}</td>
-              <td>{{ stay.PICEmployeeName }}</td>
               <td>{{ stay.branchCodeFk }}</td>
               <td>{{ stay.reservationCodeFk }}</td>
 
@@ -122,7 +119,13 @@ const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
 const checkedRows = ref([]);
 
 watch(stays, () => {
-  checkedRows.value = stays.value.content ? stays.value.content.map(() => false) : [];
+  checkedRows.value = stays.value.content ?
+      stays.value.content.map(() => false) : [];
+}, { immediate: true });
+
+watch(stays, () => {
+  checkedRows.value = stays.value.content ?
+      stays.value.content.map(stay => !!stay.stayCheckoutTime) : [];
 }, { immediate: true });
 
 const selectedReservationDate = ref(null);
@@ -192,8 +195,13 @@ onMounted( async () => {
   });
 });
 
+// 날짜 변환
 // LocalDateTime -> yyyy-MM-dd로 변환
 function formatDate(dateString) {
+  if (dateString === null) {
+    return null;
+  }
+
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
