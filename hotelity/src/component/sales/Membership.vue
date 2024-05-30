@@ -9,7 +9,7 @@ function navigateToCustomer(id) {
 }
 
 const isLoading = ref(true);
-const coupons = ref([]);
+const memberships = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(0);
 const pageGroup = ref(1);
@@ -20,16 +20,14 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('couponCodePk');  // default sorting by customerCodePk
+const orderBy = ref('membershipLevelCodePk');  // default sorting by customerCodePk
 
 const defaultParams = {
-  couponCodePk: null,
-  couponName: null,
-  couponType: null,
-  couponDiscountRate: null,
-  couponLaunchingDate: null,
-  couponInfo: null,
-  membershipLevelCodeFk: null
+  pageNum: 0,
+  membershipLevelCodePk: null,
+  membershipLevelName: null,
+  membershipInfo: null,
+  membershipCriteriaAmount: null
 };
 
 watch(searchValue, (newValue) => {
@@ -40,7 +38,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/page', {params});
+    const response = await axios.get('http://localhost:8888/sales/membership', {params});
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -52,7 +50,7 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/page/excel/download', {
+    const response = await axios.get('http://localhost:8888/sales/membership/excel/download', {
       params: defaultParams,
       responseType: 'blob'
     });
@@ -60,7 +58,7 @@ async function downloadExcel() {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'coupon.xlsx');
+    link.setAttribute('download', 'membership.xlsx');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -77,7 +75,7 @@ async function loadList() {
   }
 }
 
-async function loadCoupon(page, orderByValue = 'couponCodePk', sortByValue = 0) {
+async function loadCoupon(page, orderByValue = 'membershipLevelCodePk', sortByValue = 0) {
   try {
     const data = await fetchData({
       ...defaultParams,
@@ -85,10 +83,10 @@ async function loadCoupon(page, orderByValue = 'couponCodePk', sortByValue = 0) 
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    coupons.value = data;
+    memberships.value = data;
     isLoading.value = false;
   } catch (error) {
-    console.error('Error loading coupons:', error);
+    console.error('Error loading membership:', error);
   }
 }
 
@@ -217,7 +215,7 @@ onMounted(() => {
       <!-- Table Start -->
       <div class="container-fluid pt-4 px-4">
         <div class="bg-secondary rounded-top p-4">
-          <h3 class="mb-4">쿠폰 리스트</h3>
+          <h3 class="mb-4">멤버십</h3>
           <div class="search-container d-flex align-items-center">
             <div class="btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -227,8 +225,7 @@ onMounted(() => {
                 <i class="bi bi-search"></i>
               </button>
               <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('couponCodePk')">쿠폰 코드</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('couponName')">쿠폰 이름</a></li>
+                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('membershipLevelCodePk')">멤버십 코드</a></li>
               </ul>
             </div>
             <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
@@ -237,8 +234,8 @@ onMounted(() => {
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
-                  class="bi bi-download"></i></button>
+<!--              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i-->
+<!--                  class="bi bi-download"></i></button>-->
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                     @click="toggleFilterContainer">
@@ -246,30 +243,12 @@ onMounted(() => {
             </button>
             <div class="filter-container" v-show="isFilterContainerVisible">
               <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.couponDiscountRate">
-                  <option :value="null">할인율</option>
-                  <option value="0.1">10%</option>
-                  <option value="0.2">20%</option>
-                  <option value="0.3">30%</option>
-                  <option value="0.4">40%</option>
-                  <option value="0.5">50%</option>
-                  <option value="0.6">60%</option>
-                  <option value="0.7">70%</option>
-                  <option value="0.8">80%</option>
-                  <option value="0.9">90%</option>
-                  <option value="1">100%</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.couponType">
-                  <option :value="null">쿠폰 종류</option>
-                  <option value="객실 쿠폰">객실 쿠폰</option>
-                  <option value="조식 쿠폰">조식 쿠폰</option>
-                  <option value="호텔 레스토랑 쿠폰">호텔 레스토랑 쿠폰</option>
-                  <option value="호텔 라운지바 쿠폰">호텔 라운지바 쿠폰</option>
-                  <option value="스파 쿠폰">스파 쿠폰</option>
-                  <option value="워터파크 쿠폰">워터파크 쿠폰</option>
-                  <option value="베이커리 쿠폰">워터파크 쿠폰</option>
+                <select class="form-select" v-model="defaultParams.membershipCriteriaAmount">
+                  <option :value="null">멤버십 등급</option>
+                  <option value="플래티넘">플래티넘</option>
+                  <option value="골드">골드</option>
+                  <option value="실버">실버</option>
+                  <option value="브론즈">브론즈</option>
                 </select>
               </div>
               <button class="btn btn-primary" @click="loadCoupon(1, orderBy.value, sortBy.value)">적용</button>
@@ -281,61 +260,23 @@ onMounted(() => {
               <table class="table table-striped">
                 <thead>
                 <tr>
-                  <th scope="col" @click="sort('couponCodePk')">쿠폰 코드
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'couponCodePk' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponCodePk' && sortBy === 1 }"></i>
+                  <th scope="col" @click="sort('membershipLevelCodePk')">멤버십 코드
                   </th>
-                  <th scope="col" @click="sort('couponName')">쿠폰 이름
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'couponName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponName' && sortBy === 1 }"></i>
+                  <th scope="col" @click="sort('membershipLevelName')">멤버십 이름
                   </th>
-                  <th scope="col" @click="sort('couponDiscountRate')">쿠폰 할인율
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 1 }"></i>
+                  <th scope="col" @click="sort('membershipCriteriaAmount')">기준 누적 금액
                   </th>
-                  <th scope="col" @click="sort('couponType')">쿠폰 종류
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'couponType' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponType' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('couponLaunchingDate')">쿠폰 출시 일자
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'couponLaunchingDate' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponLaunchingDate' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('couponInfo')">쿠폰 상세 설명
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'couponInfo' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'couponInfo' && sortBy === 1 }"></i>
+                  <th scope="col" @click="sort('membershipInfo')">상세 설명
                   </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="coupon in coupons.content" :key="coupon.couponCodePk"
-                    @click=navigateToCustomer(coupon.couponCodePk)>
-                  <td>{{ coupon.couponCodePk }}</td>
-                  <td>{{ coupon.couponName }}</td>
-                  <td>{{ coupon.couponDiscountRate * 100 + '%' }}</td>
-                  <td>{{ coupon.couponType }}</td>
-                  <td>{{ new Date(coupon.couponLaunchingDate).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                  }) + ' ' + new Date(coupon.couponLaunchingDate).toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                  }) }}</td>
-                  <td>{{ coupon.couponInfo }}</td>
+                <tr v-for="membership in memberships.content" :key="memberships.membershipLevelCodePk"
+                    @click=navigateToCustomer(membership.membershipLevelCodePk)>
+                  <td>{{ membership.membershipLevelCodePk }}</td>
+                  <td>{{ membership.membershipLevelName }}</td>
+                  <td>{{ new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(membership.membershipCriteriaAmount) }}</td>
+                  <td>{{ membership.membershipInfo }}</td>
                 </tr>
                 </tbody>
               </table>
