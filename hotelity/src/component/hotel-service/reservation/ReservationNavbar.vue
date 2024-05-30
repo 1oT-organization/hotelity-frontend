@@ -24,71 +24,71 @@
       </div>
 
       <div class="navbar-nav align-items-center ms-auto">
-        <div class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="emoji bi bi-envelope-fill"></i>
-            <span class="d-none d-lg-inline-flex">Message</span>
-            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-            <a href="#" class="dropdown-item">
-              <div class="d-flex align-items-center">
-                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                <div class="ms-2">
-                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                  <small>15 minutes ago</small>
-                </div>
-              </div>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item">
-              <div class="d-flex align-items-center">
-                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                <div class="ms-2">
-                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                  <small>15 minutes ago</small>
-                </div>
-              </div>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item">
-              <div class="d-flex align-items-center">
-                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">
-                <div class="ms-2">
-                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                  <small>15 minutes ago</small>
-                </div>
-              </div>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item text-center">See all message</a>
-          </div>
-        </div>
-        <div class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="emoji bi bi-bell-fill"></i>
-            <span class="d-none d-lg-inline-flex">Notificatin</span>
-            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-            <a href="#" class="dropdown-item">
-              <h6 class="fw-normal mb-0">Profile updated</h6>
-              <small>15 minutes ago</small>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item">
-              <h6 class="fw-normal mb-0">New user added</h6>
-              <small>15 minutes ago</small>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item">
-              <h6 class="fw-normal mb-0">Password changed</h6>
-              <small>15 minutes ago</small>
-            </a>
-            <hr class="dropdown-divider">
-            <a href="#" class="dropdown-item text-center">See all notifications</a>
-          </div>
-        </div>
+<!--        <div class="nav-item dropdown">-->
+<!--          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">-->
+<!--            <i class="emoji bi bi-envelope-fill"></i>-->
+<!--            <span class="d-none d-lg-inline-flex">Message</span>-->
+<!--            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>-->
+<!--          </a>-->
+<!--          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <div class="d-flex align-items-center">-->
+<!--                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">-->
+<!--                <div class="ms-2">-->
+<!--                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>-->
+<!--                  <small>15 minutes ago</small>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <div class="d-flex align-items-center">-->
+<!--                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">-->
+<!--                <div class="ms-2">-->
+<!--                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>-->
+<!--                  <small>15 minutes ago</small>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <div class="d-flex align-items-center">-->
+<!--                <img class="rounded-circle" src="" alt="" style="width: 40px; height: 40px;">-->
+<!--                <div class="ms-2">-->
+<!--                  <h6 class="fw-normal mb-0">Jhon send you a message</h6>-->
+<!--                  <small>15 minutes ago</small>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item text-center">See all message</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="nav-item dropdown">-->
+<!--          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">-->
+<!--            <i class="emoji bi bi-bell-fill"></i>-->
+<!--            <span class="d-none d-lg-inline-flex">Notificatin</span>-->
+<!--            <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>-->
+<!--          </a>-->
+<!--          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <h6 class="fw-normal mb-0">Profile updated</h6>-->
+<!--              <small>15 minutes ago</small>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <h6 class="fw-normal mb-0">New user added</h6>-->
+<!--              <small>15 minutes ago</small>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item">-->
+<!--              <h6 class="fw-normal mb-0">Password changed</h6>-->
+<!--              <small>15 minutes ago</small>-->
+<!--            </a>-->
+<!--            <hr class="dropdown-divider">-->
+<!--            <a href="#" class="dropdown-item text-center">See all notifications</a>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
             <img class="rounded-circle me-lg-2" src="" alt="" style="width: 40px; height: 40px;">
@@ -128,41 +128,5 @@ import ReservationList from "@/component/hotel-service/reservation/ReservationLi
 
 .dropdown-icon {
   transition: transform 0.5s;
-}
-
-.filter-container {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 500px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 10px;
-  margin-right: 1.5rem;
-
-}
-
-.filter-container::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
-}
-
-.position-relative-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
-
-.emoji {
-  margin-right: 10px;
 }
 </style>

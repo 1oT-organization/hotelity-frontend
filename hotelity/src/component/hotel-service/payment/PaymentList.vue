@@ -1,7 +1,7 @@
 
 <script setup>
 
-    import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 import { ref, onMounted } from 'vue';
 
@@ -85,7 +85,7 @@ $(document).ready(function() {
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="@/assets/img/hotelity_logo.png" width="60%"></h3>
+                    <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="../../../assets/img/hotelity_logo.png" width="60%"></h3>
                 </a>
                 
                 <div class="container">
