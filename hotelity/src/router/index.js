@@ -8,6 +8,7 @@ import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
+import PaymentList from '@/component/hotel-service/payment/PaymentList.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
@@ -38,7 +39,7 @@ const router = createRouter({
       component: TestChart
     },
     {
-      path: '/employeeInfo',
+      path: '/employeeInfo/:id',
       component: EmployeeInfo
     },
     {
