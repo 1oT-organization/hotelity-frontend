@@ -68,10 +68,15 @@ async function submitFile() {
         'Content-Type': 'multipart/form-data'
       }
     });
+    orderBy.value = null;
+    sortBy.value = null;
+    currentPage.value = 1;
 
+    loadCustomers(currentPage.value, orderBy.value, sortBy.value);
     // 응답 처리
     console.log(response.data);
   } catch (error) {
+    console.log(fileToUpload.value)
     console.error(error);
   }
 }
