@@ -73,6 +73,10 @@ const router = createRouter({
     {
         path: '/membership',
         component: Membership
+    },
+    {
+      path: '/payment',
+      component: PaymentList
     }
 ]
 });
