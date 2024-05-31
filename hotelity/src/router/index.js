@@ -13,6 +13,7 @@ import ReservationCalendar from "@/component/hotel-service/reservation/Reservati
 import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
+import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -72,6 +73,10 @@ const router = createRouter({
     {
         path: '/membership',
         component: Membership
+    },
+    {
+        path: '/payment',
+        component: PaymentList
     }
 ]
 });
