@@ -12,10 +12,10 @@ import ReservationPage from '@/component/hotel-service/reservation/ReservationPa
 import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
-import StayPage from "@/component/hotel-service/stay/StayPage.vue";
 import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 import Voc from "@/component/sales/Voc.vue";
+import Notice from "@/component/sales/Notice.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -65,10 +65,6 @@ const router = createRouter({
         component: Customer
     },
     {
-      path: '/stayPage',
-      component: StayPage
-    },
-    {
         path: '/coupon',
         component: Coupon
     },
@@ -87,6 +83,10 @@ const router = createRouter({
     {
       path: '/voc',
       component: Voc
+    },
+    {
+      path: '/notice',
+      component: Notice
     }
 ]
 });
