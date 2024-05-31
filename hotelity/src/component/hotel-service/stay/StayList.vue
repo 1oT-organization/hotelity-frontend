@@ -44,18 +44,62 @@
             <thead>
             <tr>
               <th scope="col">체크아웃</th>
-              <th scope="col">투숙 코드</th>
-              <th scope="col">한글 이름</th>
-              <th scope="col">객실 코드</th>
-              <th scope="col">객실명</th>
-              <th scope="col">객실 등급</th>
-              <th scope="col">객실 수용 인원</th>
-              <th scope="col">투숙 인원</th>
-              <th scope="col">체크인 일자</th>
-              <th scope="col">체크아웃 일자</th>
-              <th scope="col">담당 직원 코드</th>
-              <th scope="col">지점 코드</th>
-              <th scope="col">예약 코드</th>
+              <th scope="col" @click="sort('stayCodePk')">투숙 코드
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('customerName')">한글 이름
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('roomCodeFk')">객실 코드
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomCodeFk' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomCodeFk' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('roomNumber')">객실 호수
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomNumber' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomNumber' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('roomName')">객실명
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomName' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomName' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('roomLevelName')">객실 등급
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('roomCapacity')">객실 수용 인원
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomCapacity' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomCapacity' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('stayPeopleCount')">투숙 인원
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('stayCheckinTime')">체크인 일자
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 일자
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('stayPeriod')">숙박 일수
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('employeeCodeFk')">담당 직원 코드
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeCodeFk' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'employeeCodeFk' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('branchCodeFk')">지점 코드
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('reservationCodeFk')">예약 코드
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 0 }"></i>
+              </th>
             </tr>
             </thead>
             <tbody>
@@ -63,17 +107,18 @@
               <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
               <td>{{ stay.stayCodePk }}</td>
               <td>{{ stay.customerName }}</td>
-              <td>{{ stay.roomCode }}</td>
+              <td>{{ stay.roomCodeFk }}</td>
+              <td>{{ stay.roomNumber }}</td>
               <td>{{ stay.roomName }}</td>
               <td>{{ stay.roomLevelName }}</td>
               <td>{{ stay.roomCapacity }}</td>
               <td>{{ stay.stayPeopleCount }}</td>
               <td>{{ formatDate(stay.stayCheckinTime) }}</td>
               <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
+              <td>{{ stay.stayPeriod }}</td>
               <td>{{ stay.employeeCodeFk }}</td>
               <td>{{ stay.branchCodeFk }}</td>
               <td>{{ stay.reservationCodeFk }}</td>
-
             </tr>
             </tbody>
           </table>
@@ -114,6 +159,8 @@ const totalPages = ref(0);
 const pageGroup = ref(1);
 const pageSize = 10; // 한 그룹당 페이지 수
 const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
+const sortBy = ref(0);  // 0: descending, 1: ascending
+const orderBy = ref('stayCheckinTime');
 
 // 체크박스
 const checkedRows = ref([]);
@@ -145,25 +192,27 @@ async function fetchData(params) {
 
 // watch(selectedReservationCheckinDate, loadStays, { immediate: true });
 
-async function loadStays(page = 1) {
+async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue = 0) {
   // console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
   stays.value = await fetchData({
     stayCodePk: null,
     customerCodeFk: null,
     customerName: null,
-    roomCode: null,
+    roomCodeFk: null,
+    roomNumber: null,
     roomName: null,
     roomLevelName: null,
     roomCapacity: null,
     stayPeopleCount: null,
     stayCheckinTime: null,
     stayCheckoutTime: null,
+    stayPeriod: null,
     employeeCodeFk: null,
     PICEmployeeName: null,
     branchCodeFk: null,
     reservationCodeFk: null,
-    orderBy: null,
-    sortBy: null,
+    orderBy: orderByValue,
+    sortBy: sortByValue,
     pageNum: page - 1
   });
   isLoading.value = false;
@@ -188,8 +237,23 @@ function prevPageGroup() {
   }
 }
 
+// 정렬
+function sort(column) {
+  if (orderBy.value === column) {
+    sortBy.value = sortBy.value === 0 ? 1 : 0;
+  } else {
+    orderBy.value = column;
+    sortBy.value = 0;
+  }
+  loadStays(currentPage.value, orderBy.value, sortBy.value);
+}
+
 onMounted( async () => {
-  await loadStays();
+  await loadStays(currentPage.value, orderBy.value, sortBy.value);
+
+  // Bootstrap 드롭다운 초기화
+  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
+
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();
   });
