@@ -14,6 +14,7 @@ import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
+import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -77,6 +78,10 @@ const router = createRouter({
     {
       path: '/payment',
       component: PaymentList
+    },
+    {
+      path: '/employeeStay/:id',
+      component: EmployeeStay
     }
 ]
 });
