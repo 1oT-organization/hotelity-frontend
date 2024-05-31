@@ -14,6 +14,7 @@ import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
 import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
+import Voc from "@/component/sales/Voc.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -77,6 +78,10 @@ const router = createRouter({
     {
         path: '/payment',
         component: PaymentList
+    },
+    {
+      path: '/voc',
+      component: Voc
     }
 ]
 });

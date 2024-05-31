@@ -33,147 +33,147 @@ function formatDateTime(date) {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
-  const isLoading = ref(true);
-  const payments = ref([]);
-  const currentPage = ref(1);
-  const totalPages = ref(0);
-  const pageGroup = ref(1);
-  const pageSize = 10;
-  const selectedPage = ref(1);
-  const searchValue = ref('');
-  const isFilterContainerVisible = ref(false);
-  const isDropdownOpen = ref(false);
-  const selectedCriteria = ref('');
-  const sortBy = ref(0);  // 0: ascending, 1: descending
-  const orderBy = ref('paymentCodePk');  // default sorting by customerCodePk
+const isLoading = ref(true);
+const payments = ref([]);
+const currentPage = ref(1);
+const totalPages = ref(0);
+const pageGroup = ref(1);
+const pageSize = 10;
+const selectedPage = ref(1);
+const searchValue = ref('');
+const isFilterContainerVisible = ref(false);
+const isDropdownOpen = ref(false);
+const selectedCriteria = ref('');
+const sortBy = ref(0);  // 0: ascending, 1: descending
+const orderBy = ref('paymentCodePk');  // default sorting by customerCodePk
 
-  const defaultParams = {
-    paymentCodePk: null,
-    customerCodeFk: null,
-    customerName: null,
-    paymentDate: null,
-    paymentCancelStatus: null,
-    paymentMethod: null,
-    reservationCodeFk: null,
-    paymentTypeCodeFk: null,
-    paymentTypeName: null
-  };
+const defaultParams = {
+  paymentCodePk: null,
+  customerCodeFk: null,
+  customerName: null,
+  paymentDate: null,
+  paymentCancelStatus: null,
+  paymentMethod: null,
+  reservationCodeFk: null,
+  paymentTypeCodeFk: null,
+  paymentTypeName: null
+};
 
-  watch(searchValue, (newValue) => {
-    if (selectedCriteria.value) {
-      defaultParams[selectedCriteria.value] = newValue;
-    }
-  });
+watch(searchValue, (newValue) => {
+  if (selectedCriteria.value) {
+    defaultParams[selectedCriteria.value] = newValue;
+  }
+});
 
-  async function fetchData(params) {
-    try {
-      const response = await axios.get('http://localhost:8888/hotel-service/payments/page', {params});
-      console.log(defaultParams.paymentDate)
-      console.log(response.data);
-      totalPages.value = response.data.data.totalPagesCount;
-      return response.data.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+async function fetchData(params) {
+  try {
+    const response = await axios.get('http://localhost:8888/hotel-service/payments/page', {params});
+    console.log(defaultParams.paymentDate)
+    console.log(response.data);
+    totalPages.value = response.data.data.totalPagesCount;
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function downloadExcel() {
+  try {
+    const response = await axios.get('http://localhost:8888/hotel-service/payments/excel/download', {
+      params: defaultParams,
+      responseType: 'blob'
+    });
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'payments.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function loadList() {
+  try {
+    await downloadExcel();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function loadPayments(page, orderByValue = 'paymentCodePk', sortByValue = 0) {
+  try {
+    const data = await fetchData({
+      ...defaultParams,
+      orderBy: orderByValue,
+      sortBy: sortByValue,
+      pageNum: page - 1
+    });
+    payments.value = data;
+    isLoading.value = false;
+  } catch (error) {
+    console.error('Error loading payments:', error);
+  }
+}
+
+function changePage(page) {
+  selectedPage.value = page;
+  currentPage.value = page;
+  isLoading.value = true;
+  loadPayments(page, orderBy.value, sortBy.value);
+}
+
+function nextPageGroup() {
+  if (pageGroup.value * pageSize < totalPages.value) {
+    pageGroup.value += 1;
+  }
+}
+
+function prevPageGroup() {
+  if (pageGroup.value > 1) {
+    pageGroup.value -= 1;
+  }
+}
+
+function setSearchCriteria(criteria) {
+  // 이전 검색 기준 값 초기화
+  if (selectedCriteria.value) {
+    defaultParams[selectedCriteria.value] = null;
   }
 
-  async function downloadExcel() {
-    try {
-      const response = await axios.get('http://localhost:8888/hotel-service/payments/excel/download', {
-        params: defaultParams,
-        responseType: 'blob'
-      });
+  selectedCriteria.value = criteria;
+  searchValue.value = ''; // 검색값 초기화
+  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+}
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'payments.xlsx');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error(error);
-    }
+function toggleFilterContainer() {
+  isFilterContainerVisible.value = !isFilterContainerVisible.value;
+}
+
+function toggleDropdownMenu() {
+  isDropdownOpen.value = !isDropdownOpen.value;
+}
+
+function sort(column) {
+  if (orderBy.value === column) {
+    sortBy.value = sortBy.value === 0 ? 1 : 0;
+  } else {
+    orderBy.value = column;
+    sortBy.value = 0;
   }
+  loadPayments(currentPage.value, orderBy.value, sortBy.value);
+}
 
-  async function loadList() {
-    try {
-      await downloadExcel();
-    } catch (error) {
-      console.error(error);
-    }
-  }
+onMounted(() => {
+  loadPayments(currentPage.value, orderBy.value, sortBy.value);
 
-  async function loadPayments(page, orderByValue = 'paymentCodePk', sortByValue = 0) {
-    try {
-      const data = await fetchData({
-        ...defaultParams,
-        orderBy: orderByValue,
-        sortBy: sortByValue,
-        pageNum: page - 1
-      });
-      payments.value = data;
-      isLoading.value = false;
-    } catch (error) {
-      console.error('Error loading payments:', error);
-    }
-  }
-
-  function changePage(page) {
-    selectedPage.value = page;
-    currentPage.value = page;
-    isLoading.value = true;
-    loadPayments(page, orderBy.value, sortBy.value);
-  }
-
-  function nextPageGroup() {
-    if (pageGroup.value * pageSize < totalPages.value) {
-      pageGroup.value += 1;
-    }
-  }
-
-  function prevPageGroup() {
-    if (pageGroup.value > 1) {
-      pageGroup.value -= 1;
-    }
-  }
-
-  function setSearchCriteria(criteria) {
-    // 이전 검색 기준 값 초기화
-    if (selectedCriteria.value) {
-      defaultParams[selectedCriteria.value] = null;
-    }
-
-    selectedCriteria.value = criteria;
-    searchValue.value = ''; // 검색값 초기화
-    isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
-  }
-
-  function toggleFilterContainer() {
-    isFilterContainerVisible.value = !isFilterContainerVisible.value;
-  }
-
-  function toggleDropdownMenu() {
-    isDropdownOpen.value = !isDropdownOpen.value;
-  }
-
-  function sort(column) {
-    if (orderBy.value === column) {
-      sortBy.value = sortBy.value === 0 ? 1 : 0;
-    } else {
-      orderBy.value = column;
-      sortBy.value = 0;
-    }
-    loadPayments(currentPage.value, orderBy.value, sortBy.value);
-  }
-
-  onMounted(() => {
-    loadPayments(currentPage.value, orderBy.value, sortBy.value);
-
-    // Bootstrap 드롭다운 초기화
-    new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
-  });
+  // Bootstrap 드롭다운 초기화
+  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
+});
 </script>
 
 <template>
