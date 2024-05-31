@@ -22,20 +22,6 @@ const employee = reactive({
   stay: []
 });
 
-const fields = [
-  { label: '이름', model: 'employeeName', type: 'text' },
-  { label: '직원번호', model: 'employeeCodePk', type: 'text' },
-  { label: '지점', model: 'branchCodePk', type: 'text' },
-  { label: '직책', model: 'positionCodeFk', type: 'text' },
-  { label: '직급', model: 'rankCodeFk', type: 'text' },
-  { label: '부서', model: 'departmentCodeFk', type: 'text' },
-  { label: '내선번호', model: 'employeeOfficePhoneNumber', type: 'text' },
-  { label: '전화번호', model: 'employeePhoneNumeber', type: 'text' },
-  { label: '이메일', model: 'employeeEmail', type: 'text' },
-  { label: '주소', model: 'employeeAddress', type: 'text' },
-  { label: '?', model: 'permissionCodeFk', type: 'text' },
-
-];
 
 const isLoading = ref(true);
 
@@ -47,12 +33,34 @@ async function fetchEmployeeData(employeeCodePk) {
 
   try {
     const response = await axios.get(`http://localhost:8888/employees/${employeeCodePk}`);
-    console.log('API response:', response.data);
-    Object.assign(employee, response.data);
+    console.log('뭐가 오냐?', response);
+    console.log('API response:', response);
+    console.log('employee 확인: ',  employee);
+    const data = response.data.data;
+    employee.employeeCodePk = data.employeeCodePk;
+    employee.branchCodeFk = data.branchCodeFk;
+    employee.employeeName = data.employeeName;
+    employee.positionCodeFk = data.positionCodeFk;
+    employee.rankCodeFk = data.rankCodeFk;
+    employee.departmentCodeFk = data.departmentCodeFk;
+    employee.employeeOfficePhoneNumber = data.employeeOfficePhoneNumber;
+    employee.employeePhoneNumber = data.employeePhoneNumber;
+    employee.employeeEmail = data.employeeEmail;
+    employee.employeeAddress = data.employeeAddress;
+    employee.permissionCodeFk = data.permissionCodeFk;
+    employee.employeeProfileImageLink = data.employeeProfileImageLink;
+    employee.stay = data.stay;
+    employee.nameOfBranch = data.nameOfBranch;
+    employee.nameOfPosition = data.nameOfPosition;
+    employee.nameOfDepartment = data.nameOfDepartment;
+    employee.nameOfRank = data.nameOfRank;
+    Object.assign(employee, response);
+
   } catch (error) {
     console.error("Error fetching employee data:", error);
   }
 }
+
 
 onMounted(() => {
   console.log('Route params:', route.params);
@@ -246,19 +254,19 @@ $(document).ready(function() {
         <div class="third">
           <div class="row">
           <label>사원번호:</label>
-          <span>{{ employee.data.employeeCodePk }}</span>
+          <span>{{ employee.employeeCodePk }}</span>
         </div>
       </div>
       <div class="third">
         <div class="row">
           <label>이름:</label>
-          <span>{{ employee.data.employeeName }}</span>
+          <span>{{ employee.employeeName }}</span>
         </div>
       </div>
       <div class="third">
         <div class="row">
           <label>직급:</label>
-          <span>{{ employee.data.nameOfRank }}</span>
+          <span>{{ employee.nameOfRank }}</span>
         </div>
       </div>
     </div>
@@ -266,19 +274,19 @@ $(document).ready(function() {
       <div class="third">  
       <div class="row">
           <label>근무지점:</label>
-          <span>{{ employee.data.nameOfBranch }}</span>
+          <span>{{ employee.nameOfBranch }}</span>
         </div>
       </div>
       <div class="third">
         <div class="row">
           <label>부서:</label>
-          <span>{{ employee.data.nameOfDepartment }}</span>
+          <span>{{ employee.nameOfDepartment }}</span>
         </div>
         </div>
         <div class="third">  
       <div class="row">
           <label>직책:</label>
-          <span>{{ employee.data.nameOfPosition }}</span>
+          <span>{{ employee.nameOfPosition }}</span>
         </div>
       </div>
       </div>
@@ -287,48 +295,28 @@ $(document).ready(function() {
       <div class="half">
         <div class="row">
           <label>전화번호:</label>
-          <span>{{ employee.data.employeePhoneNumber }}</span>
+          <span>{{ employee.employeePhoneNumber }}</span>
         </div>
       </div>
       <div class="half">
         <div class="row">
           <label>내선번호:</label>
-          <span>{{ employee.data.employeeOfficePhoneNumber }}</span>
+          <span>{{ employee.employeeOfficePhoneNumber }}</span>
         </div>
       </div>
       </div>
     
         <div class="row">
           <label>이메일:</label>
-          <span>{{ employee.data.employeeEmail }}</span>
+          <span>{{ employee.employeeEmail }}</span>
         </div>
         <div class="row">
           <label>주소:</label>
-          <span>{{ employee.data.employeeAddress }}</span>
+          <span>{{ employee.employeeAddress }}</span>
         </div>
       </div>
     </div>
-    <h2>담당 투숙 객실</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>투숙코드</th>
-          <th>예약코드</th>
-          <th>체크인시간</th>
-          <th>체크아웃시간</th>
-          <th>투숙일수</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="room in employee.rooms" :key="room.stayCode">
-          <td>{{ room.stayCode }}</td>
-          <td>{{ room.bookingCode }}</td>
-          <td>{{ room.checkIn }}</td>
-          <td>{{ room.checkOut }}</td>
-          <td>{{ room.days }}</td>
-        </tr>
-      </tbody>
-    </table>
+    
   </div>
             
 </div>
