@@ -1,87 +1,102 @@
-
 <script setup>
-
-    import { useRouter } from 'vue-router';
-
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
 import { reactive, ref, onMounted } from 'vue';
+import $ from 'jquery';
+
+const route = useRoute();
 
 const employee = reactive({
-  id: 'AE010001',
-  office: '본사',
-  name: '손세림',
-  position: '과장',
-  department: '영업지원',
-  extension: '100',
-  phone: '010-1234-1234',
-  email: 'example@iot.com',
-  address: '서울시 구로구',
-  rooms: [
-    {
-      stayCode: 2983,
-      bookingCode: 4748,
-      checkIn: '2021-05-22, 15:00:02',
-      checkOut: '2021-05-23, 11:00:00',
-      days: 2
-    },
-    {
-      stayCode: 2965,
-      bookingCode: 8465,
-      checkIn: '2023-08-09, 16:23:03',
-      checkOut: '2023-08-11, 11:00:00',
-      days: 4
-    }
-  ]
+  employeeCodePk: '',
+  branchCodeFk: '',
+  employeeName: '',
+  positionCodeFk: '',
+  rankCodeFk: '',
+  departmentCodeFk: '',
+  employeeOfficePhoneNumber: '',
+  employeePhoneNumeber: '',
+  employeeEmail: '',
+  employeeAddress: '',
+  permissionCodeFk: '',
+  employeeProfileImageLink: '',
+  stay: []
 });
+
 
 const isLoading = ref(true);
 
-onMounted(() => {
-    
-    $('#filter-icon').on('click', function() {
-        $('.filter-container').toggle();
-    });
-});
+async function fetchEmployeeData(employeeCodePk) {
+  if (!employeeCodePk) {
+    console.error("employeeCodePk is missing");
+    return;
+  }
+
+  try {
+    const response = await axios.get(`http://localhost:8888/employees/${employeeCodePk}`);
+    console.log('뭐가 오냐?', response);
+    console.log('API response:', response);
+    console.log('employee 확인: ',  employee);
+    const data = response.data.data;
+    employee.employeeCodePk = data.employeeCodePk;
+    employee.branchCodeFk = data.branchCodeFk;
+    employee.employeeName = data.employeeName;
+    employee.positionCodeFk = data.positionCodeFk;
+    employee.rankCodeFk = data.rankCodeFk;
+    employee.departmentCodeFk = data.departmentCodeFk;
+    employee.employeeOfficePhoneNumber = data.employeeOfficePhoneNumber;
+    employee.employeePhoneNumber = data.employeePhoneNumber;
+    employee.employeeEmail = data.employeeEmail;
+    employee.employeeAddress = data.employeeAddress;
+    employee.permissionCodeFk = data.permissionCodeFk;
+    employee.employeeProfileImageLink = data.employeeProfileImageLink;
+    employee.stay = data.stay;
+    employee.nameOfBranch = data.nameOfBranch;
+    employee.nameOfPosition = data.nameOfPosition;
+    employee.nameOfDepartment = data.nameOfDepartment;
+    employee.nameOfRank = data.nameOfRank;
+    Object.assign(employee, response);
+
+  } catch (error) {
+    console.error("Error fetching employee data:", error);
+  }
+}
+
 
 onMounted(() => {
-  fetchData().then(() => {
+  console.log('Route params:', route.params);
+
+  fetchEmployeeData(route.params.id).then(() => {
     isLoading.value = false;
   });
 
-  function fetchData() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000); 
-    });
-  }
+  $('#filter-icon').on('click', function() {
+    $('.filter-container').toggle();
+  });
 
   // Clock
   const h1 = document.getElementById("time");
 
-function getTime() {
-  const date = new Date();
-  const hour = String(date.getHours()).padStart(2, '0');
-  const minute = String(date.getMinutes()).padStart(2, '0');
-  const second = String(date.getSeconds()).padStart(2, '0');
-  const time = `${hour}:${minute}:${second}`;
-  h1.textContent = time;
-}
+  function getTime() {
+    const date = new Date();
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const second = String(date.getSeconds()).padStart(2, '0');
+    const time = `${hour}:${minute}:${second}`;
+    h1.textContent = time;
+  }
 
-// 최초에 한 번 시간 설정
-getTime();
+  // 최초에 한 번 시간 설정
+  getTime();
 
-// 1초마다 getTime 함수를 호출하도록 타이머 설정
-setInterval(getTime, 1000);
-
+  // 1초마다 getTime 함수를 호출하도록 타이머 설정
+  setInterval(getTime, 1000);
 });
 
-const router = useRouter();
-
 $(document).ready(function() {
-        $('#filter-icon').on('click', function() {
-            $('.filter-container').toggle();
-        });
-    });
+  $('#filter-icon').on('click', function() {
+    $('.filter-container').toggle();
+  });
+});
 </script>
 
 <template>
@@ -230,70 +245,78 @@ $(document).ready(function() {
     <div class="bg-secondary rounded-top p-4">
             <div class="employee-info">
     <h2>직원 정보</h2>
-    <div class="employee-details">
+    <div class="employee-details" >
       <div class="photo">
         <img src="" alt="Employee Photo" />
       </div>
       <div class="details">
-        <div class="row">
+        <div class="form-group">
+        <div class="third">
+          <div class="row">
           <label>사원번호:</label>
-          <span>{{ employee.id }}</span>
+          <span>{{ employee.employeeCodePk }}</span>
         </div>
+      </div>
+      <div class="third">
         <div class="row">
-          <label>근무지점:</label>
-          <span>{{ employee.office }}</span>
+          <label>이름:</label>
+          <span>{{ employee.employeeName }}</span>
         </div>
+      </div>
+      <div class="third">
         <div class="row">
-          <label>직원명:</label>
-          <span>{{ employee.name }}</span>
-        </div>
-        <div class="row">
-          <label>직:</label>
-          <span>{{ employee.position }}</span>
-        </div>
-        <div class="row">
-          <label>부서:</label>
-          <span>{{ employee.department }}</span>
-        </div>
-        <div class="row">
-          <label>내선번호:</label>
-          <span>{{ employee.extension }}</span>
-        </div>
-        <div class="row">
-          <label>전화번호:</label>
-          <span>{{ employee.phone }}</span>
-        </div>
-        <div class="row">
-          <label>이메일:</label>
-          <span>{{ employee.email }}</span>
-        </div>
-        <div class="row">
-          <label>주소:</label>
-          <span>{{ employee.address }}</span>
+          <label>직급:</label>
+          <span>{{ employee.nameOfRank }}</span>
         </div>
       </div>
     </div>
-    <h2>담당 투숙 객실</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>투숙코드</th>
-          <th>예약코드</th>
-          <th>체크인시간</th>
-          <th>체크아웃시간</th>
-          <th>투숙일수</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="room in employee.rooms" :key="room.stayCode">
-          <td>{{ room.stayCode }}</td>
-          <td>{{ room.bookingCode }}</td>
-          <td>{{ room.checkIn }}</td>
-          <td>{{ room.checkOut }}</td>
-          <td>{{ room.days }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="form-group">
+      <div class="third">  
+      <div class="row">
+          <label>근무지점:</label>
+          <span>{{ employee.nameOfBranch }}</span>
+        </div>
+      </div>
+      <div class="third">
+        <div class="row">
+          <label>부서:</label>
+          <span>{{ employee.nameOfDepartment }}</span>
+        </div>
+        </div>
+        <div class="third">  
+      <div class="row">
+          <label>직책:</label>
+          <span>{{ employee.nameOfPosition }}</span>
+        </div>
+      </div>
+      </div>
+
+      <div class="form-group">
+      <div class="half">
+        <div class="row">
+          <label>전화번호:</label>
+          <span>{{ employee.employeePhoneNumber }}</span>
+        </div>
+      </div>
+      <div class="half">
+        <div class="row">
+          <label>내선번호:</label>
+          <span>{{ employee.employeeOfficePhoneNumber }}</span>
+        </div>
+      </div>
+      </div>
+    
+        <div class="row">
+          <label>이메일:</label>
+          <span>{{ employee.employeeEmail }}</span>
+        </div>
+        <div class="row">
+          <label>주소:</label>
+          <span>{{ employee.employeeAddress }}</span>
+        </div>
+      </div>
+    </div>
+    
   </div>
             
 </div>
@@ -314,6 +337,24 @@ $(document).ready(function() {
 @import "@/css/style.css";
 @import "@/css/bootstrap.min.css";
 
+.form-group .half {
+  display: inline-block;
+  width: calc(50% - 10px);
+}
+
+.form-group .half:first-child {
+  margin-right: 10px;
+}
+
+.form-group .third {
+  display: inline-block;
+  width: calc(33% - 10px);
+}
+
+.form-group .third:first-child {
+  margin-right: 10px;
+}
+
 .employee-info {
   width: 100%; 
   margin: 0 auto;
@@ -325,16 +366,18 @@ $(document).ready(function() {
 
 .employee-details {
   display: flex;
-  flex-wrap: wrap; 
+  gap: 15%;
 }
 
+/*
 .details {
   display: flex;
 }
+*/
 
 .row {
   display: flex;
-  flex-wrap: wrap; 
+  margin-bottom: 30px;
 }
 
 .row label {
@@ -344,6 +387,7 @@ $(document).ready(function() {
 }
 
 .photo {
+  margin-top: 5%;
   flex-shrink: 0;
 }
 

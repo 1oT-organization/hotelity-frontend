@@ -8,11 +8,14 @@
       </div>
       <div class="position-relative-container mt-3">
         <ExcelButton/>
-<!--        <ReservationFilter @change-checkin-date="handleCheckinDateChange"/>-->
 
-<!--        ReservationFilter start -->
-        <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i>
-        </button>
+        <div style="display: flex;justify-content:right">
+          <ReservationCheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>
+
+          <!--        ReservationFilter start -->
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
+              class="bi bi-funnel"></i></button>
+        </div>
         <div class="filter-container" style="width: auto">
           <div class="btn-group me-2">
             <select class="form-select">
@@ -22,22 +25,25 @@
             </select>
           </div>
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event" format="yyyy-MM-dd"
+            <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event"
+                        format="yyyy-MM-dd"
                         style="width: 120px; text-align: center" placeholder="예약 일자"></DatePicker>
           </div>
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationCheckinDate" @update:modelValue="selectedReservationCheckinDate = $event" format="yyyy-MM-dd"
+            <DatePicker :modelValue="selectedReservationCheckinDate"
+                        @update:modelValue="selectedReservationCheckinDate = $event" format="yyyy-MM-dd"
                         style="width: 120px; text-align: center" placeholder="체크인 일자"></DatePicker>
           </div>
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationCheckoutDate" @update:modelValue="selectedReservationCheckoutDate = $event" format="yyyy-MM-dd"
+            <DatePicker :modelValue="selectedReservationCheckoutDate"
+                        @update:modelValue="selectedReservationCheckoutDate = $event" format="yyyy-MM-dd"
                         style="width: 120px; text-align: center" placeholder="체크아웃 일자"></DatePicker>
           </div>
 
           <button class="btn btn-primary">적용</button>
         </div>
 
-<!--        ReservationFilter end-->
+        <!--        ReservationFilter end-->
 
       </div>
       <br>
@@ -46,6 +52,7 @@
           <table class="table table-striped">
             <thead>
             <tr>
+              <th scope="col">체크인</th>
               <th scope="col">예약 코드</th>
               <th scope="col">고객 코드</th>
               <th scope="col">한글 이름</th>
@@ -53,17 +60,22 @@
               <th scope="col">객실 코드</th>
               <th scope="col">객실명</th>
               <th scope="col">객실 등급</th>
-<!--              <th scope="col">객실 수용 인원</th>-->
+              <!--              <th scope="col">객실 수용 인원</th>-->
               <th scope="col">지점 코드</th>
               <th scope="col">예약 일자</th>
               <th scope="col">예약 체크인 일자</th>
               <th scope="col">예약 체크아웃 일자</th>
               <th scope="col">예약 인원</th>
               <th scope="col">예약 취소</th>
+              <th scope="col">투숙 등록</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="reservation in reservations.content" :key="reservation.reservationCodePk">
+            <tr v-for="(reservation, index) in reservations.content" :key="reservation.reservationCodePk">
+              <td>
+                <input type="checkbox" :checked="reservation.stayStatus === 1" :disabled="reservation.stayStatus === 1"
+                       @change="checkedRows[index] = $event.target.checked ? reservation.reservationCodePk : null">
+              </td>
               <td>{{ reservation.reservationCodePk }}</td>
               <td>{{ reservation.customerCodeFk }}</td>
               <td>{{ reservation.customerName }}</td>
@@ -71,7 +83,7 @@
               <td>{{ reservation.roomCodeFk }}</td>
               <td>{{ reservation.roomName }}</td>
               <td>{{ reservation.roomLevelName }}</td>
-<!--              <td>{{ reservation.roomCapacity }}</td>-->
+              <!--              <td>{{ reservation.roomCapacity }}</td>-->
               <td>{{ reservation.branchCodeFk }}</td>
               <td>{{ formatDate(reservation.reservationDate) }}</td>
               <td>{{ formatDate(reservation.reservationCheckinDate) }}</td>
@@ -80,6 +92,10 @@
               <td>
                 <span v-if="reservation.reservationCancelStatus === 0">N</span>
                 <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>
+              </td>
+              <td>
+                <span v-if="reservation.stayStatus === 0">N</span>
+                <span v-else-if="reservation.stayStatus === 1">Y</span>
               </td>
             </tr>
             </tbody>
@@ -99,12 +115,25 @@ import ReservationSearch from "@/component/hotel-service/reservation/Reservation
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import ReservationFilter from "@/component/hotel-service/reservation/ReservationFilter.vue";
 import DatePicker from "vue3-datepicker";
+import ReservationCheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
+import StayCheckoutBtn from "@/component/hotel-service/stay/StayCheckoutBtn.vue";
 
 const isLoading = ref(true);
 const reservations = ref([]);
 const selectedReservationDate = ref(null);
 const selectedReservationCheckinDate = ref(null);
 const selectedReservationCheckoutDate = ref(null);
+
+// 체크박스
+const checkedRows = ref([]);
+
+watch(reservations, () => {
+  checkedRows.value = reservations.value.content ?
+      reservations.value.content.map(reservation =>
+          reservation.stayStatus === 1 ?
+              reservation.reservationCodePk : null) : [];
+}, { immediate: true });
+
 
 async function fetchData(params) {
   try {
@@ -117,7 +146,7 @@ async function fetchData(params) {
   }
 }
 
-watch(selectedReservationCheckinDate, loadReservations, { immediate: true });
+watch(selectedReservationCheckinDate, loadReservations, {immediate: true});
 
 async function loadReservations() {
   console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
@@ -136,13 +165,14 @@ async function loadReservations() {
     reservationCheckoutDate: null,
     reservationCancelStatus: null,
     reservationPersonnel: null,
+    stayStatus: null,
     orderBy: null,
     sortBy: null
   });
   isLoading.value = false;
 }
 
-onMounted( async () => {
+onMounted(async () => {
   await loadReservations();
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();

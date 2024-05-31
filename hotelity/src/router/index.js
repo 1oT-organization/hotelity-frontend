@@ -9,10 +9,11 @@ import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
-import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
+import StayPage from "@/component/hotel-service/stay/StayPage.vue";
+import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 import Voc from "@/component/sales/Voc.vue";
 
@@ -40,7 +41,7 @@ const router = createRouter({
       component: TestChart
     },
     {
-      path: '/employeeInfo',
+      path: '/employeeInfo/:id',
       component: EmployeeInfo
     },
     {
@@ -60,12 +61,12 @@ const router = createRouter({
       component: ReservationPage
     },
     {
-      path: '/reservationCalendar',
-      component: ReservationCalendar
-    },
-    {
         path: '/customer/:id',
         component: Customer
+    },
+    {
+      path: '/stayPage',
+      component: StayPage
     },
     {
         path: '/coupon',
@@ -76,8 +77,12 @@ const router = createRouter({
         component: Membership
     },
     {
-        path: '/payment',
-        component: PaymentList
+      path: '/payment',
+      component: PaymentList
+    },
+    {
+      path: '/employeeStay/:id',
+      component: EmployeeStay
     },
     {
       path: '/voc',
