@@ -294,15 +294,8 @@ onMounted(() => {
             </button>
             <div class="filter-container" v-show="isFilterContainerVisible">
               <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.customerType">
-                  <option :value="null">고객타입 선택</option>
-                  <option value="개인">개인</option>
-                  <option value="법인">법인</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
                 <select class="form-select" v-model="defaultParams.membershipLevelName">
-                  <option :value="null">멤버십 등급 선택</option>
+                  <option v-bind:value="null">멤버십 등급 선택</option>
                   <option value="일반">일반</option>
                   <option value="골드">골드</option>
                   <option value="플래티넘">플래티넘</option>
@@ -310,6 +303,14 @@ onMounted(() => {
                   <option value="VIP">VIP</option>
                 </select>
               </div>
+              <div class="btn-group me-2">
+                <select class="form-select" v-model="defaultParams.customerType">
+                  <option v-bind:value="null">고객타입 선택</option>
+                  <option value="개인">개인</option>
+                  <option value="법인">법인</option>
+                </select>
+              </div>
+
               <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
             </div>
           </div>
