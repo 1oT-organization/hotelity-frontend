@@ -318,7 +318,6 @@ onMounted(() => {
                   <th scope="col">수용인원</th>
                   <th scope="col">화장실개수</th>
                   <th scope="col">비수기 할인율</th>
-                  <th scope="col">상세설명</th>
                 </tr>
                 </thead>
                 <tbody>
