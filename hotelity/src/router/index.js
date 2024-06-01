@@ -3,7 +3,8 @@ import CustomerInit from '@/component/customer/CustomerInit.vue';
 import CustomerList from '@/component/customer/CustomerList.vue';
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
-import TestChart from '@/component/TestChart.vue';
+import TestBarChart from '@/component/TestBarChart.vue';
+import TestPieChart from '@/component/TestPieChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
@@ -36,8 +37,12 @@ const router = createRouter({
       component: Test
     },
     {
-      path: '/chartTest',
-      component: TestChart
+      path: '/barchartTest',
+      component: TestBarChart
+    },
+    {
+      path: '/piechartTest',
+      component: TestPieChart
     },
     {
       path: '/employeeInfo/:id',

@@ -247,7 +247,7 @@ $(document).ready(function() {
     <h2>직원 정보</h2>
     <div class="employee-details" >
       <div class="photo">
-        <img src="" alt="Employee Photo" />
+        <img src="https://hotelity-1ot.s3.ap-northeast-2.amazonaws.com/be46ffc1-b%EC%A4%80%ED%98%95%EB%8B%98%ED%94%84%EB%A1%9C%ED%95%84.png" alt="Employee Photo" />
       </div>
       <div class="details">
         <div class="form-group">
