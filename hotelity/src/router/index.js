@@ -17,6 +17,7 @@ import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
+import RoomList from "@/component/hotel-management/RoomList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -92,6 +93,10 @@ const router = createRouter({
     {
       path: '/couponIssue',
       component: CouponIssue
+    },
+    {
+      path:'/room',
+      component: RoomList
     }
 ]
 });
