@@ -19,6 +19,7 @@ import Notice from "@/component/sales/Notice.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import Campaign from "@/component/marketing/Campaign.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -102,6 +103,10 @@ const router = createRouter({
     {
       path: '/ancillary',
       component: Ancillary
+    },
+    {
+      path: '/campaign',
+      component: Campaign
     }
 ]
 });
