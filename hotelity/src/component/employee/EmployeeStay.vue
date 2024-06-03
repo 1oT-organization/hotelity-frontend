@@ -12,6 +12,7 @@
             <th>체크아웃시간</th>
             <th>투숙고객</th>
             <th>투숙인원</th>
+            <th>숙박일수</th>
             <th>객실 코드</th>
             <th>객실명(객실등급 + 객실명)</th>
           </tr>
@@ -25,6 +26,7 @@
             <td>{{ stay.stayCheckoutTime }}</td>
             <td>{{ stay.customerName }}</td>
             <td>{{ stay.stayPeopleCount }}</td>
+            <td>{{ stay.stayPeriod }}</td>
             <td>{{ stay.roomCode }}</td>
             <td>{{stay.roomLevelName }} {{ stay.roomName }} </td>
           </tr>
