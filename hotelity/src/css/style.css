@@ -315,3 +315,7 @@
     justify-content: flex-end;
     margin-bottom: 20px;
 }
+
+.c-pointer {
+    cursor: pointer;
+}
