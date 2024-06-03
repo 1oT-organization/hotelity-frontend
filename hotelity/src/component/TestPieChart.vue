@@ -10,6 +10,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { Chart, PieController, CategoryScale, ArcElement, Tooltip, Legend } from 'chart.js';
+import axios from 'axios';
 
 Chart.register(PieController, CategoryScale, ArcElement, Tooltip, Legend);
 
@@ -23,7 +24,7 @@ export default {
         {
           label: '현황',
           backgroundColor: ['#36A2EB', '#FF6384'],
-          data: [60, 40]
+          data: [0, 0] // 초기값 설정
         }
       ]
     });
@@ -33,16 +34,51 @@ export default {
       maintainAspectRatio: true,
     });
 
-    onMounted(() => {
-      if (chartInstance.value) {
-        chartInstance.value.destroy();
-      }
+    const fetchData = async () => {
+      try {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
-      chartInstance.value = new Chart(chartCanvas.value.getContext('2d'), {
-        type: 'pie',
-        data: datacollection.value,
-        options: options.value
-      });
+        const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
+        const reservationResponse = await axios.get(`http://localhost:8888/hotel-service/reservations/${formattedDate}/day`);
+        const dailyReservationInfo = reservationResponse.data.data;
+        const reservationCount = dailyReservationInfo.content.length;
+
+        const stayDate = new Date();
+        const stayYear = stayDate.getFullYear();
+        const stayMonth = String(stayDate.getMonth() + 1).padStart(2, '0');
+        const stayDay = String(stayDate.getDate()).padStart(2, '0');
+        const formattedStayDate = `${stayYear}-${stayMonth}-${stayDay}`;
+
+        const stayResponse = await axios.get(`http://localhost:8888/hotel-service/stays/daily/${formattedStayDate}`);
+        const dailyStayInfo = stayResponse.data.data;
+        console.log(dailyStayInfo)
+        const stayingCount = dailyStayInfo.content.length;
+
+        datacollection.value.datasets[0].data = [reservationCount, stayingCount];
+
+        if (chartInstance.value) {
+          chartInstance.value.destroy();
+        }
+
+        chartInstance.value = new Chart(chartCanvas.value.getContext('2d'), {
+          type: 'pie',
+          data: datacollection.value,
+          options: options.value
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchData();
     });
 
     return { chartCanvas, datacollection, options };
