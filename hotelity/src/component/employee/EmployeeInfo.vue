@@ -6,6 +6,42 @@ import $ from 'jquery';
 
 const route = useRoute();
 
+const editEmployee = () => {
+  console.log("직원 정보 수정 로직 예정")
+};
+
+const deleteEmployee = () => {
+  if (window.confirm('삭제하시겠습니까?')) {
+    console.log("직원 정보 삭제 로직 예정")
+  }
+};
+const uploadImage = async (event) => {
+  const file = event.target.files[0];
+  if (!file) {
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  console.log('이거뭐임??ㅇㄴㅁ라ㅣㅓㅗ아ㅣㅎㅁ졷', route.params.id)
+  try {
+    const response = await axios.post(`http://localhost:8888/employees/${route.params.id}/image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    if (response.status === 200) {
+      console.log('Image uploaded successfully:', response.data);
+    } else {
+      console.error('Error uploading image:', response.data);
+    }
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+};
+
 const employee = reactive({
   employeeCodePk: '',
   branchCodeFk: '',
@@ -245,10 +281,22 @@ $(document).ready(function() {
     <div class="bg-secondary rounded-top p-4">
             <div class="employee-info">
     <h2>직원 정보</h2>
+
+    <div class="employee-actions">
+      <button @click="editEmployee">직원 정보 수정</button>
+      <button @click="deleteEmployee">직원 정보 삭제</button>
+    </div>
+
     <div class="employee-details" >
       <div class="photo">
-        <img src="" alt="Employee Photo" />
-      </div>
+  <img :src="employee.employeeProfileImageLink" alt="Employee Photo" />
+</div>
+
+      <div class="image-upload">
+      <input type="file" @change="uploadImage">
+      <button>이미지 업로드</button>
+    </div>
+
       <div class="details">
         <div class="form-group">
         <div class="third">

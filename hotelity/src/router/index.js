@@ -3,7 +3,8 @@ import CustomerInit from '@/component/customer/CustomerInit.vue';
 import CustomerList from '@/component/customer/CustomerList.vue';
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
-import TestChart from '@/component/TestChart.vue';
+import TestBarChart from '@/component/TestBarChart.vue';
+import TestPieChart from '@/component/TestPieChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
@@ -18,6 +19,10 @@ import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
 import RoomList from "@/component/hotel-management/RoomList.vue";
+import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import Campaign from "@/component/marketing/Campaign.vue";
+import TestCustomer from '@/component/TestCustomer.vue';
+import NoticeInfo from '@/component/sales/NoticeInfo.vue';
 import Stay from "@/component/hotel-service/stay/Stay.vue";
 
 const router = createRouter({
@@ -40,8 +45,12 @@ const router = createRouter({
       component: Test
     },
     {
-      path: '/chartTest',
-      component: TestChart
+      path: '/barchartTest',
+      component: TestBarChart
+    },
+    {
+      path: '/piechartTest',
+      component: TestPieChart
     },
     {
       path: '/employeeInfo/:id',
@@ -98,6 +107,22 @@ const router = createRouter({
     {
       path:'/room',
       component: RoomList
+    },
+    {
+      path: '/ancillary',
+      component: Ancillary
+    },
+    {
+      path: '/campaign',
+      component: Campaign
+    },
+    {
+      path: '/testCustomer',
+      component: TestCustomer
+    },
+    {
+      path: '/noticeInfo/:id',
+      component: NoticeInfo
     },
     {
       path: '/stay',

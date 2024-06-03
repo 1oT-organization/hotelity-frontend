@@ -328,6 +328,7 @@ onMounted(() => {
                   <td>{{ room.roomNumber }}</td>
                   <td>{{ room.roomName }}</td>
                   <td>{{ '₩' + room.roomPrice.toLocaleString('ko-KR') }}</td>
+                  <td>{{ room.roomSpecificInfo }}</td>
                   <td>{{ room.roomSubRoomsCount }}</td>
                   <td>{{ room.roomCapacity }}</td>
                   <td>{{ room.roomBathroomCount }}</td>
