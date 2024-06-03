@@ -25,12 +25,15 @@
         <ExcelButton/>
 
         <div style="display: flex; justify-content:right">
+          <!-- calendar icon -->
+          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i class="bi bi-calendar"></i></button>
+
           <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
         <!--        StayFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
 
-          <!-- calendar icon -->
-          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-left: 8px" @click="toggleCalendarContainer"><i class="bi bi-calendar"></i></button>
+
+          <!-- StayFilter start -->
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
         </div>
 
         <!-- filter container -->
@@ -48,14 +51,14 @@
         <!-- calendar container -->
         <div class="calendar-container" v-show="isCalendarContainerVisible">
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="selectedStayCheckinDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크인 일자"></DatePicker>
+            <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="updateDate($event)" format="yyyy-MM-dd"
+                        style="width: 130px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크인 일자"></DatePicker>
           </div>
-          <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크아웃 일자"></DatePicker>
-          </div>
-<!--          <button class="btn btn-primary" @click="onSearchButtonClick">적용</button>-->
+          <!--          <div class="btn-group me-2">-->
+          <!--            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"-->
+          <!--                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크아웃 일자"></DatePicker>-->
+          <!--          </div>-->
+          <!--          <button class="btn btn-primary" @click="onSearchButtonClick">적용</button>-->
         </div>
 
       </div>
@@ -125,7 +128,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
+            <tr v-if="isFetchDailyStay" v-for="(stay, index) in stays" :key="stay.stayCodePk">
+              <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
+              <td>{{ stay.stayCodePk }}</td>
+              <td>{{ stay.customerName }}</td>
+              <td>{{ stay.roomCodeFk }}</td>
+              <td>{{ stay.roomNumber }}</td>
+              <td>{{ stay.roomName }}</td>
+              <td>{{ stay.roomLevelName }}</td>
+              <td>{{ stay.roomCapacity }}</td>
+              <td>{{ stay.stayPeopleCount }}</td>
+              <td>{{ formatDate(stay.stayCheckinTime) }}</td>
+              <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
+              <td>{{ stay.stayPeriod }}</td>
+              <td>{{ stay.employeeCodeFk }}</td>
+              <td>{{ stay.branchCodeFk }}</td>
+              <td>{{ stay.reservationCodeFk }}</td>
+            </tr>
+
+            <tr v-else v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
               <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
               <td>{{ stay.stayCodePk }}</td>
               <td>{{ stay.customerName }}</td>
@@ -190,7 +211,10 @@ const sortBy = ref(0);  // 0: descending, 1: ascending
 const orderBy = ref('stayCheckinTime');
 
 const selectedStayCheckinDate = ref(null);
-const selectedStayCheckoutDate = ref(null);
+// const selectedStayCheckoutDate = ref(null);
+
+// fetch마다 다르게 리스트를 출력하기 위함
+const isFetchDailyStay = ref(false);
 
 const defaultParams = {
   stayCodePk: null,
@@ -240,13 +264,34 @@ async function fetchData(params) {
     const response = await axios.get(url, { params });
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount; // 총 페이지 수를 업데이트
+    isFetchDailyStay.value = false; // Add this line
     return response.data.data;
   } catch (error) {
     console.error(error);
   }
 }
 
-// watch(selectedReservationCheckinDate, loadStays, { immediate: true });
+// datePicker의 체크인 일자 선택 실행
+async function fetchDailyStay(dateString) {
+  try {
+    const response = await axios.get(`http://localhost:8888/hotel-service/stays/daily/${dateString}`);
+    stays.value = response.data.data.content.flat(); // Add this line
+    isFetchDailyStay.value = true; // Add this line
+    return stays.value;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function updateDate(date) {
+  selectedStayCheckinDate.value = date;
+  const response = await fetchDailyStay(formatDate(date));
+  if (response) {
+    stays.value = response; // Update the stays array with the response
+    console.log(stays.value); // Add this line
+  }
+}
+// watch(selectedStayCheckinDate, loadStays, { immediate: true });
 
 async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue = 0) {
   // console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
@@ -361,7 +406,7 @@ function formatDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-// Datepicker 값 -> yyyy-MM-ddTHH:mm:ss로 변환
+// DatePicker 값 -> yyyy-MM-ddTHH:mm:ss로 변환
 function formatDateTime(date) {
   if (date == null) {
     date = new Date();
@@ -382,14 +427,14 @@ function formatDateTime(date) {
 .filter-container {
   position: absolute;
   top: 50px;  /* 필터 아이콘의 높이에 따라 조정 */
-  right: 41px;  /* 필터 아이콘 오른쪽 끝에 위치 */
+  right: -8px;  /* 필터 아이콘 오른쪽 끝에 위치 */
   width: auto;
 }
 
 .calendar-container {
   position: absolute;
   top: 50px;
-  right: 0;
+  right: 142px;
   width: auto;
   background: #fff;
   border-radius: 5px;
