@@ -123,10 +123,6 @@ $(document).ready(function () {
 </template>
 
 <style>
-
-@import "@/css/style.css";
-@import "@/css/bootstrap.min.css";
-
 .dropdown-icon {
   transition: transform 0.5s;
 }

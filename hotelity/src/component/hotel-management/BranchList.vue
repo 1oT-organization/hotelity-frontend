@@ -179,10 +179,6 @@ $(document).ready(function() {
 </template>
 
 <style>
-
-@import "@/css/style.css";
-@import "@/css/bootstrap.min.css";
-
 .modal {
   display: flex;
   align-items: center;

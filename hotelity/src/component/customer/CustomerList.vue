@@ -1,8 +1,7 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
 import router from '@/router/index.js';
-import Clock from '@/component/common/Clock.vue';
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -89,7 +88,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/customers/page', { params });
+    const response = await axios.get('http://localhost:8888/customers/page', {params});
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -198,7 +197,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <body>
   <div class="container-fluid position-relative d-flex p-0">
     <!-- Spinner Start -->
     <div v-if="isLoading" id="spinner"
@@ -208,6 +206,8 @@ onMounted(() => {
       </div>
     </div>
     <!-- Spinner End -->
+
+    <!-- Content Start -->
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
@@ -245,15 +245,8 @@ onMounted(() => {
           </button>
           <div class="filter-container" v-show="isFilterContainerVisible">
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.customerType">
-                <option :value="null">고객타입 선택</option>
-                <option value="개인">개인</option>
-                <option value="법인">법인</option>
-              </select>
-            </div>
-            <div class="btn-group me-2">
               <select class="form-select" v-model="defaultParams.membershipLevelName">
-                <option :value="null">멤버십 등급 선택</option>
+                <option v-bind:value="null">멤버십 등급 선택</option>
                 <option value="일반">일반</option>
                 <option value="골드">골드</option>
                 <option value="플래티넘">플래티넘</option>
@@ -261,6 +254,14 @@ onMounted(() => {
                 <option value="VIP">VIP</option>
               </select>
             </div>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.customerType">
+                <option v-bind:value="null">고객타입 선택</option>
+                <option value="개인">개인</option>
+                <option value="법인">법인</option>
+              </select>
+            </div>
+
             <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
           </div>
         </div>
@@ -354,11 +355,11 @@ onMounted(() => {
       </div>
     </div>
     <!-- Table End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
   </div>
-  </body>
+  <!-- Content End -->
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
 <style>
