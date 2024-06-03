@@ -12,7 +12,12 @@ import ReservationPage from '@/component/hotel-service/reservation/ReservationPa
 import Customer from "@/component/customer/Customer.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import Membership from "@/component/sales/Membership.vue";
-import StayPage from "@/component/hotel-service/stay/StayPage.vue";
+import EmployeeStay from "@/component/employee/EmployeeStay.vue";
+import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
+import Voc from "@/component/sales/Voc.vue";
+import Notice from "@/component/sales/Notice.vue";
+import CouponIssue from "@/component/sales/CouponIssue.vue";
+import RoomList from "@/component/hotel-management/RoomList.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -38,7 +43,7 @@ const router = createRouter({
       component: TestChart
     },
     {
-      path: '/employeeInfo',
+      path: '/employeeInfo/:id',
       component: EmployeeInfo
     },
     {
@@ -62,16 +67,36 @@ const router = createRouter({
         component: Customer
     },
     {
-      path: '/stayPage',
-      component: StayPage
-    },
-    {
         path: '/coupon',
         component: Coupon
     },
     {
         path: '/membership',
         component: Membership
+    },
+    {
+      path: '/payment',
+      component: PaymentList
+    },
+    {
+      path: '/employeeStay/:id',
+      component: EmployeeStay
+    },
+    {
+      path: '/voc',
+      component: Voc
+    },
+    {
+      path: '/notice',
+      component: Notice
+    },
+    {
+      path: '/couponIssue',
+      component: CouponIssue
+    },
+    {
+      path:'/room',
+      component: RoomList
     }
 ]
 });

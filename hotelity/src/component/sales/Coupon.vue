@@ -231,14 +231,12 @@ onMounted(() => {
                 <li><a class="dropdown-item" href="#" @click="setSearchCriteria('couponName')">쿠폰 이름</a></li>
               </ul>
             </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                   v-model="searchValue">
+            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
             <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
           </div>
           <div class="position-relative-container mt-3">
             <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
-                  class="bi bi-download"></i></button>
+              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
             </div>
             <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                     @click="toggleFilterContainer">
@@ -262,7 +260,7 @@ onMounted(() => {
               </div>
               <div class="btn-group me-2">
                 <select class="form-select" v-model="defaultParams.couponType">
-                  <option :value="null">쿠폰 종류</option>
+                  <option v-bind:value="null">쿠폰 종류</option>
                   <option value="객실 쿠폰">객실 쿠폰</option>
                   <option value="조식 쿠폰">조식 쿠폰</option>
                   <option value="호텔 레스토랑 쿠폰">호텔 레스토랑 쿠폰</option>
