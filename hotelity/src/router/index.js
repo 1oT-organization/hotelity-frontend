@@ -3,7 +3,8 @@ import CustomerInit from '@/component/customer/CustomerInit.vue';
 import CustomerList from '@/component/customer/CustomerList.vue';
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import Test from '@/component/Test.vue';
-import TestChart from '@/component/TestChart.vue';
+import TestBarChart from '@/component/TestBarChart.vue';
+import TestPieChart from '@/component/TestPieChart.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 import Login from '@/component/login/Login.vue';
 import BranchList from '@/component/hotel-management/BranchList.vue';
@@ -20,6 +21,7 @@ import CouponIssue from "@/component/sales/CouponIssue.vue";
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 import Campaign from "@/component/marketing/Campaign.vue";
+import TestCustomer from '@/component/TestCustomer.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -41,8 +43,12 @@ const router = createRouter({
       component: Test
     },
     {
-      path: '/chartTest',
-      component: TestChart
+      path: '/barchartTest',
+      component: TestBarChart
+    },
+    {
+      path: '/piechartTest',
+      component: TestPieChart
     },
     {
       path: '/employeeInfo/:id',
@@ -107,6 +113,10 @@ const router = createRouter({
     {
       path: '/campaign',
       component: Campaign
+    },
+    {
+      path: '/testCustomer',
+      component: TestCustomer
     }
 ]
 });
