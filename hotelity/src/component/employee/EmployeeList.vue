@@ -1,3 +1,196 @@
+<template>
+  <div class="container-fluid position-relative d-flex p-0">
+    <!-- Spinner Start -->
+    <div v-if="isLoading" id="spinner"
+         class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Table Start -->
+    <div class="container-fluid pt-4 px-4">
+      <div class="bg-secondary rounded-top p-4">
+        <h3 class="mb-4">직원 리스트</h3>
+        <div class="search-container d-flex align-items-center">
+          <div class="btn-group">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    @click="toggleDropdownMenu"
+                    :class="{ 'btn-primary': isDropdownOpen }"
+                    style="background-color: saddlebrown;">
+              <i class="bi bi-search"></i>
+            </button>
+            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeCode')">직원코드</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeName')">이름</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeePhoneNumber')">전화번호</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeOfficePhoneNumber')">내선번호</a>
+              </li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeEmail')">이메일</a></li>
+            </ul>
+          </div>
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
+                 v-model="searchValue">
+          <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
+        </div>
+        <div class="position-relative-container mt-3">
+          <div class="excel button" style="display: flex;justify-content:left">
+            <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
+                class="bi bi-download"></i></button>
+          </div>
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
+                  @click="toggleFilterContainer">
+            <i class="bi bi-funnel"></i>
+          </button>
+          <div class="filter-container" v-show="isFilterContainerVisible">
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.branchCode">
+                <option :value="null">지점 선택</option>
+                <option value="HQ">HQ</option>
+                <option value="SE">SE</option>
+              </select>
+            </div>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.rankCode">
+                <option :value="null">직급 선택</option>
+                <option value="1">부장</option>
+                <option value="2">차장</option>
+                <option value="3">과장</option>
+                <option value="4">대리</option>
+                <option value="5">사원</option>
+                <option value="6">인턴</option>
+              </select>
+            </div>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.positionCode">
+                <option :value="null">직책 선택</option>
+                <option value="1">CEO</option>
+                <option value="2">본부장</option>
+                <option value="3">실장</option>
+                <option value="5">파트장</option>
+              </select>
+            </div>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.departmentCode">
+                <option :value="null">부서 선택</option>
+                <option value="1">운영팀</option>
+                <option value="2">기술팀</option>
+                <option value="3">마케팅팀</option>
+                <option value="4">시설팀</option>
+                <option value="5">영업팀</option>
+                <option value="6">호텔관리팀</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col" @click="sort('employeeCode')">직원 코드
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'employeeCode' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeeCode' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('employeeName')">이름
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeeName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('branchCode')">지점
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'branchCode' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'branchCode' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('rankCode')">직급
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'rankCode' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'rankCode' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('departmentCode')">부서
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'departmentCode' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'departmentCode' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('positionCode')">직책
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'positionCode' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'positionCode' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('employeeOfficePhoneNumber')">내선번호
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('employeePhoneNumber')">전화번호
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('employeeEmail')">Email
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeEmail' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeeEmail' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('employeeAddress')">주소
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeAddress' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'employeeAddress' && sortBy === 1 }"></i>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="employee in employees.content" :key="employees.employeeCodePk"
+                  @click=navigateToCustomer(customer.customerCodePk)>
+                <td>{{ employee.employeeCodePk }}</td>
+                <td>{{ employee.employeeName }}</td>
+                <td>{{ employee.nameOfBranch }}</td>
+                <td>{{ employee.nameOfRank }}</td>
+                <td>{{ employee.nameOfDepartment }}</td>
+                <td>{{ employee.nameOfPosition }}</td>
+                <td>{{ employee.employeeOfficePhoneNumber }}</td>
+                <td>{{ employee.employeePhoneNumber }}</td>
+                <td>{{ employee.employeeEmail }}</td>
+                <td>{{ employee.employeeAddress }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 페이징 컨트롤 -->
+          <div class="pagination">
+            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
+            <button v-for="page in pageSize" :key="page"
+                    @click="changePage((pageGroup - 1) * pageSize + page)"
+                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
+                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+              {{ (pageGroup - 1) * pageSize + page }}
+            </button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table End -->
+  </div>
+  <!-- Content End -->
+
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</template>
+
 <script setup>
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
@@ -153,255 +346,7 @@ onMounted(() => {
 });
 </script>
 
-<template>
-  <body>
-  <div class="container-fluid position-relative d-flex p-0">
-    <!-- Spinner Start -->
-    <div v-if="isLoading" id="spinner"
-         class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-    <!-- Spinner End -->
-
-    <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
-      <nav class="navbar bg-secondary navbar-dark">
-        <a href="index.html" class="navbar-brand mx-4 mb-3">
-          <h3 class="text-primary" style="display: flex; justify-content: center;"><img
-              src="@/assets/img/hotelity_logo.png" width="60%"></h3>
-        </a>
-        <Clock/>
-
-        <div class="navbar-nav w-100">
-          <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트
-          </router-link>
-          <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
-        </div>
-      </nav>
-    </div>
-    <!-- Sidebar End -->
-
-    <!-- Content Start -->
-    <div class="content">
-      <!-- Navbar Start -->
-      <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-        <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-          <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
-        </a>
-        <a href="#" class="sidebar-toggler flex-shrink-0">
-          <i class="fa fa-bars"></i>
-        </a>
-
-        <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
-          <a href="" class="nav-item nav-link">고객</a>
-          <a href="" class="nav-item nav-link">직원</a>
-          <a href="" class="nav-item nav-link">호텔 서비스</a>
-          <a href="" class="nav-item nav-link">호텔 관리</a>
-          <a href="" class="nav-item nav-link">마케팅</a>
-          <a href="" class="nav-item nav-link">영업관리</a>
-        </div>
-        <div class="navbar-nav align-items-center ms-auto">
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              <img class="rounded-circle me-lg-2" src="" alt="" style="width: 40px; height: 40px;">
-              <span class="d-none d-lg-inline-flex">John Doe</span>
-              <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-              <a href="#" class="dropdown-item">My Profile</a>
-              <a href="#" class="dropdown-item">Settings</a>
-              <a href="#" class="dropdown-item">Log Out</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <!-- Navbar End -->
-
-      <!-- Table Start -->
-      <div class="container-fluid pt-4 px-4">
-        <div class="bg-secondary rounded-top p-4">
-          <h3 class="mb-4">직원 리스트</h3>
-          <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      @click="toggleDropdownMenu"
-                      :class="{ 'btn-primary': isDropdownOpen }"
-                      style="background-color: saddlebrown;">
-                <i class="bi bi-search"></i>
-              </button>
-              <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeCode')">직원코드</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeName')">이름</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeePhoneNumber')">전화번호</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeOfficePhoneNumber')">내선번호</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeEmail')">이메일</a></li>
-              </ul>
-            </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                   v-model="searchValue">
-            <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
-          </div>
-          <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
-                  class="bi bi-download"></i></button>
-            </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                    @click="toggleFilterContainer">
-              <i class="bi bi-funnel"></i>
-            </button>
-            <div class="filter-container" v-show="isFilterContainerVisible">
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.branchCode">
-                  <option :value="null">지점 선택</option>
-                  <option value="HQ">HQ</option>
-                  <option value="SE">SE</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.rankCode">
-                  <option :value="null">직급 선택</option>
-                  <option value="1">부장</option>
-                  <option value="2">차장</option>
-                  <option value="3">과장</option>
-                  <option value="4">대리</option>
-                  <option value="5">사원</option>
-                  <option value="6">인턴</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.positionCode">
-                  <option :value="null">직책 선택</option>
-                  <option value="1">CEO</option>
-                  <option value="2">본부장</option>
-                  <option value="3">실장</option>
-                  <option value="5">파트장</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.departmentCode">
-                  <option :value="null">부서 선택</option>
-                  <option value="1">운영팀</option>
-                  <option value="2">기술팀</option>
-                  <option value="3">마케팅팀</option>
-                  <option value="4">시설팀</option>
-                  <option value="5">영업팀</option>
-                  <option value="6">호텔관리팀</option>
-                </select>
-              </div>
-              <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-12">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th scope="col" @click="sort('employeeCode')">직원 코드
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'employeeCode' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'employeeCode' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('employeeName')">이름
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'employeeName' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('branchCode')">지점
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'branchCode' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'branchCode' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('rankCode')">직급
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'rankCode' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'rankCode' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('departmentCode')">부서
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'departmentCode' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'departmentCode' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('positionCode')">직책
-                    <i class="bi bi-caret-up-fill"
-                       :class="{ active: orderBy === 'positionCode' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'positionCode' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('employeeOfficePhoneNumber')">내선번호
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('employeePhoneNumber')">전화번호
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('employeeEmail')">Email
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeEmail' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'employeeEmail' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('employeeAddress')">주소
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeAddress' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill"
-                       :class="{ active: orderBy === 'employeeAddress' && sortBy === 1 }"></i>
-                  </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="employee in employees.content" :key="employees.employeeCodePk"
-                    @click=navigateToCustomer(customer.customerCodePk)>
-                  <td>{{ employee.employeeCodePk }}</td>
-                  <td>{{ employee.employeeName }}</td>
-                  <td>{{ employee.nameOfBranch }}</td>
-                  <td>{{ employee.nameOfRank }}</td>
-                  <td>{{ employee.nameOfDepartment }}</td>
-                  <td>{{ employee.nameOfPosition }}</td>
-                  <td>{{ employee.employeeOfficePhoneNumber }}</td>
-                  <td>{{ employee.employeePhoneNumber }}</td>
-                  <td>{{ employee.employeeEmail }}</td>
-                  <td>{{ employee.employeeAddress }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- 페이징 컨트롤 -->
-            <div class="pagination">
-              <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-              <button v-for="page in pageSize" :key="page"
-                      @click="changePage((pageGroup - 1) * pageSize + page)"
-                      :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                      :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-                {{ (pageGroup - 1) * pageSize + page }}
-              </button>
-              <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Table End -->
-    </div>
-    <!-- Content End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-  </div>
-  </body>
-</template>
-
 <style>
-@import "@/css/style.css";
-@import "@/css/bootstrap.min.css";
-
 .pagination {
   display: flex;
   justify-content: center;
