@@ -188,7 +188,7 @@ function formatDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-// Datepicker 값 -> yyyy-MM-ddTHH:mm:ss로 변환
+// Datepicker 값 -> yyyy-MM-ddTHH:mm:ss(LocalDateTime)로 변환
 function formatDateTime(date) {
   if (date == null) {
     date = new Date();

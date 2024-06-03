@@ -4,7 +4,22 @@
     <div class="bg-secondary rounded-top p-4">
       <h3 class="mb-4">투숙 리스트</h3>
       <div class="search-container d-flex align-items-center">
-        <StaySearch/>
+        <div class="btn-group">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                  @click="toggleDropdownMenu"
+                  aria-expanded="false" style="background-color: saddlebrown; margin-left: 8px">
+            <i class="bi bi-search"></i>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#" @click="setSearchCriteria('stayCodePk')">투숙코드</a></li>
+            <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">고객명</a></li>
+            <li><a class="dropdown-item" href="#" @click="setSearchCriteria('roomCodeFk')">객실코드</a></li>
+            <li><a class="dropdown-item" href="#" @click="setSearchCriteria('roomName')">객실명</a></li>
+            <li><a class="dropdown-item" href="#" @click="setSearchCriteria('roomLevelName')">객실등급</a></li>
+          </ul>
+        </div>
+        <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
+        <button class="btn btn-primary ms-2" @click="onSearchButtonClick">검색</button>
       </div>
       <div class="position-relative-container mt-3">
         <ExcelButton/>
@@ -12,7 +27,7 @@
         <div style="display: flex;justify-content:right">
           <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
           <!--        StayFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i class="bi bi-funnel"></i></button>
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
         </div>
         <div class="filter-container" style="width: auto">
           <div class="btn-group me-2">
@@ -34,7 +49,7 @@
           <button class="btn btn-primary">적용</button>
         </div>
 
-        <!--        ReservationFilter end-->
+        <!--        StayFilter end-->
 
       </div>
       <br>
@@ -159,8 +174,37 @@ const totalPages = ref(0);
 const pageGroup = ref(1);
 const pageSize = 10; // 한 그룹당 페이지 수
 const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
+const searchValue = ref('');
+const isFilterContainerVisible = ref(false);
+const isDropdownOpen = ref(false);
+const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: descending, 1: ascending
 const orderBy = ref('stayCheckinTime');
+
+const selectedStayCheckinDate = ref(null);
+const selectedStayCheckoutDate = ref(null);
+
+const defaultParams = {
+  stayCodePk: null,
+  customerCodeFk: null,
+  customerName: null,
+  roomCodeFk: null,
+  roomNumber: null,
+  roomName: null,
+  roomLevelName: null,
+  roomCapacity: null,
+  stayPeopleCount: null,
+  stayCheckinTime: null,
+  stayCheckoutTime: null,
+  stayPeriod: null,
+  employeeCodeFk: null,
+  PICEmployeeName: null,
+  branchCodeFk: null,
+  reservationCodeFk: null,
+  orderBy: null,
+  sortBy: null,
+  pageNum: null
+};
 
 // 체크박스
 const checkedRows = ref([]);
@@ -175,13 +219,12 @@ watch(stays, () => {
       stays.value.content.map(stay => !!stay.stayCheckoutTime) : [];
 }, { immediate: true });
 
-const selectedReservationDate = ref(null);
-const selectedReservationCheckinDate = ref(null);
-const selectedReservationCheckoutDate = ref(null);
-
 async function fetchData(params) {
+
+  const url = `http://localhost:8888/hotel-service/stays/page`
   try {
-    const response = await axios.get(`http://localhost:8888/hotel-service/stays/page`, { params });
+    console.log("url" + url)
+    const response = await axios.get(url, { params });
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount; // 총 페이지 수를 업데이트
     return response.data.data;
@@ -195,22 +238,7 @@ async function fetchData(params) {
 async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue = 0) {
   // console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
   stays.value = await fetchData({
-    stayCodePk: null,
-    customerCodeFk: null,
-    customerName: null,
-    roomCodeFk: null,
-    roomNumber: null,
-    roomName: null,
-    roomLevelName: null,
-    roomCapacity: null,
-    stayPeopleCount: null,
-    stayCheckinTime: null,
-    stayCheckoutTime: null,
-    stayPeriod: null,
-    employeeCodeFk: null,
-    PICEmployeeName: null,
-    branchCodeFk: null,
-    reservationCodeFk: null,
+    ...defaultParams,
     orderBy: orderByValue,
     sortBy: sortByValue,
     pageNum: page - 1
@@ -246,6 +274,48 @@ function sort(column) {
     sortBy.value = 0;
   }
   loadStays(currentPage.value, orderBy.value, sortBy.value);
+}
+
+// 검색
+function setSearchCriteria(criteria) {
+  // 이전 검색 기준 값 초기화
+  if (selectedCriteria.value) {
+    defaultParams[selectedCriteria.value] = null;
+  }
+
+  selectedCriteria.value = criteria;
+  searchValue.value = ''; // 검색값 초기화
+  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+}
+
+// new 검색
+// function setSearchCriteria(criteria) {
+//   selectedCriteria.value = criteria;
+// }
+
+// 검색 버튼의 클릭 이벤트 핸들러
+// 검색 버튼의 클릭 이벤트 핸들러
+async function onSearchButtonClick() {
+  const params = {
+    ...defaultParams,
+    pageNum: currentPage.value - 1  // 페이지 번호 설정
+  };
+
+  // 선택한 검색 기준과 검색 값을 params에 추가
+  if (selectedCriteria.value && searchValue.value) {
+    params[selectedCriteria.value] = searchValue.value;
+  }
+
+  stays.value = await fetchData(params);
+}
+
+// 필터
+function toggleFilterContainer() {
+  isFilterContainerVisible.value = !isFilterContainerVisible.value;
+}
+
+function toggleDropdownMenu() {
+  isDropdownOpen.value = !isDropdownOpen.value;
 }
 
 onMounted( async () => {
