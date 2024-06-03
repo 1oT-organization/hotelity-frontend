@@ -4,6 +4,8 @@
     <div style="position: relative; width: 50%; margin: auto;">
       <canvas ref="chartCanvas"></canvas>
     </div>
+
+    <p>전체 예약 건수: {{ totalReservationCount }}</p>
   </div>
 </template>
 
@@ -18,8 +20,10 @@ export default {
   setup() {
     const chartCanvas = ref(null);
     const chartInstance = ref(null);
+    const totalReservationCount = ref(0);
+
     const datacollection = ref({
-      labels: ['당일 예약', '당일 투숙'],
+      labels: ['예약', '투숙'],
       datasets: [
         {
           label: '현황',
@@ -59,9 +63,16 @@ export default {
         const stayResponse = await axios.get(`http://localhost:8888/hotel-service/stays/daily/${formattedStayDate}`);
         const dailyStayInfo = stayResponse.data.data;
         console.log(dailyStayInfo)
-        const stayingCount = dailyStayInfo.content.length;
+        totalReservationCount.value = dailyReservationInfo.content.length;
 
-        datacollection.value.datasets[0].data = [reservationCount, stayingCount];
+        const actualStayCount = dailyStayInfo.content.length;
+
+        console.log(dailyStayInfo.content.length)
+
+const remainingReservationCount = reservationCount - actualStayCount; // 아직 체크인하지 않은 예약 건수
+
+
+datacollection.value.datasets[0].data = [remainingReservationCount, actualStayCount];
 
         if (chartInstance.value) {
           chartInstance.value.destroy();
@@ -79,9 +90,10 @@ export default {
 
     onMounted(() => {
       fetchData();
+
     });
 
-    return { chartCanvas, datacollection, options };
+    return { chartCanvas, datacollection, options, totalReservationCount };
   }
 };
 </script>
