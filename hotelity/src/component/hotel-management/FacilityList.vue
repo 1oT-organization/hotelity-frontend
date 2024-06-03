@@ -1,14 +1,14 @@
 <script setup>
 
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
 const isLoading = ref(true);
 
 onMounted(() => {
 
-  $('#filter-icon').on('click', function() {
+  $('#filter-icon').on('click', function () {
     $('.filter-container').toggle();
   });
 });
@@ -25,25 +25,6 @@ onMounted(() => {
       }, 1000);
     });
   }
-
-  // Clock
-  const h1 = document.getElementById("time");
-
-  function getTime() {
-    const date = new Date();
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
-    const second = String(date.getSeconds()).padStart(2, '0');
-    const time = `${hour}:${minute}:${second}`;
-    h1.textContent = time;
-  }
-
-// 최초에 한 번 시간 설정
-  getTime();
-
-// 1초마다 getTime 함수를 호출하도록 타이머 설정
-  setInterval(getTime, 1000);
-
 });
 
 const router = useRouter();
@@ -56,7 +37,6 @@ $(document).ready(function () {
 </script>
 
 <template>
-  <body>
   <div class="container-fluid position-relative d-flex p-0">
     <!-- Spinner Start -->
     <div v-if="isLoading" id="spinner"
@@ -118,8 +98,6 @@ $(document).ready(function () {
 
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-  </body>
 </template>
 
 <style>

@@ -195,7 +195,6 @@
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
 import router from '@/router/index.js';
-import Clock from '@/component/common/Clock.vue';
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);

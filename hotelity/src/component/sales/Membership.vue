@@ -2,7 +2,6 @@
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
 import router from '@/router/index.js';
-import Clock from '@/component/common/Clock.vue';
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -147,7 +146,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <body>
   <div class="container-fluid position-relative d-flex p-0">
     <!-- Spinner Start -->
     <div v-if="isLoading" id="spinner"
@@ -253,7 +251,6 @@ onMounted(() => {
 
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-  </body>
 </template>
 
 <style>
