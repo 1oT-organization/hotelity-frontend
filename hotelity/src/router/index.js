@@ -22,6 +22,7 @@ import RoomList from "@/component/hotel-management/RoomList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 import Campaign from "@/component/marketing/Campaign.vue";
 import TestCustomer from '@/component/TestCustomer.vue';
+import NoticeInfo from '@/component/sales/NoticeInfo.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -117,6 +118,10 @@ const router = createRouter({
     {
       path: '/testCustomer',
       component: TestCustomer
+    },
+    {
+      path: '/noticeInfo/:id',
+      component: NoticeInfo
     }
 ]
 });

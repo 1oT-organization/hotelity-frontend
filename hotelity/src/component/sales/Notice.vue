@@ -5,7 +5,7 @@ import router from '@/router/index.js';
 import Clock from '@/component/common/Clock.vue';
 
 function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+  router.push(`/noticeInfo/${id}`);
 }
 
 const isLoading = ref(true);
@@ -218,7 +218,7 @@ onMounted(() => {
       <!-- Table Start -->
       <div class="container-fluid pt-4 px-4">
         <div class="bg-secondary rounded-top p-4">
-          <h3 class="mb-4">notice 리스트</h3>
+          <h3 class="mb-4">공지사항</h3>
           <div class="search-container d-flex align-items-center">
             <div class="btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -268,15 +268,14 @@ onMounted(() => {
                     <i class="bi bi-caret-down-fill"
                        :class="{ active: orderBy === 'noticeCodePk' && sortBy === 1 }"></i>
                   </th>
-                  <th scope="col">공지 제목</th>
-                  <th scope="col">작성자 직원 코드</th>
-                  <th scope="col">작성자 직원명</th>
-                  <th scope="col" @click="sort('branchCodeFk')">지점 코드 코드
+                  <th scope="col">제목</th>
+                  <th scope="col" @click="sort('branchCodeFk')">지점
                     <i class="bi bi-caret-up-fill"
                        :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
                     <i class="bi bi-caret-down-fill"
                        :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
                   </th>
+                  <th scope="col">직원명</th>
                   <th scope="col">작성 일자</th>
                 </tr>
                 </thead>
@@ -285,9 +284,8 @@ onMounted(() => {
                     @click=navigateToCustomer(notice.noticeCodePk)>
                   <td>{{ notice.noticeCodePk }}</td>
                   <td>{{ notice.noticeTitle }}</td>
-                  <td>{{ notice.employeeCodeFk }}</td>
-                  <td>{{ notice.picemployeeName }}</td>
                   <td>{{ notice.branchCodeFk }}</td>
+                  <td>{{ notice.picemployeeName }}</td>
                   <td>{{
                       new Date(notice.noticePostedDate).toLocaleDateString('ko-KR', {
                         year: 'numeric',
