@@ -19,6 +19,8 @@ import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
 import RoomList from "@/component/hotel-management/RoomList.vue";
+import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import Campaign from "@/component/marketing/Campaign.vue";
 import TestCustomer from '@/component/TestCustomer.vue';
 
 const router = createRouter({
@@ -103,6 +105,14 @@ const router = createRouter({
     {
       path:'/room',
       component: RoomList
+    },
+    {
+      path: '/ancillary',
+      component: Ancillary
+    },
+    {
+      path: '/campaign',
+      component: Campaign
     },
     {
       path: '/testCustomer',
