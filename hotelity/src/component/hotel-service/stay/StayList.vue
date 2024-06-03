@@ -24,32 +24,39 @@
       <div class="position-relative-container mt-3">
         <ExcelButton/>
 
-        <div style="display: flex;justify-content:right">
+        <div style="display: flex; justify-content:right">
           <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
-          <!--        StayFilter start -->
+        <!--        StayFilter start -->
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
+
+          <!-- calendar icon -->
+          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-left: 8px" @click="toggleCalendarContainer"><i class="bi bi-calendar"></i></button>
         </div>
-        <div class="filter-container" style="width: auto">
+
+        <!-- filter container -->
+        <div class="filter-container" v-show="isFilterContainerVisible">
           <div class="btn-group me-2">
-            <select class="form-select">
-              <option selected>지점 코드</option>
-              <option value="1">SE</option>
-              <option value="2">HQ</option>
+            <select class="form-select" v-model="defaultParams.branchCodeFk">
+              <option value="null">지점 코드</option>
+              <option value="SE">SE</option>
+              <option value="HQ">HQ</option>
             </select>
           </div>
+          <button class="btn btn-primary" @click="onSearchButtonClick">적용</button>
+        </div>
+
+        <!-- calendar container -->
+        <div class="calendar-container" v-show="isCalendarContainerVisible">
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="selectedStayCheckinDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center" placeholder="체크인 일자"></DatePicker>
+                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크인 일자"></DatePicker>
           </div>
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center" placeholder="체크아웃 일자"></DatePicker>
+                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크아웃 일자"></DatePicker>
           </div>
-
-          <button class="btn btn-primary">적용</button>
+<!--          <button class="btn btn-primary" @click="onSearchButtonClick">적용</button>-->
         </div>
-
-        <!--        StayFilter end-->
 
       </div>
       <br>
@@ -176,6 +183,7 @@ const pageSize = 10; // 한 그룹당 페이지 수
 const selectedPage = ref(1); // 클릭한 페이지 번호를 추적하는 ref
 const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
+const isCalendarContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: descending, 1: ascending
@@ -220,6 +228,11 @@ watch(stays, () => {
 }, { immediate: true });
 
 async function fetchData(params) {
+
+  // 필터의 dropdown에서 '지점 코드'를 선택했을 때 requestParam에서 branchCodeFk 제거
+  if (params.branchCodeFk === 'null') {
+    delete params.branchCodeFk;
+  }
 
   const url = `http://localhost:8888/hotel-service/stays/page`
   try {
@@ -288,12 +301,6 @@ function setSearchCriteria(criteria) {
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
 }
 
-// new 검색
-// function setSearchCriteria(criteria) {
-//   selectedCriteria.value = criteria;
-// }
-
-// 검색 버튼의 클릭 이벤트 핸들러
 // 검색 버튼의 클릭 이벤트 핸들러
 async function onSearchButtonClick() {
   const params = {
@@ -312,6 +319,17 @@ async function onSearchButtonClick() {
 // 필터
 function toggleFilterContainer() {
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
+  // 필터 컨테이너가 열리면 캘린더 컨테이너는 자동 닫힘
+  if (isFilterContainerVisible.value && isCalendarContainerVisible.value) {
+    isCalendarContainerVisible.value = false;
+  }
+}
+
+function toggleCalendarContainer() {
+  isCalendarContainerVisible.value = !isCalendarContainerVisible.value;
+  if(isCalendarContainerVisible.value && isFilterContainerVisible.value) {
+    isFilterContainerVisible.value = false;
+  }
 }
 
 function toggleDropdownMenu() {
@@ -361,6 +379,44 @@ function formatDateTime(date) {
 </script>
 
 <style>
+.filter-container {
+  position: absolute;
+  top: 50px;  /* 필터 아이콘의 높이에 따라 조정 */
+  right: 41px;  /* 필터 아이콘 오른쪽 끝에 위치 */
+  width: auto;
+}
+
+.calendar-container {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: auto;
+  background: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* 그림자 효과 추가 */
+}
+
+
+.calendar-container::before {
+  content: "";
+  position: absolute;
+  top: -10px; /* 화살표 위치 조정 */
+  right: 10px; /* 화살표 위치 조정 */
+  border-width: 0 10px 10px 10px; /* 화살표 크기 조정 */
+  border-style: solid;
+  border-color: transparent transparent #ccc transparent; /* 화살표 색상 조정 */
+}
+
+.calendar-container::after {
+  content: "";
+  position: absolute;
+  top: -9px; /* 화살표 위치 조정 */
+  right: 10px; /* 화살표 위치 조정 */
+  border-width: 0 9px 9px 9px; /* 화살표 크기 조정 */
+  border-style: solid;
+  border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
+}
 
 .pagination {
   display: flex;

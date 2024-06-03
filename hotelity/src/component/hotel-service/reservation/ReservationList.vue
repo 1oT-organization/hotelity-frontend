@@ -27,17 +27,17 @@
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event"
                         format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center" placeholder="예약 일자"></DatePicker>
+                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="예약 일자"></DatePicker>
           </div>
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedReservationCheckinDate"
                         @update:modelValue="selectedReservationCheckinDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center" placeholder="체크인 일자"></DatePicker>
+                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크인 일자"></DatePicker>
           </div>
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedReservationCheckoutDate"
                         @update:modelValue="selectedReservationCheckoutDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center" placeholder="체크아웃 일자"></DatePicker>
+                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크아웃 일자"></DatePicker>
           </div>
 
           <button class="btn btn-primary">적용</button>
