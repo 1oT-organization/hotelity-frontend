@@ -12,12 +12,12 @@
       <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
 
         <!-- New Menu Items -->
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.customer)">고객</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee)">직원</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService)">호텔 서비스</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement)">호텔 관리</div>
+        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.customer, $event)">고객</div>
+        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee, $event)">직원</div>
+        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService, $event)">호텔 서비스</div>
+        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement, $event)">호텔 관리</div>
         <div class="nav-item nav-link">마케팅</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales)">영업관리</div>
+        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales, $event)">영업관리</div>
 
       </div>
 
@@ -111,7 +111,7 @@
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
-  const emit = defineEmits(['toggleOpen']);
+  const emit = defineEmits(['toggleOpen', 'setMenu']);
 
   const toggleOpenClass = () => {
     emit('toggleOpen');
@@ -120,9 +120,6 @@
   const setSidebarMenu = (menu) => {
     emit('setMenu', menu);
   };
-
-  // const setSidebarMenu = (menu) => {
-  // };
 
   const destination = {
     customer: {
@@ -148,7 +145,13 @@
     // marketing: '/marketing',
   };
 
-  const navigateTo = (destination) => {
+  const navigateTo = (destination, event) => {
+    document.querySelectorAll(".navbar-nav .nav-item:not(.dropdown)").forEach(item => {
+      item.classList.remove('active');
+    });
+
+    event.target.classList.add('active');
+
     router.push(destination.path);
     setSidebarMenu(destination.name);
   };

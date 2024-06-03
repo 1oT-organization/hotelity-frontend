@@ -13,12 +13,18 @@ import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
 
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
+import RoomList from "@/component/hotel-management/RoomList.vue";
+import FacilityList from "@/component/hotel-management/FacilityList.vue";
 
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
+import StayList from "@/component/hotel-service/stay/StayList.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
+import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 
-import Coupon from "@/component/sales/Coupon.vue";
+import Voc from "@/component/sales/Voc.vue";
+import Notice from "@/component/sales/Notice.vue";
 import Membership from "@/component/sales/Membership.vue";
+import Coupon from "@/component/sales/Coupon.vue";
 
 const routes = [
     {
@@ -98,6 +104,22 @@ const routes = [
             requiresAuth: true,
         },
     },
+    {
+        path: '/roomList',
+        name: 'RoomList',
+        component: RoomList,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '/facilityList',
+        name: 'FacilityList',
+        component: FacilityList,
+        meta: {
+            requiresAuth: true,
+        },
+    },
 
     /* 호텔서비스 */
     {
@@ -109,9 +131,17 @@ const routes = [
         },
     },
     {
-        path: '/stayPage',
-        name: 'StayPage',
-        component: StayPage,
+        path: '/stayList',
+        name: 'StayList',
+        component: StayList,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '/paymentList',
+        name: 'PaymentList',
+        component: PaymentList,
         meta: {
             requiresAuth: true,
         },
@@ -119,9 +149,17 @@ const routes = [
 
     /* 영업관리 */
     {
-        path: '/coupon',
-        name: 'Coupon',
-        component: Coupon,
+        path: '/vocList',
+        name: 'VocList',
+        component: Voc,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '/noticeList',
+        name: 'NoticeList',
+        component: Notice,
         meta: {
             requiresAuth: true,
         },
@@ -130,6 +168,14 @@ const routes = [
         path: '/membership',
         name: 'Membership',
         component: Membership,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: '/coupon',
+        name: 'Coupon',
+        component: Coupon,
         meta: {
             requiresAuth: true,
         },

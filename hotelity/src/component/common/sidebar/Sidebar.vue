@@ -4,7 +4,7 @@
     <nav class="navbar bg-secondary navbar-dark">
       <div class="navbar-brand mx-4 mb-3">
         <h3 class="text-primary" style="display: flex; justify-content: center;">
-          <img src="@/assets/img/hotelity_logo.png" width="60%">
+          <img class="c-pointer" src="@/assets/img/hotelity_logo.png" width="60%" @click="navigateToHome">
         </h3>
       </div>
 
@@ -15,13 +15,13 @@
       </div>
 
       <div class="navbar-nav w-100">
-        <!--        <router-link to="/customerList" class="nav-item nav-link">-->
-        <!--          <i class="emoji bi bi-people-fill"></i>고객 리스트-->
-        <!--        </router-link>-->
-        <!--&lt;!&ndash;        <router-link to="/" class="nav-item nav-link active">&ndash;&gt;-->
-        <!--        <router-link to="/" class="nav-item nav-link">-->
-        <!--          <i class="emoji bi bi-person-fill-add"></i>고객 등록-->
-        <!--        </router-link>-->
+        <router-link
+            v-for="link in links"
+            :key="link.path"
+            :to="link.path"
+            class="nav-item nav-link">
+          <i :class="link.iconClass"></i>{{ link.text }}
+        </router-link>
       </div>
     </nav>
   </div>
@@ -29,7 +29,15 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
+import router from "@/router/router.js";
+
+const emit = defineEmits(['removeNavActive'])
+
+const navigateToHome = () => {
+  router.push('/');
+  emit('removeNavActive');
+};
 
 onMounted(() => {
   fetchData().then(() => {
@@ -62,8 +70,117 @@ onMounted(() => {
   // 1초마다 getTime 함수를 호출하도록 타이머 설정
   setInterval(getTime, 1000);
 });
+
+const menu = {
+  customer: {
+    name: 'customer',
+    subMenu: [
+      {
+        text: '고객 리스트',
+        path: '/customerList',
+        iconClass: 'emoji bi bi-people-fill'
+      },
+      {
+        text: '고객 등록',
+        path: '/customerInit',
+        iconClass: 'emoji bi bi-person-fill-add'
+      }
+    ]
+  },
+  employee: {
+    name: 'employee',
+    subMenu: [
+      {
+        text: '직원 관리',
+        path: '/employeeList',
+        iconClass: 'emoji bi bi-person-vcard-fill'
+      }
+    ]
+  },
+  hotelService: {
+    name: 'hotelService',
+    subMenu: [
+      {
+        text: '예약 일정',
+        path: '/reservationPage',
+        iconClass: 'emoji bi bi-calendar-fill'
+      },
+      {
+        text: '투숙',
+        path: '/stayList',
+        iconClass: 'emoji bi bi-house-heart-fill'
+      },
+      {
+        text: '결제',
+        path: '/paymentList',
+        iconClass: 'emoji bi bi-credit-card-2-back-fill'
+      }
+    ]
+  },
+  hotelManagement: {
+    name: 'hotelManagement',
+    subMenu: [
+      {
+        text: '전체 지점',
+        path: '/branchList',
+        iconClass: 'emoji bi bi-building-fill'
+      },
+      {
+        text: '객실',
+        path: '/roomList',
+        iconClass: 'emoji bi bi-door-open-fill'
+      },
+      {
+        text: '부대시설',
+        path: '/facilityList',
+        iconClass: 'emoji bi bi-house-door-fill'
+      }
+    ]
+  },
+  sales: {
+    name: 'sales',
+    subMenu: [
+      {
+        text: 'VOC',
+        path: '/vocList',
+        iconClass: 'emoji bi bi-chat-left-fill'
+      },
+      {
+        text: '공지',
+        path: '/noticeList',
+        iconClass: 'emoji bi bi-megaphone-fill'
+      },
+      {
+        text: '멤버십',
+        path: '/membership',
+        iconClass: 'emoji bi bi-award-fill'
+      },
+      {
+        text: '쿠폰',
+        path: '/coupon',
+        iconClass: 'emoji bi bi-tag-fill'
+      },
+    ]
+  },
+  // marketing: '/marketing',
+};
+
+const links = ref([]);
+
+const setSidebarMenu = (navMenuName) => {
+  if (navMenuName === 'home') {
+    links.value = [];
+    return;
+  }
+
+  links.value = menu[navMenuName].subMenu;
+};
+
+defineExpose({
+  setSidebarMenu
+});
 </script>
 
 <style>
 
-</style>b
+</style>

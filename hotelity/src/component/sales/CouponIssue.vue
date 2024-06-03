@@ -1,7 +1,7 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
-import router from '@/router/index.js';
+// import router from '@/router/index.js';
 
 onMounted(() => {
   // Initialize datepicker
@@ -31,7 +31,7 @@ function formatDateTime(date) {
 }
 
 function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+  // router.push(`/customer/${id}`);
 }
 
 const isLoading = ref(true);
