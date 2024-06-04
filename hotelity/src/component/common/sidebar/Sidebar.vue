@@ -200,7 +200,7 @@ const links = ref([]);
 const setSidebarMenu = (navMenuName) => {
   links.value = [];
 
-  if (navMenuName === 'home') {
+  if (navMenuName === 'home' || !menu[navMenuName]) {
     return;
   }
 
