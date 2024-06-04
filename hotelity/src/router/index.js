@@ -23,6 +23,7 @@ import Ancillary from "@/component/hotel-management/Ancillary.vue";
 import Campaign from "@/component/marketing/Campaign.vue";
 import TestCustomer from '@/component/TestCustomer.vue';
 import NoticeInfo from '@/component/sales/NoticeInfo.vue';
+import RoomDetails from '@/component/hotel-management/RoomDetails.vue';
 import Stay from "@/component/hotel-service/stay/Stay.vue";
 
 const router = createRouter({
@@ -123,6 +124,10 @@ const router = createRouter({
     {
       path: '/noticeInfo/:id',
       component: NoticeInfo
+    },
+    {
+      path: '/roomDetails/:id',
+      component: RoomDetails
     },
     {
       path: '/stay',
