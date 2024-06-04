@@ -20,6 +20,7 @@ import FacilityList from "@/component/hotel-management/FacilityList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
+import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
 import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
@@ -171,6 +172,15 @@ const routes = [
         name: 'ReservationPage',
 
         component: ReservationPage,
+        meta: {
+            requiresAuth: true,
+            category: 'hotelService',
+        },
+    },
+    {
+        path: '/reservationList',
+        name: 'ReservationList',
+        component: ReservationList,
         meta: {
             requiresAuth: true,
             category: 'hotelService',

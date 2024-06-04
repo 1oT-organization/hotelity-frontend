@@ -1,4 +1,8 @@
 <template>
+  <div class="container-fluid pt-4 px-4">
+    <ReservationCalendar @date-clicked="handleDateClicked"/>
+  </div>
+
   <!-- Table Start -->
   <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">
@@ -9,14 +13,18 @@
       <div class="position-relative-container mt-3">
         <ExcelButton/>
 
-        <div style="display: flex;justify-content:right">
+        <div style="display: flex; justify-content:right">
+          <!-- calendar icon -->
+          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i
+              class="bi bi-calendar"></i></button>
+
           <ReservationCheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>
 
           <!--        ReservationFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"><i
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i
               class="bi bi-funnel"></i></button>
         </div>
-        <div class="filter-container" style="width: auto">
+        <div class="filter-container" style="width: auto" v-show="isFilterContainerVisible">
           <div class="btn-group me-2">
             <select class="form-select">
               <option selected>지점 코드</option>
@@ -24,6 +32,10 @@
               <option value="2">HQ</option>
             </select>
           </div>
+          <button class="btn btn-primary">적용</button>
+        </div>
+
+        <div class="calendar-container" v-show="isCalendarContainerVisible">
           <div class="btn-group me-2">
             <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event"
                         format="yyyy-MM-dd"
@@ -42,8 +54,6 @@
                         style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
                         placeholder="체크아웃 일자"></DatePicker>
           </div>
-
-          <button class="btn btn-primary">적용</button>
         </div>
 
         <!--        ReservationFilter end-->
@@ -120,12 +130,16 @@ import ReservationFilter from "@/component/hotel-service/reservation/Reservation
 import DatePicker from "vue3-datepicker";
 import ReservationCheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
 import StayCheckoutBtn from "@/component/hotel-service/stay/StayCheckoutBtn.vue";
+import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
+
 
 const isLoading = ref(true);
 const reservations = ref([]);
 const selectedReservationDate = ref(null);
 const selectedReservationCheckinDate = ref(null);
 const selectedReservationCheckoutDate = ref(null);
+const isFilterContainerVisible = ref(false);
+const isCalendarContainerVisible = ref(false);
 
 // 체크박스
 const checkedRows = ref([]);
@@ -137,13 +151,27 @@ watch(reservations, () => {
               reservation.reservationCodePk : null) : [];
 }, {immediate: true});
 
-
+// 월별 예약 내역 조회
 async function fetchData(params) {
   try {
     const formattedDate = formatDateTime(selectedReservationCheckinDate.value);
     const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${formattedDate}`, {params});
+    console.log("월별 예약 내역 조회: ")
     console.log(response.data);
     return response.data.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// 일별 예약 내역 조회
+const handleDateClicked = async (formattedDate) => {
+  console.log("handleDateClicked 실행됨")
+  try {
+    const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${formattedDate}/day`);
+    console.log("일별 예약 내역 조회: ")
+    console.log(response.data.data);
+    reservations.value = response.data.data;
   } catch (error) {
     console.error(error);
   }
@@ -172,11 +200,34 @@ async function loadReservations() {
     orderBy: null,
     sortBy: null
   });
+  console.log("확인 요망")
+  console.log(reservations.value);
+
   isLoading.value = false;
 }
 
+// 필터
+function toggleFilterContainer() {
+  isFilterContainerVisible.value = !isFilterContainerVisible.value;
+  // 필터 컨테이너가 열리면 캘린더 컨테이너는 자동 닫힘
+  if (isFilterContainerVisible.value && isCalendarContainerVisible.value) {
+    isCalendarContainerVisible.value = false;
+  }
+}
+
+function toggleCalendarContainer() {
+  isCalendarContainerVisible.value = !isCalendarContainerVisible.value;
+  if(isCalendarContainerVisible.value && isFilterContainerVisible.value) {
+    isFilterContainerVisible.value = false;
+  }
+}
+
+function toggleDropdownMenu() {
+  isDropdownOpen.value = !isDropdownOpen.value;
+}
+
 onMounted(async () => {
-  await loadReservations();
+  // await loadReservations();
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();
   });
@@ -209,5 +260,43 @@ function formatDateTime(date) {
 </script>
 
 <style>
+.filter-container {
+  position: absolute;
+  top: 50px;  /* 필터 아이콘의 높이에 따라 조정 */
+  right: -8px;  /* 필터 아이콘 오른쪽 끝에 위치 */
+  width: auto;
+}
+
+.calendar-container {
+  position: absolute;
+  top: 50px;
+  right: 142px;
+  width: auto;
+  background: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* 그림자 효과 추가 */
+}
+
+
+.calendar-container::before {
+  content: "";
+  position: absolute;
+  top: -10px; /* 화살표 위치 조정 */
+  right: 10px; /* 화살표 위치 조정 */
+  border-width: 0 10px 10px 10px; /* 화살표 크기 조정 */
+  border-style: solid;
+  border-color: transparent transparent #ccc transparent; /* 화살표 색상 조정 */
+}
+
+.calendar-container::after {
+  content: "";
+  position: absolute;
+  top: -9px; /* 화살표 위치 조정 */
+  right: 10px; /* 화살표 위치 조정 */
+  border-width: 0 9px 9px 9px; /* 화살표 크기 조정 */
+  border-style: solid;
+  border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
+}
 
 </style>
