@@ -10,11 +10,14 @@ import CustomerList from '@/component/customer/CustomerList.vue';
 
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
+import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import RoomList from "@/component/hotel-management/RoomList.vue";
+import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import FacilityList from "@/component/hotel-management/FacilityList.vue";
+import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import StayList from "@/component/hotel-service/stay/StayList.vue";
@@ -23,8 +26,12 @@ import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 
 import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
+import NoticeInfo from "@/component/sales/NoticeInfo.vue";
 import Membership from "@/component/sales/Membership.vue";
 import Coupon from "@/component/sales/Coupon.vue";
+import CouponIssue from "@/component/sales/CouponIssue.vue";
+
+import Campaign from "@/component/marketing/Campaign.vue";
 
 const routes = [
     {
@@ -46,7 +53,7 @@ const routes = [
 
     /* 고객 */
     {
-        path: '/customer',
+        path: '/customer/:id',
         name: 'Customer',
         component: Customer,
         meta: {
@@ -84,9 +91,18 @@ const routes = [
         },
     },
     {
-        path: '/employeeInfo',
+        path: '/employeeInfo/:id',
         name: 'EmployeeInfo',
         component: EmployeeInfo,
+        meta: {
+            requiresAuth: true,
+            category: 'employee',
+        },
+    },
+    {
+        path: '/employeeStay/:id',
+        name: 'EmployeeStay',
+        component: EmployeeStay,
         meta: {
             requiresAuth: true,
             category: 'employee',
@@ -122,9 +138,27 @@ const routes = [
         },
     },
     {
+        path: '/roomDetails/:id',
+        name: 'RoomDetails',
+        component: RoomDetails,
+        meta: {
+            requiresAuth: true,
+            category: 'hotelManagement',
+        },
+    },
+    {
         path: '/facilityList',
         name: 'FacilityList',
         component: FacilityList,
+        meta: {
+            requiresAuth: true,
+            category: 'hotelManagement',
+        },
+    },
+    {
+        path: '/ancillaryList',
+        name: 'Ancillary',
+        component: Ancillary,
         meta: {
             requiresAuth: true,
             category: 'hotelManagement',
@@ -161,10 +195,21 @@ const routes = [
         },
     },
 
+    /* 마케팅 */
+    {
+        path: '/campaign',
+        name: 'Campaign',
+        component: Campaign,
+        meta: {
+            requiresAuth: true,
+            category: 'marketing',
+        },
+    },
+
     /* 영업관리 */
     {
-        path: '/vocList',
-        name: 'VocList',
+        path: '/voc',
+        name: 'Voc',
         component: Voc,
         meta: {
             requiresAuth: true,
@@ -172,9 +217,18 @@ const routes = [
         },
     },
     {
-        path: '/noticeList',
-        name: 'NoticeList',
+        path: '/notice',
+        name: 'Notice',
         component: Notice,
+        meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
+        path: '/noticeInfo/:id',
+        name: 'NoticeInfo',
+        component: NoticeInfo,
         meta: {
             requiresAuth: true,
             category: 'sales',
@@ -193,6 +247,15 @@ const routes = [
         path: '/coupon',
         name: 'Coupon',
         component: Coupon,
+        meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
+        path: '/couponIssue',
+        name: 'CouponIssue',
+        component: CouponIssue,
         meta: {
             requiresAuth: true,
             category: 'sales',

@@ -2,7 +2,7 @@
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
 
-// import router from '@/router/index.js';
+import router from '@/router/router.js';
 
 function navigateToCustomer(id) {
   // router.push(`/customer/${id}`);

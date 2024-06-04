@@ -158,12 +158,12 @@ const menu = {
     subMenu: [
       {
         text: 'VOC',
-        path: '/vocList',
+        path: '/voc',
         iconClass: 'emoji bi bi-chat-left-fill'
       },
       {
         text: '공지',
-        path: '/noticeList',
+        path: '/notice',
         iconClass: 'emoji bi bi-megaphone-fill'
       },
       {
@@ -178,7 +178,21 @@ const menu = {
       },
     ]
   },
-  // marketing: '/marketing',
+  marketing: {
+    name: 'marketing',
+    subMenu: [
+      {
+        text: '발송 내역',
+        path: '/campaign',
+        iconClass: 'emoji bi bi-envelope-fill'
+      },
+      {
+        text: '템플릿',
+        path: '/campaign',
+        iconClass: 'emoji bi bi-file-earmark-text-fill'
+      },
+    ]
+  },
 };
 
 const links = ref([]);
