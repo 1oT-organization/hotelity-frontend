@@ -1,12 +1,14 @@
-import './css/style.css';
-import router from './router/index.js';
-import CustomerInit from './component/customer/CustomerInit.vue';
+import { createApp } from 'vue';
 import { Chart } from 'chart.js';
 
-import { createApp } from 'vue';
 import App from './App.vue';
+import router from './router/router.js';
+import pinia from './store';
 
 const app = createApp(App);
+
+app.use(pinia);
 app.use(router);
+
 app.mount('#app');
 app.use(Chart);
