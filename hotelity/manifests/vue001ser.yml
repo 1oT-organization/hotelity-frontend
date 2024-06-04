@@ -5,7 +5,7 @@ metadata:
   name: vue001ser # Service의 이름을 설정한다. 이 이름으로 Service를 식별할 수 있다.
 
 spec: # Service의 사양을 정의한다. 여기에는 서비스 유형, 포트 설정, 셀렉터 등이 포함된다.
-  type: LoadBalancer
+  type: NodePort
   ports:
   
     # 서비스의 포트
@@ -13,6 +13,7 @@ spec: # Service의 사양을 정의한다. 여기에는 서비스 유형, 포트
   
     # 컨테이너 포트(파드의 포트)
     targetPort: 5173 
-    protocol: TCP 
+    protocol: TCP
+    nodePort: 30001 # 노드 포트를 설정한다. 이 포트로 클러스터 외부에서 서비스에 접근할 수 있다.
   selector:
     app: vue001kube # 이 셀렉터는 'app=vue001kube' 레이블이 있는 파드를 서비스의 대상으로 지정한다.
