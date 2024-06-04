@@ -5,7 +5,8 @@
       <h3 class="mb-4">투숙 리스트</h3>
       <div class="search-container d-flex align-items-center">
         <div class="btn-group">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
                   @click="toggleDropdownMenu"
                   aria-expanded="false" style="background-color: saddlebrown; margin-left: 8px">
             <i class="bi bi-search"></i>
@@ -26,14 +27,16 @@
 
         <div style="display: flex; justify-content:right">
           <!-- calendar icon -->
-          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i class="bi bi-calendar"></i></button>
+          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i
+              class="bi bi-calendar"></i></button>
 
           <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
-        <!--        StayFilter start -->
+          <!--        StayFilter start -->
 
 
           <!-- StayFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
+                  @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
         </div>
 
         <!-- filter container -->
@@ -51,8 +54,10 @@
         <!-- calendar container -->
         <div class="calendar-container" v-show="isCalendarContainerVisible">
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="updateDate($event)" format="yyyy-MM-dd"
-                        style="width: 130px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크인 일자"></DatePicker>
+            <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="updateDate($event)"
+                        format="yyyy-MM-dd"
+                        style="width: 130px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
+                        placeholder="체크인 일자"></DatePicker>
           </div>
           <!--          <div class="btn-group me-2">-->
           <!--            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"-->
@@ -107,7 +112,8 @@
               </th>
               <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 일자
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 0 }"></i>
+                <i class="bi bi-caret-down-fill"
+                   :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 0 }"></i>
               </th>
               <th scope="col" @click="sort('stayPeriod')">숙박 일수
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 1 }"></i>
@@ -123,7 +129,8 @@
               </th>
               <th scope="col" @click="sort('reservationCodeFk')">예약 코드
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 0 }"></i>
+                <i class="bi bi-caret-down-fill"
+                   :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 0 }"></i>
               </th>
             </tr>
             </thead>
@@ -244,12 +251,12 @@ const checkedRows = ref([]);
 watch(stays, () => {
   checkedRows.value = stays.value.content ?
       stays.value.content.map(() => false) : [];
-}, { immediate: true });
+}, {immediate: true});
 
 watch(stays, () => {
   checkedRows.value = stays.value.content ?
       stays.value.content.map(stay => !!stay.stayCheckoutTime) : [];
-}, { immediate: true });
+}, {immediate: true});
 
 async function fetchData(params) {
 
@@ -261,7 +268,7 @@ async function fetchData(params) {
   const url = `http://localhost:8888/hotel-service/stays/page`
   try {
     console.log("url" + url)
-    const response = await axios.get(url, { params });
+    const response = await axios.get(url, {params});
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount; // 총 페이지 수를 업데이트
     isFetchDailyStay.value = false; // Add this line
@@ -291,6 +298,7 @@ async function updateDate(date) {
     console.log(stays.value); // Add this line
   }
 }
+
 // watch(selectedStayCheckinDate, loadStays, { immediate: true });
 
 async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue = 0) {
@@ -372,7 +380,7 @@ function toggleFilterContainer() {
 
 function toggleCalendarContainer() {
   isCalendarContainerVisible.value = !isCalendarContainerVisible.value;
-  if(isCalendarContainerVisible.value && isFilterContainerVisible.value) {
+  if (isCalendarContainerVisible.value && isFilterContainerVisible.value) {
     isFilterContainerVisible.value = false;
   }
 }
@@ -381,7 +389,7 @@ function toggleDropdownMenu() {
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
-onMounted( async () => {
+onMounted(async () => {
   await loadStays(currentPage.value, orderBy.value, sortBy.value);
 
   // Bootstrap 드롭다운 초기화
@@ -426,8 +434,8 @@ function formatDateTime(date) {
 <style>
 .filter-container {
   position: absolute;
-  top: 50px;  /* 필터 아이콘의 높이에 따라 조정 */
-  right: -8px;  /* 필터 아이콘 오른쪽 끝에 위치 */
+  top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
+  right: -8px; /* 필터 아이콘 오른쪽 끝에 위치 */
   width: auto;
 }
 
@@ -439,7 +447,7 @@ function formatDateTime(date) {
   background: #fff;
   border-radius: 5px;
   padding: 10px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* 그림자 효과 추가 */
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
 }
 
 

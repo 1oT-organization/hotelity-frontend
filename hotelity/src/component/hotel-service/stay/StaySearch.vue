@@ -19,7 +19,7 @@
 
 <script>
 
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
 // 검색
 function setSearchCriteria(criteria) {
@@ -42,7 +42,7 @@ function toggleDropdownMenu() {
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
-onMounted( async () => {
+onMounted(async () => {
   await loadStays(currentPage.value, orderBy.value, sortBy.value);
 
   // Bootstrap 드롭다운 초기화

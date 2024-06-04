@@ -1,8 +1,7 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
-import router from '@/router/index.js';
-import Clock from '@/component/common/Clock.vue';
+import router from '@/router/router.js';
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -89,7 +88,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/customers/page', { params });
+    const response = await axios.get('http://localhost:8888/customers/page', {params});
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -198,7 +197,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <body>
   <div class="container-fluid position-relative d-flex p-0">
     <!-- Spinner Start -->
     <div v-if="isLoading" id="spinner"
@@ -209,204 +207,161 @@ onMounted(() => {
     </div>
     <!-- Spinner End -->
 
-    <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
-      <nav class="navbar bg-secondary navbar-dark">
-        <a href="index.html" class="navbar-brand mx-4 mb-3">
-          <h3 class="text-primary" style="display: flex; justify-content: center;"><img src="@/assets/img/hotelity_logo.png" width="60%"></h3>
-        </a>
-        <Clock/>
-
-        <div class="navbar-nav w-100">
-          <router-link to="/customerList" class="nav-item nav-link active"><i class="emoji bi bi-people-fill"></i>고객 리스트</router-link>
-          <router-link to="/" class="nav-item nav-link"><i class="emoji bi bi-person-fill-add"></i>고객 등록</router-link>
-        </div>
-      </nav>
-    </div>
-    <!-- Sidebar End -->
-
     <!-- Content Start -->
-    <div class="content">
-      <!-- Navbar Start -->
-      <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-        <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-          <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
-        </a>
-        <a href="#" class="sidebar-toggler flex-shrink-0">
-          <i class="fa fa-bars"></i>
-        </a>
-
-        <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
-          <a href="" class="nav-item nav-link">고객</a>
-          <a href="" class="nav-item nav-link">직원</a>
-          <a href="" class="nav-item nav-link">호텔 서비스</a>
-          <a href="" class="nav-item nav-link">호텔 관리</a>
-          <a href="" class="nav-item nav-link">마케팅</a>
-          <a href="" class="nav-item nav-link">영업관리</a>
-        </div>
-        <div class="navbar-nav align-items-center ms-auto">
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              <img class="rounded-circle me-lg-2" src="" alt="" style="width: 40px; height: 40px;">
-              <span class="d-none d-lg-inline-flex">John Doe</span>
-              <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-              <a href="#" class="dropdown-item">My Profile</a>
-              <a href="#" class="dropdown-item">Settings</a>
-              <a href="#" class="dropdown-item">Log Out</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <!-- Navbar End -->
-
-      <!-- Table Start -->
-      <div class="container-fluid pt-4 px-4">
-        <div class="bg-secondary rounded-top p-4">
-          <h3 class="mb-4">고객 리스트</h3>
-          <div class="search-container d-flex align-items-center">
-            <div class="btn-group">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      @click="toggleDropdownMenu"
-                      :class="{ 'btn-primary': isDropdownOpen }"
-                      style="background-color: saddlebrown;">
-                <i class="bi bi-search"></i>
-              </button>
-              <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerCodePk')">고객코드</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">이름</a></li>
-                <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerPhoneNumber')">전화번호</a></li>
-              </ul>
-            </div>
-            <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
-            <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
-          </div>
-          <div class="position-relative-container mt-3">
-            <div class="excel button" style="display: flex;justify-content:left">
-              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i class="bi bi-download"></i></button>
-              <button id="upload-icon" class="btn btn-success me-2" @click="openFileInput">Excel <i class="bi bi-upload"></i></button>
-              <input type="file" id="fileInput" style="display: none" @change="handleFileUpload"/>
-              <button class="btn btn-primary" @click="submitFile">전송</button>
-            </div>
-            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleFilterContainer">
-              <i class="bi bi-funnel"></i>
+    <!-- Table Start -->
+    <div class="container-fluid pt-4 px-4">
+      <div class="bg-secondary rounded-top p-4">
+        <h3 class="mb-4">고객 리스트</h3>
+        <div class="search-container d-flex align-items-center">
+          <div class="btn-group">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    @click="toggleDropdownMenu"
+                    :class="{ 'btn-primary': isDropdownOpen }"
+                    style="background-color: saddlebrown;">
+              <i class="bi bi-search"></i>
             </button>
-            <div class="filter-container" v-show="isFilterContainerVisible">
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.membershipLevelName">
-                  <option v-bind:value="null">멤버십 등급 선택</option>
-                  <option value="일반">일반</option>
-                  <option value="골드">골드</option>
-                  <option value="플래티넘">플래티넘</option>
-                  <option value="프리미엄">프리미엄</option>
-                  <option value="VIP">VIP</option>
-                </select>
-              </div>
-              <div class="btn-group me-2">
-                <select class="form-select" v-model="defaultParams.customerType">
-                  <option v-bind:value="null">고객타입 선택</option>
-                  <option value="개인">개인</option>
-                  <option value="법인">법인</option>
-                </select>
-              </div>
-
-              <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
-            </div>
+            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerCodePk')">고객코드</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">이름</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerPhoneNumber')">전화번호</a></li>
+            </ul>
           </div>
-          <br>
-          <div class="row">
-            <div class="col-12">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th scope="col" @click="sort('customerCodePk')">고객 코드
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerName')">한글 이름
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerEnglishName')">영문 이름
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEnglishName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEnglishName' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerGender')">성별
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerPhoneNumber')">전화번호
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerEmail')">Email
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerAddress')">주소
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('membershipLevelName')">멤버십 등급
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'membershipLevelName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'membershipLevelName' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('nationName')">국가
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'nationName' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'nationName' && sortBy === 1 }"></i>
-                  </th>
-                  <th scope="col" @click="sort('customerType')">고객 타입
-                    <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerType' && sortBy === 0 }"></i>
-                    <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerType' && sortBy === 1 }"></i>
-                  </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="customer in customers.content" :key="customer.customerCodePk" @click=navigateToCustomer(customer.customerCodePk)>
-                  <td>{{ customer.customerCodePk }}</td>
-                  <td>{{ customer.customerName }}</td>
-                  <td>{{ customer.customerEnglishName }}</td>
-                  <td>{{ customer.customerGender }}</td>
-                  <td>{{ customer.customerPhoneNumber }}</td>
-                  <td>{{ customer.customerEmail }}</td>
-                  <td>{{ customer.customerAddress }}</td>
-                  <td>{{ customer.membershipLevelName }}</td>
-                  <td>{{ customer.nationName }}</td>
-                  <td>{{ customer.customerType }}</td>
-                </tr>
-                </tbody>
-              </table>
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
+          <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
+        </div>
+        <div class="position-relative-container mt-3">
+          <div class="excel button" style="display: flex;justify-content:left">
+            <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
+                class="bi bi-download"></i></button>
+            <button id="upload-icon" class="btn btn-success me-2" @click="openFileInput">Excel <i
+                class="bi bi-upload"></i></button>
+            <input type="file" id="fileInput" style="display: none" @change="handleFileUpload"/>
+            <button class="btn btn-primary" @click="submitFile">전송</button>
+          </div>
+          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
+                  @click="toggleFilterContainer">
+            <i class="bi bi-funnel"></i>
+          </button>
+          <div class="filter-container" v-show="isFilterContainerVisible">
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.membershipLevelName">
+                <option v-bind:value="null">멤버십 등급 선택</option>
+                <option value="일반">일반</option>
+                <option value="골드">골드</option>
+                <option value="플래티넘">플래티넘</option>
+                <option value="프리미엄">프리미엄</option>
+                <option value="VIP">VIP</option>
+              </select>
+            </div>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.customerType">
+                <option v-bind:value="null">고객타입 선택</option>
+                <option value="개인">개인</option>
+                <option value="법인">법인</option>
+              </select>
             </div>
 
-            <!-- 페이징 컨트롤 -->
-            <div class="pagination">
-              <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-              <button v-for="page in pageSize" :key="page"
-                      @click="changePage((pageGroup - 1) * pageSize + page)"
-                      :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                      :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-                {{ (pageGroup - 1) * pageSize + page }}
-              </button>
-              <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-            </div>
+            <button class="btn btn-primary" @click="loadCustomers(1, orderBy.value, sortBy.value)">적용</button>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col" @click="sort('customerCodePk')">고객 코드
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerCodePk' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerName')">한글 이름
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerEnglishName')">영문 이름
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'customerEnglishName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerEnglishName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerGender')">성별
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerGender' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerPhoneNumber')">전화번호
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerEmail')">Email
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerAddress')">주소
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerAddress' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('membershipLevelName')">멤버십 등급
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('nationName')">국가
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'nationName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'nationName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('customerType')">고객 타입
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerType' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerType' && sortBy === 1 }"></i>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="customer in customers.content" :key="customer.customerCodePk"
+                  @click=navigateToCustomer(customer.customerCodePk)>
+                <td>{{ customer.customerCodePk }}</td>
+                <td>{{ customer.customerName }}</td>
+                <td>{{ customer.customerEnglishName }}</td>
+                <td>{{ customer.customerGender }}</td>
+                <td>{{ customer.customerPhoneNumber }}</td>
+                <td>{{ customer.customerEmail }}</td>
+                <td>{{ customer.customerAddress }}</td>
+                <td>{{ customer.membershipLevelName }}</td>
+                <td>{{ customer.nationName }}</td>
+                <td>{{ customer.customerType }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 페이징 컨트롤 -->
+          <div class="pagination">
+            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
+            <button v-for="page in pageSize" :key="page"
+                    @click="changePage((pageGroup - 1) * pageSize + page)"
+                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
+                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+              {{ (pageGroup - 1) * pageSize + page }}
+            </button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
           </div>
         </div>
       </div>
-      <!-- Table End -->
     </div>
-    <!-- Content End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <!-- Table End -->
   </div>
-  </body>
+  <!-- Content End -->
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
 <style>
-@import "@/css/style.css";
-@import "@/css/bootstrap.min.css";
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -421,9 +376,11 @@ onMounted(() => {
 .dropdown-icon {
   transition: transform 0.5s;
 }
+
 tr {
   cursor: pointer;
 }
+
 .filter-container {
   position: absolute;
   top: 50px;
