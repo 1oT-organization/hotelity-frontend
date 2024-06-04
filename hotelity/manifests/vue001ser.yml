@@ -9,10 +9,10 @@ spec: # Service의 사양을 정의한다. 여기에는 서비스 유형, 포트
   ports:
   
     # 서비스의 포트
-  - port: 5173
+  - port: 8887
   
     # 컨테이너 포트(파드의 포트)
-    targetPort: 5173 
+    targetPort: 8887
     protocol: TCP
     nodePort: 30001 # 노드 포트를 설정한다. 이 포트로 클러스터 외부에서 서비스에 접근할 수 있다.
   selector:
