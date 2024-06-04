@@ -105,10 +105,7 @@
 
 
     </nav>
-    <div class="container-fluid pt-4 px-4">
-      <ReservationCalendar/>
-    </div>
-    <ReservationList/>
+    <ReservationList :reservations="reservations"/>
 
   </div>
 
