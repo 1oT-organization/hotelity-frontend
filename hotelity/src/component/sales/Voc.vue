@@ -4,8 +4,8 @@ import axios from 'axios';
 import router from '@/router/index.js';
 import Clock from '@/component/common/Clock.vue';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+function navigateToVocSelect(id) {
+  router.push(`/vocSelect/${id}`);
 }
 
 const isLoading = ref(true);
@@ -298,7 +298,7 @@ onMounted(() => {
                 </thead>
                 <tbody>
                 <tr v-for="voc in vocs.content" :key="voc.vocCodePk"
-                    @click=navigateToCustomer(voc.vocCodePk)>
+                    @click=navigateToVocSelect(voc.vocCodePk)>
                   <td>{{ voc.vocCodePk }}</td>
                   <td>{{
                       new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
