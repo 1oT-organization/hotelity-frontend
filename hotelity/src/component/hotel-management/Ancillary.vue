@@ -1,16 +1,15 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
-
-// import router from '@/router/index.js';
+import router from '@/router/index.js';
+import Clock from '@/component/common/Clock.vue';
 
 function navigateToCustomer(id) {
-  // router.push(`/customer/${id}`);
-  router.push(`/noticeInfo/${id}`);
+  router.push(`/customer/${id}`);
 }
 
 const isLoading = ref(true);
-const notices = ref([]);
+const ancillaries = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(0);
 const pageGroup = ref(1);
@@ -21,17 +20,20 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('noticeCodePk');  // default sorting by customerCodePk
+const orderBy = ref('ancillaryCodePk');  // default sorting by customerCodePk
 
 const defaultParams = {
-  noticeCodePk: null,
-  noticeTitle: null,
-  noticeContent: null,
-  employeeCodeFk: null,
-  employeeName: null,
+  ancillaryCodePk: null,
+  ancillaryName: null,
   branchCodeFk: null,
-  noticePostedDate: null,
-  noticeLastUpdatedDate: null
+  ancillaryLocation: null,
+  ancillaryOpenTime: null,
+  ancillaryCloseTime: null,
+  ancillaryPhoneNumber: null,
+  ancillaryCategoryCodeFk: null,
+  branchName: null,
+  ancillaryCategoryName: null
+
 };
 
 watch(searchValue, (newValue) => {
@@ -42,7 +44,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/notices/page', {params});
+    const response = await axios.get('http://localhost:8888/hotel-management/facilities', {params});
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -54,7 +56,7 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/sales/notices/page/excel/download', {
+    const response = await axios.get('http://localhost:8888/hotel-management/facilities/excel/download', {
       params: defaultParams,
       responseType: 'blob'
     });
@@ -62,7 +64,7 @@ async function downloadExcel() {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'notice.xlsx');
+    link.setAttribute('download', 'ancillary.xlsx');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -79,7 +81,7 @@ async function loadList() {
   }
 }
 
-async function loadNotice(page, orderByValue = 'noticeCodePk', sortByValue = 0) {
+async function loadancillary(page, orderByValue = 'ancillaryCodePk', sortByValue = 0) {
   try {
     const data = await fetchData({
       ...defaultParams,
@@ -87,10 +89,10 @@ async function loadNotice(page, orderByValue = 'noticeCodePk', sortByValue = 0) 
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    notices.value = data;
+    ancillaries.value = data;
     isLoading.value = false;
   } catch (error) {
-    console.error('Error loading notices:', error);
+    console.error('Error loading ancillaries:', error);
   }
 }
 
@@ -98,7 +100,7 @@ function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
   isLoading.value = true;
-  loadNotice(page, orderBy.value, sortBy.value);
+  loadancillary(page, orderBy.value, sortBy.value);
 }
 
 function nextPageGroup() {
@@ -139,11 +141,11 @@ function sort(column) {
     orderBy.value = column;
     sortBy.value = 0;
   }
-  loadNotice(currentPage.value, orderBy.value, sortBy.value);
+  loadancillary(currentPage.value, orderBy.value, sortBy.value);
 }
 
 onMounted(() => {
-  loadNotice(currentPage.value, orderBy.value, sortBy.value);
+  loadancillary(currentPage.value, orderBy.value, sortBy.value);
 
   // Bootstrap 드롭다운 초기화
   new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
@@ -165,7 +167,7 @@ onMounted(() => {
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
       <div class="bg-secondary rounded-top p-4">
-        <h3 class="mb-4">공지사항</h3>
+        <h3 class="mb-4">부대시설 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -175,13 +177,13 @@ onMounted(() => {
               <i class="bi bi-search"></i>
             </button>
             <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('noticeCodePk')">공지 코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('noticeTitle')">공지 제목</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('ancillaryCodePk')">편의시설 코드</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('ancillaryName')">시설명</a></li>
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
                  v-model="searchValue">
-          <button class="btn btn-primary ms-2" @click="loadNotice(1, orderBy.value, sortBy.value)">검색</button>
+          <button class="btn btn-primary ms-2" @click="loadancillary(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
@@ -200,7 +202,21 @@ onMounted(() => {
                 <option value="SE">SE</option>
               </select>
             </div>
-            <button class="btn btn-primary" @click="loadNotice(1, orderBy.value, sortBy.value)">적용</button>
+            <div class="btn-group me-2">
+              <select class="form-select" v-model="defaultParams.ancillaryCategoryName">
+                <option v-bind:value="null">타입</option>
+                <option value="편의점">편의점</option>
+                <option value="휘트니스">휘트니스</option>
+                <option value="스파">스파</option>
+                <option value="워터파크">워터파크</option>
+                <option value="베이커리">베이커리</option>
+                <option value="호텔식당">호텔식당</option>
+                <option value="호텔바">호텔바</option>
+                <option value="일반식당">일반식당</option>
+                <option value="주차장">주차장</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" @click="loadancillary(1, orderBy.value, sortBy.value)">적용</button>
           </div>
         </div>
         <br>
@@ -209,43 +225,47 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('noticeCodePk')">공지 코드
+                <th scope="col" @click="sort('ancillaryCodePk')">편의시설 코드
                   <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'noticeCodePk' && sortBy === 0 }"></i>
+                     :class="{ active: orderBy === 'ancillaryCodePk' && sortBy === 0 }"></i>
                   <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'noticeCodePk' && sortBy === 1 }"></i>
+                     :class="{ active: orderBy === 'ancillaryCodePk' && sortBy === 1 }"></i>
                 </th>
-                <th scope="col">제목</th>
-                <th scope="col" @click="sort('branchCodeFk')">지점
+                <th scope="col" @click="sort('ancillaryCategoryName')">타입
                   <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
+                     :class="{ active: orderBy === 'ancillaryCategoryName' && sortBy === 0 }"></i>
                   <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
+                     :class="{ active: orderBy === 'ancillaryCategoryName' && sortBy === 1 }"></i>
                 </th>
-                <th scope="col">직원명</th>
-                <th scope="col">작성 일자</th>
+                <th scope="col" @click="sort('branchName')">지점
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'branchName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'branchName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col" @click="sort('ancillaryName')">시설명
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'ancillaryName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'ancillaryName' && sortBy === 1 }"></i>
+                </th>
+                <th scope="col">위치</th>
+                <th scope="col">전화번호</th>
+                <th scope="col">운영 시작 시간</th>
+                <th scope="col">운영 종료 시간</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="notice in notices.content" :key="notice.noticeCodePk"
-                  @click=navigateToCustomer(notice.noticeCodePk)>
-                <td>{{ notice.noticeCodePk }}</td>
-                <td>{{ notice.noticeTitle }}</td>
-                <td>{{ notice.branchCodeFk }}</td>
-                <td>{{ notice.picemployeeName }}</td>
-                <td>{{
-                    new Date(notice.noticePostedDate).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit'
-                    }) + ' ' + new Date(notice.noticePostedDate).toLocaleTimeString('ko-KR', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: false
-                    })
-                  }}
-                </td>
+              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk"
+                  @click=navigateToCustomer(ancillary.ancillaryCodePk)>
+                <td>{{ ancillary.ancillaryCodePk }}</td>
+                <td>{{ ancillary.ancillaryCategoryName }}</td>
+                <td>{{ ancillary.branchName }}</td>
+                <td>{{ ancillary.ancillaryName }}</td>
+                <td>{{ ancillary.ancillaryLocation }}</td>
+                <td>{{ ancillary.ancillaryPhoneNumber }}</td>
+                <td>{{ ancillary.ancillaryOpenTime }}</td>
+                <td>{{ ancillary.ancillaryCloseTime }}</td>
               </tr>
               </tbody>
             </table>
