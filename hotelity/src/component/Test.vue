@@ -1,49 +1,28 @@
 <template>
   <div class="dashboard">
-    <div class="chart-container">
-      <h2>Charts</h2>
-      <div style="display: flex; justify-content: center;">
-        <canvas ref="barChartCanvas" class="chart"></canvas>
-        <canvas ref="pieChartCanvas" class="chart"></canvas>
-      </div>
-    </div>
+   
     <div class="lists-container">
       <div class="list">
-        <h3>공지</h3>
-        <ul>
-          <li>공지사항 1</li>
-          <li>공지사항 2</li>
-          <li>공지사항 3</li>
-        </ul>
-        <a href="#">+더보기</a>
-      </div>
-      <div class="list">
-        <h3>VOC 내역</h3>
-        <ul>
-          <li>voc 내역 1</li>
-          <li>voc 내역 2</li>
-          <li>voc 내역 3</li>
-        </ul>
-        <a href="#">+더보기</a>
-      </div>
-      <div class="list">
-        <h3>예약 내역</h3>
-        <ul>
-          <li>예약 내역 1</li>
-          <li>예약 내역 2</li>
-          <li>예약 내역 3</li>
-        </ul>
-        <a href="#">+더보기</a>
-      </div>
-      <div class="list">
-        <h3>여기는 Footer형식 들어갈 예정</h3>
-        <ul>
-          <li>관리실 휴대전화 번호</li>
-          <li>주소</li>
-          <li>가이드 다운로드 등</li>
-        </ul>
-        <a href="#">+더보기</a>
-      </div>
+    <h3>공지</h3>
+    <ul>
+      <li v-for="notice in notices" :key="notice.data">{{ notice.noticeTitle }}</li>
+    </ul>
+    <a href="#">+더보기</a>
+  </div>
+  <div class="list">
+    <h3>VOC 내역</h3>
+    <ul>
+      <li v-for="voc in vocs" :key="voc.data">{{ voc.vocTitle }}</li>
+    </ul>
+    <a href="#">+더보기</a>
+  </div>
+  <div class="list">
+    <h3>예약 내역</h3>
+    <ul>
+      <li v-for="reservation in reservations" :key="reservation.data">{{ reservation.roomLevelName }} {{ reservation.roomName }}</li>
+    </ul>
+    <a href="#">+더보기</a>
+  </div>
     </div>
   </div>
 </template>
@@ -55,12 +34,43 @@ import axios from 'axios';
 
 Chart.register(BarController, PieController, CategoryScale, BarElement, ArcElement, Tooltip, Legend);
 
+const fetchNotices = async () => {
+  try {
+    const response = await axios.get('http://localhost:8888/sales/notices/latest');
+    return response.data.data.content;
+  } catch (error) {
+    console.error('Error fetching notices:', error);
+  }
+};
+
+const fetchVocs = async () => {
+  try {
+    const response = await axios.get('http://localhost:8888/sales/vocs/latest');
+    return response.data.data.content;
+  } catch (error) {
+    console.error('Error fetching vocs:', error);
+  }
+};
+
+const fetchReservations = async () => {
+  try {
+    const response = await axios.get('http://localhost:8888/hotel-service/reservations/latest');
+    return response.data.data.content;
+  } catch (error) {
+    console.error('Error fetching reservations:', error);
+  }
+};
+
+
 export default {
   setup() {
     const barChartCanvas = ref(null);
     const pieChartCanvas = ref(null);
     const barChartInstance = ref(null);
     const pieChartInstance = ref(null);
+    const notices = ref([]);
+    const vocs = ref([]);
+    const reservations = ref([]);
 
     const barChartData = {
       labels: ['Label 1', 'Label 2', 'Label 3'],
@@ -89,42 +99,18 @@ export default {
       maintainAspectRatio: false,
     };
 
-    const fetchData = async () => {
-      try {
-        const currentDate = new Date().toISOString().split('T')[0];
-        const reservationResponse = await axios.get(`http://localhost:8888/hotel-service/reservations/${currentDate}/day`);
-        const stayResponse = await axios.get(`http://localhost:8888/hotel-service/stays/daily/${currentDate}`);
-        console.log('reservationResponse:', reservationResponse);
-        console.log('stayResponse:', stayResponse);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
 
-    onMounted(() => {
-      fetchData();
-
-      if (barChartInstance.value) {
-        barChartInstance.value.destroy();
-      }
-      if (pieChartInstance.value) {
-        pieChartInstance.value.destroy();
-      }
-
-      barChartInstance.value = new Chart(barChartCanvas.value.getContext('2d'), {
-        type: 'bar',
-        data: barChartData,
-        options
-      });
-
-      pieChartInstance.value = new Chart(pieChartCanvas.value.getContext('2d'), {
-        type: 'pie',
-        data: pieChartData,
-        options
-      });
+    onMounted(async () => {
+      notices.value = await fetchNotices();
+      console.log('notice value data', notices.value.data);
+      vocs.value = await fetchVocs();
+      console.log('voc value', vocs.value);
+      reservations.value = await fetchReservations();
+      console.log('reservations value', reservations.value);
     });
 
-    return { barChartCanvas, pieChartCanvas };
+
+    return { notices, vocs, reservations };
   }
 };
 </script>
