@@ -40,6 +40,7 @@ const routes = [
         component: Home,
         meta: {
             requiresAuth: true,
+            category: 'home',
         },
     },
 
@@ -50,6 +51,7 @@ const routes = [
         component: Customer,
         meta: {
             requiresAuth: true,
+            category: 'customer',
         },
     },
     {
@@ -58,6 +60,7 @@ const routes = [
         component: CustomerInit,
         meta: {
             requiresAuth: true,
+            category: 'customer',
         },
     },
     {
@@ -66,6 +69,7 @@ const routes = [
         component: CustomerList,
         meta: {
             requiresAuth: true,
+            category: 'customer',
         },
     },
 
@@ -76,6 +80,7 @@ const routes = [
         component: EmployeeList,
         meta: {
             requiresAuth: true,
+            category: 'employee',
         },
     },
     {
@@ -84,6 +89,7 @@ const routes = [
         component: EmployeeInfo,
         meta: {
             requiresAuth: true,
+            category: 'employee',
         },
     },
 
@@ -94,6 +100,7 @@ const routes = [
         component: BranchList,
         meta: {
             requiresAuth: true,
+            category: 'hotelManagement',
         },
     },
     {
@@ -102,6 +109,7 @@ const routes = [
         component: BranchInfo,
         meta: {
             requiresAuth: true,
+            category: 'hotelManagement',
         },
     },
     {
@@ -110,6 +118,7 @@ const routes = [
         component: RoomList,
         meta: {
             requiresAuth: true,
+            category: 'hotelManagement',
         },
     },
     {
@@ -118,6 +127,7 @@ const routes = [
         component: FacilityList,
         meta: {
             requiresAuth: true,
+            category: 'hotelManagement',
         },
     },
 
@@ -125,9 +135,11 @@ const routes = [
     {
         path: '/reservationPage',
         name: 'ReservationPage',
+
         component: ReservationPage,
         meta: {
             requiresAuth: true,
+            category: 'hotelService',
         },
     },
     {
@@ -136,6 +148,7 @@ const routes = [
         component: StayList,
         meta: {
             requiresAuth: true,
+            category: 'hotelService',
         },
     },
     {
@@ -144,6 +157,7 @@ const routes = [
         component: PaymentList,
         meta: {
             requiresAuth: true,
+            category: 'hotelService',
         },
     },
 
@@ -154,6 +168,7 @@ const routes = [
         component: Voc,
         meta: {
             requiresAuth: true,
+            category: 'sales',
         },
     },
     {
@@ -162,6 +177,7 @@ const routes = [
         component: Notice,
         meta: {
             requiresAuth: true,
+            category: 'sales',
         },
     },
     {
@@ -170,6 +186,7 @@ const routes = [
         component: Membership,
         meta: {
             requiresAuth: true,
+            category: 'sales',
         },
     },
     {
@@ -178,6 +195,7 @@ const routes = [
         component: Coupon,
         meta: {
             requiresAuth: true,
+            category: 'sales',
         },
     },
 ];

@@ -12,12 +12,12 @@
       <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
 
         <!-- New Menu Items -->
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.customer, $event)">고객</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee, $event)">직원</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService, $event)">호텔 서비스</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement, $event)">호텔 관리</div>
-        <div class="nav-item nav-link">마케팅</div>
-        <div class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales, $event)">영업관리</div>
+        <div id="customer" class="nav-item nav-link c-pointer" @click="navigateTo(destination.customer, $event)">고객</div>
+        <div id="employee" class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee, $event)">직원</div>
+        <div id="hotelService" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService, $event)">호텔 서비스</div>
+        <div id="hotelManagement" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement, $event)">호텔 관리</div>
+        <div id="marketing" class="nav-item nav-link">마케팅</div>
+        <div id="sales" class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales, $event)">영업관리</div>
 
       </div>
 
@@ -140,25 +140,20 @@
     },
     sales: {
       name: 'sales',
-      path: '/coupon'
+      path: '/vocList'
     },
     // marketing: '/marketing',
   };
 
   const navigateTo = (destination, event) => {
-    document.querySelectorAll(".navbar-nav .nav-item:not(.dropdown)").forEach(item => {
-      item.classList.remove('active');
-    });
-
-    event.target.classList.add('active');
+    if (event.target.classList.contains('active')) {
+      return;
+    }
 
     router.push(destination.path);
-    setSidebarMenu(destination.name);
   };
 
   onMounted(() => {
-    console.log('Navbar mounted');
-
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
     dropdownToggles.forEach(toggle => {

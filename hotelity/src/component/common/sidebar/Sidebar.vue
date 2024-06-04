@@ -15,13 +15,14 @@
       </div>
 
       <div class="navbar-nav w-100">
-        <router-link
-            v-for="link in links"
+        <div
+            v-for="(link, index) in links"
             :key="link.path"
-            :to="link.path"
-            class="nav-item nav-link">
+            class="nav-item nav-link"
+            :id="link.path"
+            @click="navigateTo(link.path, $event)">
           <i :class="link.iconClass"></i>{{ link.text }}
-        </router-link>
+        </div>
       </div>
     </nav>
   </div>
@@ -29,10 +30,10 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, onUpdated, ref} from "vue";
 import router from "@/router/router.js";
 
-const emit = defineEmits(['removeNavActive'])
+const emit = defineEmits(['removeNavActive', 'setSideMenuActive'])
 
 const navigateToHome = () => {
   router.push('/');
@@ -40,6 +41,8 @@ const navigateToHome = () => {
 };
 
 onMounted(() => {
+  console.log('Sidebar mounted');
+
   fetchData().then(() => {
     // isLoading.value = false;
   });
@@ -70,6 +73,19 @@ onMounted(() => {
   // 1초마다 getTime 함수를 호출하도록 타이머 설정
   setInterval(getTime, 1000);
 });
+
+onUpdated(() => {
+  console.log('Sidebar updated');
+  emit('setSideMenuActive');
+});
+
+const navigateTo = (destination, event) => {
+  if (event.target.classList.contains('active')) {
+    return;
+  }
+
+  router.push(destination);
+};
 
 const menu = {
   customer: {
@@ -168,8 +184,9 @@ const menu = {
 const links = ref([]);
 
 const setSidebarMenu = (navMenuName) => {
+  links.value = [];
+
   if (navMenuName === 'home') {
-    links.value = [];
     return;
   }
 
