@@ -4,8 +4,11 @@ import axios from 'axios';
 import router from '@/router/index.js';
 import Clock from '@/component/common/Clock.vue';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+function openRoomDetails(roomCodePk) {
+  console.log('roomCodePk:', roomCodePk);
+  const url = `/roomDetails/${roomCodePk}`;
+  const windowFeatures = "width=550,height=600,scrollbars=yes,resizable=yes";
+  window.open(url, '_blank', windowFeatures);
 }
 
 const isLoading = ref(true);
@@ -90,6 +93,8 @@ async function loadroom(page, orderByValue = 'roomCodePk', sortByValue = 0) {
       pageNum: page - 1
     });
     rooms.value = data;
+    console.log('rooms:', rooms)
+    console.log('rooms.value:', rooms.value)
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading rooms:', error);
@@ -283,7 +288,7 @@ onMounted(() => {
               <table class="table table-striped">
                 <thead>
                 <tr>
-                  <th scope="col" @click="sort('roomCodePk')">쿠폰 코드
+                  <th scope="col" @click="sort('roomCodePk')">객실 코드
                     <i class="bi bi-caret-up-fill"
                        :class="{ active: orderBy === 'roomCodePk' && sortBy === 0 }"></i>
                     <i class="bi bi-caret-down-fill"
@@ -322,7 +327,7 @@ onMounted(() => {
                 </thead>
                 <tbody>
                 <tr v-for="room in rooms.content" :key="room.roomCodePk"
-                    @click=navigateToCustomer(room.roomCodePk)>
+                    @click=openRoomDetails(room.roomCodePk)>
                   <td>{{ room.roomCodePk }}</td>
                   <td>{{ room.branchCodeFk }}</td>
                   <td>{{ room.roomNumber }}</td>
