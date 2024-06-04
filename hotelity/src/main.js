@@ -12,6 +12,5 @@ app.use(pinia);
 app.use(authRouterTest);
 // app.use(router)
 
-app.use(Chart);
-
 app.mount('#app');
+app.use(Chart);
