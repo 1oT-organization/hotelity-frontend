@@ -321,13 +321,16 @@ onMounted(() => {
                     })
                   }}
                 </td>
-                <td>{{
+                <td>
+                  <span v-if="couponIssue.couponUseDate === null">미사용</span><span v-else>
+                  {{
                     new Date(couponIssue.couponUseDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: '2-digit',
                       day: '2-digit'
                     })
                   }}
+                  </span>
                 </td>
               </tr>
               </tbody>
