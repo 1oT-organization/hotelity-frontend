@@ -204,7 +204,7 @@ const setSidebarMenu = (navMenuName) => {
     return;
   }
 
-  links.value = menu[navMenuName].subMenu;
+  // links.value = menu[navMenuName].subMenu;
 };
 
 defineExpose({

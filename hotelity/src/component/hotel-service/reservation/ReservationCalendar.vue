@@ -43,7 +43,14 @@
         initialView: 'dayGridMonth',
         selectable: true,
         events: [
-          // 이벤트 데이터를 여기에 추가하세요.
+          {
+            title: '예약 n건',
+            start: '2024-06-03'
+          },
+          {
+            title: '예약 n건',
+            start: '2024-06-04'
+          }
         ],
         dateClick: this.dateClick,
         aspectRatio: 3.5

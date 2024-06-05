@@ -20,6 +20,7 @@ import FacilityList from "@/component/hotel-management/FacilityList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
 import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
+import Reservation2List from '@/component/hotel-service/reservation2/Reservation2List.vue';
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
@@ -168,10 +169,10 @@ const routes = [
 
     /* 호텔서비스 */
     {
-        path: '/reservationPage',
-        name: 'ReservationPage',
+        path: '/reservation',
+        name: 'Reservation',
 
-        component: ReservationPage,
+        component: Reservation2List,
         meta: {
             requiresAuth: true,
             category: 'hotelService',
@@ -278,21 +279,21 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    const authStore = useAuthStore();
-
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!authStore.isAuthenticated) {
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath },
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     const authStore = useAuthStore();
+//
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!authStore.isAuthenticated) {
+//             next({
+//                 path: '/login',
+//                 query: { redirect: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;
