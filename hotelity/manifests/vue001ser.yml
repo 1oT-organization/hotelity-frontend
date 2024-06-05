@@ -9,7 +9,7 @@ spec: # Service의 사양을 정의한다. 여기에는 서비스 유형, 포트
   ports:
   
     # 서비스의 포트
-  - port: 80
+  - port: 5173
   
     # 컨테이너 포트(파드의 포트)
     targetPort: 80
