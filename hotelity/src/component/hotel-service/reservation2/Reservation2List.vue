@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid pt-4 px-4">
-    <Reservation2Calendar @month-changed="updateSelectedMonth" @date-clicked="handleDateClicked"/>
+    <Reservation2Calendar :reservations="obj" @month-changed="updateSelectedMonth" @date-clicked="handleDateClicked"/>
   </div>
 
   <!-- Table Start -->
@@ -18,7 +18,7 @@
           <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i
               class="bi bi-calendar"></i></button>
 
-          <ReservationCheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>
+          <Reservation2CheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>
 
           <!--        ReservationFilter start -->
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
@@ -88,7 +88,7 @@
             <tr v-for="(reservation, index) in reservations" :key="reservation.reservationCodePk">
               <td>
                 <input type="checkbox" :checked="reservation.stayStatus === 1" :disabled="reservation.stayStatus === 1"
-                       @change="checkedRows[index] = $event.target.checked ? reservation.reservationCodePk : null">
+                       @change="checkedRows[index] = $event.target.checked ? reservation : null">
               </td>
               <td>{{ reservation.reservationCodePk }}</td>
               <td>{{ reservation.customerCodeFk }}</td>
@@ -121,7 +121,7 @@
 
 <script setup>
 
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted, watch, provide} from 'vue';
 import axios from 'axios';
 
 import ReservationSearch from "@/component/hotel-service/reservation/ReservationSearch.vue";
@@ -129,6 +129,7 @@ import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import ReservationCheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
 import Reservation2Calendar from "@/component/hotel-service/reservation2/Reservation2Calendar.vue";
+import Reservation2CheckinBtn from "@/component/hotel-service/reservation2/Reservation2CheckinBtn.vue";
 
 const isLoading = ref(true);
 const reservations = ref([]);
@@ -142,7 +143,7 @@ const selectedMonth = ref(null);
 // 체크박스
 const checkedRows = ref([]);
 
-//
+// reservations 변경 감지
 watch(reservations, () => {
   if (reservations.value && reservations.value.content) {
     checkedRows.value = reservations.value.content.map(reservation =>
@@ -182,7 +183,7 @@ watch(selectedMonth, async (newMonth) => {
         console.log("const axios 실행 결과: ")
         console.log(data);
 
-        obj = {};
+        // obj = {};
 
         for (const reservation of data.content) {
           const date = formatDate(reservation.reservationCheckinDate); // Assuming formatDate function converts date to 'yyyy-MM-dd' format
@@ -194,9 +195,8 @@ watch(selectedMonth, async (newMonth) => {
           obj[date].push(reservation);
         }
 
-        console.log("obj 출력: ")
-        console.log(obj["2024-06-04"]);
-        console.log(obj["2024-06-04"].length);
+        console.log(obj);
+        // provide('updateEvents', updateEvents);
       }
     }
 );
@@ -221,9 +221,23 @@ function toggleDropdownMenu() {
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
+function getToday() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}T00:00:00`;
+}
+
 onMounted(async () => {
-  // await loadReservations();
-  // updateSelectedMonth(selectedMonth.value);
+  const today = getToday();
+
+  console.log("오늘 날짜: ");
+  console.log(today);
+
+  const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${today}/day`);
+  reservations.value = response.data.data.content;
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();
   });
