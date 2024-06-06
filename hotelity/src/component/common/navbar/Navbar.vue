@@ -29,7 +29,7 @@
             <span class="d-none d-lg-inline-flex">{{ userInfo ? userInfo.employeeName : ""}}</span>
             <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+          <div class="dropdown-menu dropdown-menu-end border-0 rounded-0 rounded-bottom m-0">
             <div @click="navigateToEmployeeInfo" class="dropdown-item">My Profile</div>
             <div @click="signOut" class="dropdown-item">Log Out</div>
           </div>
