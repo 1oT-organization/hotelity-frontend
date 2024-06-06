@@ -5,6 +5,10 @@ export const login = async (loginInfo) => {
     return await apiClient.post('/login', loginInfo);
 }
 
+export const logout = async () => {
+    return await apiClient.post('/logout');
+}
+
 /* 토큰 재발급 */
 export const reissue = async () => {
     return await apiClient.post('/reissue');

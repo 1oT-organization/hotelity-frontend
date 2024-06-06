@@ -30,8 +30,8 @@
             <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-            <div class="dropdown-item">My Profile</div>
-            <div class="dropdown-item">Log Out</div>
+            <div @click="navigateToEmployeeInfo" class="dropdown-item">My Profile</div>
+            <div @click="signOut" class="dropdown-item">Log Out</div>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
   import {onMounted, ref} from "vue";
   import { defineEmits } from 'vue';
   import { useRouter } from 'vue-router';
-  import { getEmployee } from '@/api/apiService.js';
+  import { getEmployee, logout } from '@/api/apiService.js';
 
   const authStore = useAuthStore();
   const router = useRouter();
@@ -93,6 +93,25 @@
     }
 
     router.push(destination.path);
+  };
+
+  const navigateToEmployeeInfo = () => {
+    router.push(`/employeeInfo/${userInfo.value.employeeCodePk}`);
+  };
+
+  const signOut = () => {
+    authStore.logout();
+    window.localStorage.clear();
+    router.push('/login');
+
+    // backend logout 연동 필요
+    // logout().then((res) => {
+    //   console.log('logout', res);
+    //
+    //   authStore.logout();
+    //   window.localStorage.clear();
+    //   router.push('/login');
+    // });
   };
 
   const setDropdownToggles = () => {
