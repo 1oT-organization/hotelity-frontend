@@ -21,7 +21,6 @@ import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
-import StayPage from "@/component/hotel-service/stay/StayPage.vue";
 import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 
 import Voc from "@/component/sales/Voc.vue";
