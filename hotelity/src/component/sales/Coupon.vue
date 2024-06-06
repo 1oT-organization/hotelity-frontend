@@ -248,6 +248,12 @@ onMounted(() => {
                   <i class="bi bi-caret-down-fill"
                      :class="{ active: orderBy === 'couponType' && sortBy === 1 }"></i>
                 </th>
+                <th scope="col" @click="sort('membershipLevelCodeFk')">멤버십 등급
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'membershipLevelCodeFk' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'membershipLevelCodeFk' && sortBy === 1 }"></i>
+                </th>
                 <th scope="col" @click="sort('couponLaunchingDate')">쿠폰 출시 일자
                   <i class="bi bi-caret-up-fill"
                      :class="{ active: orderBy === 'couponLaunchingDate' && sortBy === 0 }"></i>
@@ -269,6 +275,13 @@ onMounted(() => {
                 <td>{{ coupon.couponName }}</td>
                 <td>{{ coupon.couponDiscountRate * 100 + '%' }}</td>
                 <td>{{ coupon.couponType }}</td>
+                <td>
+                  <span v-if="coupon.membershipLevelCodeFk === 1">일반</span>
+                  <span v-else-if="coupon.membershipLevelCodeFk === 2">골드</span>
+                  <span v-else-if="coupon.membershipLevelCodeFk === 3">플래티넘</span>
+                  <span v-else-if="coupon.membershipLevelCodeFk === 4">프리미엄</span>
+                  <span v-else-if="coupon.membershipLevelCodeFk === 5">VIP</span>
+                </td>
                 <td>{{
                     new Date(coupon.couponLaunchingDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',

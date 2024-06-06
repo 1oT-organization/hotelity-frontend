@@ -32,6 +32,10 @@ import Coupon from "@/component/sales/Coupon.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
 
 import Campaign from "@/component/marketing/Campaign.vue";
+import CampaignSend from "@/component/marketing/CampaignSend.vue";
+import TemplateList from "@/component/marketing/TemplateList.vue";
+import TemplateInfo from "@/component/marketing/TemplateInfo.vue";
+import TemplateSelect from "@/component/marketing/TemplateSelect.vue";
 
 const routes = [
     {
@@ -205,6 +209,42 @@ const routes = [
             category: 'marketing',
         },
     },
+    {
+        path: '/campaignSend',
+        name: 'CampaignSend',
+        component: CampaignSend,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateList',
+        name: 'TemplateList',
+        component: TemplateList,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateInfo/:id',
+        name: 'TemplateInfo',
+        component: TemplateInfo,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateSelect/:id',
+        name: 'TemplateSelect',
+        component: TemplateSelect,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
 
     /* 영업관리 */
     {
@@ -268,21 +308,21 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    const authStore = useAuthStore();
+// router.beforeEach((to, from, next) => {
+//     const authStore = useAuthStore();
 
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!authStore.isAuthenticated) {
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath },
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!authStore.isAuthenticated) {
+//             next({
+//                 path: '/login',
+//                 query: { redirect: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;
