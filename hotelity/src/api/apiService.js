@@ -431,9 +431,9 @@ export const getReservation = async (reservationId) => {
 }
 
 /* 일자별 예약 리스트 */
-export const getDailyReservations = async (checkinDate) => {
+export const getDailyReservations = async (today) => {
     try {
-        const response = await apiClient.get(`/hotel-service/reservations/${checkinDate}/day`);
+        const response = await apiClient.get(`/hotel-service/reservations/${today}/day`);
         return response.data;
     } catch (e) {
         console.error('Error fetching daily reservations:', e);

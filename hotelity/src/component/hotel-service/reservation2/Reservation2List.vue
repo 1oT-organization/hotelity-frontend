@@ -123,6 +123,7 @@
 
 import {ref, onMounted, watch, provide} from 'vue';
 import axios from 'axios';
+import * as api from '@/api/apiService.js';
 
 import ReservationSearch from "@/component/hotel-service/reservation/ReservationSearch.vue";
 import ExcelButton from "@/component/common/ExcelButton.vue";
@@ -145,6 +146,7 @@ const checkedRows = ref([]);
 
 // reservations 변경 감지
 watch(reservations, () => {
+  console.log("reservation 변경 감지됨")
   if (reservations.value && reservations.value.content) {
     checkedRows.value = reservations.value.content.map(reservation =>
         reservation.stayStatus === 1 ?
@@ -174,12 +176,18 @@ function handleDateClicked(formattedDate) {
 }
 
 let obj = {};
+const change = ref(false);
+provide('change', change);
 
 watch(selectedMonth, async (newMonth) => {
       if (newMonth) {
         // await fetchData();
-        const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${selectedMonth.value}`);
-        const data = response.data.data;
+        // const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${selectedMonth.value}`);
+        const response = await api.getMonthlyReservations(selectedMonth.value);
+        const data = response.data;
+
+        change.value = true;
+
         console.log("const axios 실행 결과: ")
         console.log(data);
 
@@ -232,12 +240,8 @@ function getToday() {
 
 onMounted(async () => {
   const today = getToday();
-
-  console.log("오늘 날짜: ");
-  console.log(today);
-
-  const response = await axios.get(`http://localhost:8888/hotel-service/reservations/${today}/day`);
-  reservations.value = response.data.data.content;
+  const response = await api.getDailyReservations(today);
+  reservations.value = response.data.content;
   $('#filter-icon').on('click', function () {
     $('#filter').toggle();
   });

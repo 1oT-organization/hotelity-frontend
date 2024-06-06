@@ -17,6 +17,7 @@ const props = defineProps({
 var selectedMonth = ref(null);
 var selectedDay = ref(null);
 
+// 캘린더 날짜 선택 시 스타일 적용
 const dateClick = async function (info) {
   if (selectedDay.value) {
     selectedDay.value.style.borderColor = '';
@@ -39,137 +40,89 @@ const dateClick = async function (info) {
   emit('date-clicked', formattedDate);
 };
 
-// let response = inject('response'); // Inject the response from Reservation2List.vue
-//
-// watch(response, (newResponse) => {
-//   if (newResponse) {
-//     const events = newResponse.data.data.content ? Object.entries(newResponse.data.data.content).map(([date, reservations]) => ({
-//       title: `예약 ${reservations.length} 건`,
-//       start: date
-//     })) : [];
-//
-//     const eventSource = calendar.getEventSourceById('reservations');
-//     if (eventSource) {
-//       eventSource.remove();
-//     }
-//     calendar.addEventSource({events, id: 'reservations'});
-//   }
-// });
+// 예약 건 수 계산을 위한 변수
+let response = inject('response');
 
-// let calendar = null;
-//
-// const updateEvents = () => {
-//   console.log("updateEvents 실행됨")
-//   const events = props.reservations ? Object.entries(props.reservations).map(([date, reservations]) => ({
-//     title: `예약 ${reservations.length} 건`,
-//     start: date
-//   })) : [];
-//
-//   const eventSource = calendar.getEventSourceById('reservations');
-//   if (eventSource) {
-//     eventSource.remove();
-//   }
-//   calendar.addEventSource({events, id: 'reservations'});
-// };
-//
-// const renderCalendar = () => {
-//   const calendarEl = document.getElementById('calendar');
-//   calendar = new Calendar(calendarEl, {
-//     plugins: [dayGridPlugin, interactionPlugin],
-//     initialView: 'dayGridMonth',
-//     selectable: true,
-//     events: [],
-//     dateClick: dateClick,
-//     aspectRatio: 3.5,
-//     datesSet: function (info) {
-//
-//       let firstWeekStartDate = new Date(info.startStr);
-//       firstWeekStartDate.setDate(firstWeekStartDate.getDate() + 7);
-//       let year = firstWeekStartDate.getFullYear();
-//       let month = String(firstWeekStartDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so we add 1
-//       let day = String(firstWeekStartDate.getDate()).padStart(2, '0');
-//       selectedMonth.value = `${year}-${month}-${day}T00:00:00`;
-//       emit('month-changed', selectedMonth.value);
-//     }
-//   });
-//   calendar.render();
-//   updateEvents();
-// };
-//
-// watch(props.reservations, () => {
-//   if (!calendar) {
-//     renderCalendar();
-//   } else {
-//     updateEvents();
-//   }
-// });
-//
-// onMounted(renderCalendar);
+// 부모 컴포넌트의 메소드 호출 감지 변수
+let change = inject('change');
 
-onMounted(() => {
-  console.log("Calendar onMounted 실행됨");
-  console.log(props.reservations);
+// 예약 건수 계산
+watch(response, (newResponse) => {
+  if (newResponse) {
+    const events = newResponse.data.data.content ? Object.entries(newResponse.data.data.content).map(([date, reservations]) => ({
+      title: `예약 ${reservations.length} 건`,
+      start: date
+    })) : [];
+
+    const eventSource = calendar.getEventSourceById('reservations');
+    if (eventSource) {
+      eventSource.remove();
+    }
+    calendar.addEventSource({events, id: 'reservations'});
+  }
+});
+
+let calendar = null;
+
+// 캘린더 이벤트 업데이트
+const updateEvents = () => {
+  console.log("updateEvents 실행됨")
+  const events = props.reservations ? Object.entries(props.reservations).map(([date, reservations]) => ({
+    title: `예약 ${reservations.length} 건`,
+    start: date
+  })) : [];
+
+  const eventSource = calendar.getEventSourceById('reservations');
+  if (eventSource) {
+    eventSource.remove();
+  }
+  console.log("addEventSource 실행됨")
+  calendar.addEventSource({events, id: 'reservations'});
+};
+
+// 페이지 열리면 캘린더 렌더링
+const renderCalendar = () => {
   const calendarEl = document.getElementById('calendar');
-  var calendar = new Calendar(calendarEl, {
+  calendar = new Calendar(calendarEl, {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     selectable: true,
-    // events: props.reservations ? Object.entries(props.reservations).map(([date, reservations]) => ({
-    //   title: `예약 ${reservations.length} 건`,
-    //   start: date
-    // })) : [],
-    events: [
-      {
-        title: "예약 1건",
-        start: "2024-06-01"
-      },
-      {
-        title: "예약 7건",
-        start: "2024-06-03"
-      },
-      {
-        title: "예약 13건",
-        start: "2024-06-04"
-      },
-      {
-        title: "예약 3건",
-        start: "2024-06-05"
-      },
-      {
-        title: "예약 1건",
-        start: "2024-06-06"
-      }
-      ],
-      dateClick
-:
-  dateClick,
-      aspectRatio
-:
-  3.5,
-      datesSet
-:
+    events: [],
+    dateClick: dateClick,
+    aspectRatio: 3.5,
+    datesSet: function (info) {
 
-  function (info) {
-
-    // 현재 보여지고 있는 월을 가져와서 selectedMonth에 담는다.
-    let firstWeekStartDate = new Date(info.startStr);
-
-    firstWeekStartDate.setDate(firstWeekStartDate.getDate() + 7);
-    let year = firstWeekStartDate.getFullYear();
-    let month = String(firstWeekStartDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so we add 1
-    let day = String(firstWeekStartDate.getDate()).padStart(2, '0');
-
-    selectedMonth.value = `${year}-${month}-${day}T00:00:00`;
-
-    // alert(selectedMonth.value);
-    emit('month-changed', selectedMonth.value);
-  }
-})
-  ;
-
+      let firstWeekStartDate = new Date(info.startStr);
+      firstWeekStartDate.setDate(firstWeekStartDate.getDate() + 7);
+      let year = firstWeekStartDate.getFullYear();
+      let month = String(firstWeekStartDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so we add 1
+      let day = String(firstWeekStartDate.getDate()).padStart(2, '0');
+      selectedMonth.value = `${year}-${month}-${day}T00:00:00`;
+      emit('month-changed', selectedMonth.value);
+    }
+  });
   calendar.render();
+  updateEvents();
+};
+
+// 부모 컴포넌트(ReservationList.vue) 백엔드 메소드 호출 감지
+watch(change, (newValue) => {
+  if (newValue) {
+    console.log("props.reservations 변경됨");
+    if (!calendar) {
+      console.log("watch-renderCalendar 실행됨")
+      renderCalendar();
+    } else {
+      console.log("watch-updateEvents 실행됨")
+      updateEvents();
+    }
+  }
 });
 
+// 페이지 접속 시점에 캘린더 렌더링
+onMounted(renderCalendar);
+
+// 날짜 형식 변환(FullCalendar의 date형식 -> yyyy-MM-dd)
 function formatDate(date) {
   if (date == null) {
     date = new Date();
