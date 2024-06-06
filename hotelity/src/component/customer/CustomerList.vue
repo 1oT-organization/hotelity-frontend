@@ -62,11 +62,6 @@ async function submitFile() {
 
   try {
     // 파일 전송
-    // const response = await axios.post('http://localhost:8888/customers/excel/read', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // });
     const response = await api.uploadExcel(formData);
     orderBy.value = null;
     sortBy.value = null;
@@ -89,8 +84,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/customers/page', {params});
-    // console.log(response.data);
     const response = await api.getCustomers(params);
     totalPages.value = response.data.totalPagesCount;
     return response.data;
@@ -102,10 +95,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/customers/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadExcel(defaultParams);
     console.log(response);
 

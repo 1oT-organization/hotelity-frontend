@@ -51,8 +51,8 @@
 
     </div>
     <div class="section">
-      <h3>결제 내역 <a href="#">+더보기</a></h3>
-      <table>
+      <h3>결제 내역 <a v-if="customer.payment.length > 0" href="#">+더보기</a></h3>
+      <table v-if="customer.payment.length > 0">
         <thead>
         <tr>
           <th>결제 일자</th>
@@ -62,30 +62,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>{{customer.payment[0].paymentDate}}</td>
-          <td>{{customer.payment[0].paymentTypeName}}</td>
-          <td>{{customer.payment[0].paymentMethod}}</td>
-          <td>{{customer.payment[0].paymentAmount}}</td>
-        </tr>
-        <tr>
-          <td>2022.07.30</td>
-          <td>추가 결제</td>
-          <td>카드</td>
-          <td>210,000</td>
-        </tr>
-        <tr>
-          <td>2022.07.29</td>
-          <td>객실 이용</td>
-          <td>카드</td>
-          <td>380,000</td>
+        <tr v-for="(customerPayment, index) in customer.payment" :key="index">
+          <td>{{customerPayment.paymentDate}}</td>
+          <td>{{customerPayment.paymentTypeName}}</td>
+          <td>{{customerPayment.paymentMethod}}</td>
+          <td>{{customerPayment.paymentAmount}}</td>
         </tr>
         </tbody>
       </table>
+      <p v-else>결제 내역이 없습니다.</p>
     </div>
     <div class="section">
-      <h3>등록 VOC <a href="#">+더보기</a></h3>
-      <table>
+      <h3>등록 VOC <a v-if="customer.voc.length > 0" href="#">+더보기</a></h3>
+      <table v-if="customer.voc.length > 0">
         <thead>
         <tr>
           <th>제목</th>
@@ -94,33 +83,26 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>제목 1</td>
-          <td>내용 1</td>
-          <td>처리 중</td>
-        </tr>
-        <tr>
-          <td>제목 2</td>
-          <td>내용 2</td>
-          <td>처리 중</td>
-        </tr>
-        <tr>
-          <td>제목 3</td>
-          <td>내용 3</td>
-          <td>완료</td>
+        <tr v-for="(customerVoc, index) in customer.voc" :key="index">
+          <td>{{ customerVoc.vocTitle }}</td>
+          <td>{{ customerVoc.vocContent }}</td>
+          <td>{{ customerVoc.vocProcessStatus === 0 ? "처리 중" : "처리 완료" }}</td>
         </tr>
         </tbody>
       </table>
+      <p v-else>등록된 VOC가 없습니다.</p>
     </div>
-    <div class="section">
-      <h3>보유 쿠폰 <a href="#">+더보기</a></h3>
-      <div class="coupons">
-        <div class="coupon">사우나 50% 쿠폰</div>
-        <div class="coupon">사우나 50% 쿠폰</div>
-        <div class="coupon">사우나 50% 쿠폰</div>
-        <div class="coupon">사우나 50% 쿠폰</div>
-      </div>
-    </div>
+<!--  고객 쿠폰 정보는 API 수정 필요,,  -->
+<!--  쿠폰 정보는 없고 투숙 정보 있음.. 어떤 항목 표현할 지 논의 필요  -->
+<!--    <div class="section">-->
+<!--      <h3>보유 쿠폰 <a href="#">+더보기</a></h3>-->
+<!--      <div class="coupons">-->
+<!--        <div class="coupon">사우나 50% 쿠폰</div>-->
+<!--        <div class="coupon">사우나 50% 쿠폰</div>-->
+<!--        <div class="coupon">사우나 50% 쿠폰</div>-->
+<!--        <div class="coupon">사우나 50% 쿠폰</div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -128,6 +110,7 @@
 import {useRoute, useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import {getCustomer} from "@/api/apiService";
 
 const router = useRouter();
 const route = useRoute();
@@ -138,16 +121,16 @@ console.log('customerCodePk',customerCodePk);
 
 const fetchCustomer = async () => {
   try {
-    const response = await axios.get(`http://localhost:8888/customers/${customerCodePk.id}/customer`);
+    const response = await getCustomer(customerCodePk.id);
     console.log('response',response)
-    customer.value = response.data;
+    customer.value = response;
   } catch (error) {
     console.error('Error fetching customer:', error);
   }
 };
 
 const closeNotice = () => {
-  router.push('/customerList');
+  router.back();
 };
 
 onMounted(() => {

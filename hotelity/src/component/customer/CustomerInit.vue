@@ -47,7 +47,6 @@ let initialFormState = {
 
 async function handleSubmit() {
   try {
-    // const response = await axios.post('http://localhost:8888/customers', form.value);
     const response = await api.createCustomer(form.value);
     console.log(response);
     window.alert(response.data.content); // 상태 체크 팝업 창
@@ -62,7 +61,6 @@ async function handleSubmit() {
 
 async function nationList() {
   try {
-    // const response = await axios.get('http://localhost:8888/nations');
     const response = await api.getNations();
     return response;
   } catch (error) {
