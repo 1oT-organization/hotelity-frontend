@@ -3,18 +3,25 @@
 import {useRouter} from 'vue-router';
 
 import {ref, onMounted, reactive} from 'vue';
-import axios from "axios";
+// import axios from "axios";
+import * as api from '@/api/apiService.js';
+import {createBranch} from "@/api/apiService.js";
 
 const isLoading = ref(true);
 const branches = ref([]);
 const isModifyModalOpen = ref(false);
 
+const branchesInfo = {
+  pageNum: 0,
+};
+
 async function fetchData() {
   try {
-    const response = await axios.get('http://localhost:8888/hotel-management/branches?pageNum=0');
+    // const response = await axios.get('http://localhost:8888/hotel-management/branches?pageNum=0');
+    const response = await api.getBranches(branchesInfo);
 
-    console.log(response.data);
-    return response.data.data;
+    console.log(response);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -57,8 +64,10 @@ const openModifyModal = (branch) => {
 const modifyBranch = async (branchCodePk) => {
   try {
     console.log('Selected Branch:', selectedBranch.value);
-    const response = await axios.put(`http://localhost:8888/hotel-management/branches/${branchCodePk}`, selectedBranch.value);
-    console.log('Response Data:', response.data);
+    // const response = await axios.put(`http://localhost:8888/hotel-management/branches/${branchCodePk}`, selectedBranch.value);
+    const response = await api.updateBranch(branchCodePk, selectedBranch.value);
+
+    console.log('Response Data:', response);
     isModifyModalOpen.value = false;
     loadBranch();
   } catch (error) {
@@ -69,7 +78,8 @@ const modifyBranch = async (branchCodePk) => {
 const deleteBranch = async (branchCodePk) => {
   if (confirm('해당 지점을 정말 삭제하시겠습니까?')) {
     try {
-      await axios.delete(`http://localhost:8888/hotel-management/branches/${branchCodePk}`);
+      // await axios.delete(`http://localhost:8888/hotel-management/branches/${branchCodePk}`);
+      await api.deleteBranch(branchCodePk);
       loadBranch();
     } catch (error) {
       console.error('Error deleting branch:', error);
@@ -119,7 +129,8 @@ const toggleModal = () => {
 // 폼 제출 함수
 const submitForm = async () => {
   try {
-    const response = await axios.post('http://localhost:8888/hotel-management/branches', formData.value);
+    // const response = await axios.post('http://localhost:8888/hotel-management/branches', formData.value);
+    const response = await api.createBranch(formData.value);
     console.log('response.data:', response.data);
     console.log('formData.value:', formData.value);
     toggleModal();  // 폼 제출 후 모달 닫기

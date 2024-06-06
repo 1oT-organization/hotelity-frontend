@@ -1,6 +1,6 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
+import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
 
 function navigateToCustomer(id) {
@@ -68,11 +68,12 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/hotel-service/payments/page', {params});
+    // const response = await axios.get('http://localhost:8888/hotel-service/payments/page', {params});
+    const response = await api.getPayments(params);
     console.log(defaultParams.paymentDate)
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    console.log(response);
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -81,12 +82,13 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/hotel-service/payments/excel/download', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
+    // const response = await axios.get('http://localhost:8888/hotel-service/payments/excel/download', {
+    //   params: defaultParams,
+    //   responseType: 'blob'
+    // });
+    const response = await api.downloadPaymentExcel(defaultParams);
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'payments.xlsx');

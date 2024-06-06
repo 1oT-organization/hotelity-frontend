@@ -1,7 +1,8 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 import router from '@/router/router.js';
+import * as api from '@/api/apiService.js'
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -67,10 +68,11 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/marketing/campaigns/search/page', {params});
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    // const response = await axios.get('http://localhost:8888/marketing/campaigns/search/page', {params});
+    const response = await api.getCampaigns(params);
+    console.log(response);
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
