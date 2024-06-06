@@ -271,8 +271,8 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="coupon in coupons.content" :key="coupon.couponCodePk"
-                  @click=navigateToCustomer(coupon.couponCodePk)>
+              <tr v-for="coupon in coupons.content" :key="coupon.couponCodePk">
+<!--                  @click=navigateToCustomer(coupon.couponCodePk)>--> <!-- 추후 상세 페이지 연결 -->
                 <td>{{ coupon.couponCodePk }}</td>
                 <td>{{ coupon.couponName }}</td>
                 <td>{{ coupon.couponDiscountRate * 100 + '%' }}</td>

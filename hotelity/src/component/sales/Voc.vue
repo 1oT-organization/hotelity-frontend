@@ -246,7 +246,7 @@ onMounted(() => {
               </thead>
               <tbody>
               <tr v-for="voc in vocs.content" :key="voc.vocCodePk"
-                  @click=navigateToCustomer(voc.vocCodePk)>
+                  @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
                 <td>{{
                     new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
