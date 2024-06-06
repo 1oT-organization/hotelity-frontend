@@ -58,6 +58,7 @@
       return {
         reservationData: null,
         paymentData: null,
+        noticeVocData: null,
       };
     },
     methods: {
