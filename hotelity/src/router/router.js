@@ -19,7 +19,6 @@ import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import FacilityList from "@/component/hotel-management/FacilityList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
-import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
@@ -172,18 +171,9 @@ const routes = [
 
     /* 호텔서비스 */
     {
-        path: '/reservationPage',
-        name: 'ReservationPage',
+        path: '/reservation',
+        name: 'Reservation',
 
-        component: ReservationPage,
-        meta: {
-            requiresAuth: true,
-            category: 'hotelService',
-        },
-    },
-    {
-        path: '/reservationList',
-        name: 'ReservationList',
         component: ReservationList,
         meta: {
             requiresAuth: true,

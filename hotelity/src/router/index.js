@@ -24,11 +24,10 @@ import Campaign from "@/component/marketing/Campaign.vue";
 import TestCustomer from '@/component/TestCustomer.vue';
 import NoticeInfo from '@/component/sales/NoticeInfo.vue';
 import RoomDetails from '@/component/hotel-management/RoomDetails.vue';
-<<<<<<< HEAD
 import Stay from "@/component/hotel-service/stay/Stay.vue";
 import VocSelect from "@/component/sales/VocSelect.vue";
-=======
->>>>>>> develop
+import Reservation from "@/component/hotel-service/reservation/Reservation.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -140,6 +139,10 @@ const router = createRouter({
     {
       path: '/vocSelect/:id',
       component: VocSelect
+    },
+    {
+      path: '/reservation',
+      component: Reservation
     }
 ]
 });

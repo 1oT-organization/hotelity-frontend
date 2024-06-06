@@ -15,3 +15,5 @@
   <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;">
   <button class="btn btn-primary ms-2">검색</button>
 </template>
+<script setup>
+</script>
