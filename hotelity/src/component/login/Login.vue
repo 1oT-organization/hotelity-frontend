@@ -126,6 +126,7 @@
 </script>
 
 <style>
+
   .container-fluid {
     background-color: #F5EFE6;
   }

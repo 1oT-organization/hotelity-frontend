@@ -42,6 +42,10 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login,
+        meta: {
+            hideSidebar: true,
+            hideNavbar: true
+        }
     },
 
     /* 대시보드 */
@@ -146,6 +150,7 @@ const routes = [
         name: 'RoomDetails',
         component: RoomDetails,
         meta: {
+            hideNavbar: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
