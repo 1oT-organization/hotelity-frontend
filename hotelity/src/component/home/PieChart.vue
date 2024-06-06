@@ -1,7 +1,7 @@
 <template>
   <div class="col-sm-12 col-xl-6">
     <div class="bg-secondary text-center rounded p-4">
-      <h2>Pie Chart</h2>
+      <h2>당일 투숙 및 예약</h2>
       <div style="position: relative; width: 50%; margin: auto;">
         <canvas ref="chartCanvas"></canvas>
       </div>
