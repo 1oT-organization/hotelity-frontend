@@ -1,6 +1,7 @@
 <script setup>
 import BarChart from './BarChart.vue';
 import PieChart from './PieChart.vue';
+import MainContent from './MainContent.vue';
 
 </script>
 
@@ -10,6 +11,8 @@ import PieChart from './PieChart.vue';
       <BarChart/>
       <PieChart/>
     </div>
+
+    <MainContent/>
   </div>
 </template>
 
