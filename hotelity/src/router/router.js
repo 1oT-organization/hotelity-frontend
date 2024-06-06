@@ -153,15 +153,6 @@ const routes = [
     {
         path: '/facilityList',
         name: 'FacilityList',
-        component: FacilityList,
-        meta: {
-            requiresAuth: true,
-            category: 'hotelManagement',
-        },
-    },
-    {
-        path: '/ancillaryList',
-        name: 'Ancillary',
         component: Ancillary,
         meta: {
             requiresAuth: true,
@@ -308,21 +299,21 @@ const router = createRouter({
     routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//     const authStore = useAuthStore();
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
 
-//     if (to.matched.some(record => record.meta.requiresAuth)) {
-//         if (!authStore.isAuthenticated) {
-//             next({
-//                 path: '/login',
-//                 query: { redirect: to.fullPath },
-//             });
-//         } else {
-//             next();
-//         }
-//     } else {
-//         next();
-//     }
-// });
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!authStore.isAuthenticated) {
+            next({
+                path: '/login',
+                query: { redirect: to.fullPath },
+            });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
 
 export default router;

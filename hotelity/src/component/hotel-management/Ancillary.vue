@@ -1,7 +1,8 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
 import router from '@/router/router.js';
+import * as api from '@/api/apiService.js';
+import {downloadFacilityExcel} from "@/api/apiService.js";
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -43,10 +44,11 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/hotel-management/facilities', {params});
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    // const response = await axios.get('http://localhost:8888/hotel-management/facilities', {params});
+    const response = await api.getFacilities(params);
+    console.log(response);
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -55,12 +57,13 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/hotel-management/facilities/excel/download', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
+    // const response = await axios.get('http://localhost:8888/hotel-management/facilities/excel/download', {
+    //   params: defaultParams,
+    //   responseType: 'blob'
+    // });
+    const response = await api.downloadFacilityExcel(defaultParams);
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'ancillary.xlsx');

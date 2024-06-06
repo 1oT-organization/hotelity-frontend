@@ -3,8 +3,7 @@
 import {useRouter} from 'vue-router';
 
 import {ref, onMounted} from 'vue';
-import axios from "axios";
-
+import * as api from '@/api/apiService.js';
 
 function navigateToCustomerList() {
   router.push('/customerList');
@@ -48,9 +47,10 @@ let initialFormState = {
 
 async function handleSubmit() {
   try {
-    const response = await axios.post('http://localhost:8888/customers', form.value);
-    console.log(response.data);
-    window.alert(response.data.data.content); // 상태 체크 팝업 창
+    // const response = await axios.post('http://localhost:8888/customers', form.value);
+    const response = await api.createCustomer(form.value);
+    console.log(response);
+    window.alert(response.data.content); // 상태 체크 팝업 창
     navigateToCustomerList();
   } catch (error) {
     console.error(error);
@@ -62,8 +62,9 @@ async function handleSubmit() {
 
 async function nationList() {
   try {
-    const response = await axios.get('http://localhost:8888/nations');
-    return response.data;
+    // const response = await axios.get('http://localhost:8888/nations');
+    const response = await api.getNations();
+    return response;
   } catch (error) {
     console.error(error);
   }

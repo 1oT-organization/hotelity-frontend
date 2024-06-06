@@ -132,7 +132,7 @@
     },
     hotelService: {
       name: 'hotelService',
-      path: '/reservationList'
+      path: '/reservation'
     },
     hotelManagement: {
       name: 'hotelManagement',
