@@ -66,6 +66,10 @@
           const redirect = router.currentRoute.value.query.redirect || '/';
 
           console.log(authStore.$state.isAuthenticated);
+
+          document.querySelector(".sidebar").classList.remove('open');
+          document.querySelector(".content").classList.remove('open');
+
           router.push(redirect);
         } else {
           alert('로그인 실패');
