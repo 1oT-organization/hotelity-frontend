@@ -689,9 +689,9 @@ export const downloadCouponIssueExcel = async (params) => {
 }
 
 /* 멤버십 리스트 */
-export const getMemberships = async () => {
+export const getMemberships = async (params) => {
     try {
-        const response = await apiClient.get('/sales/membership');
+        const response = await apiClient.get('/sales/membership', {params});
         return response.data;
     } catch (e) {
         console.error('Error fetching memberships:', e);
@@ -764,6 +764,8 @@ export const deleteNotice = async (noticeId) => {
         throw e;
     }
 }
+
+
 
 /* VOC 리스트 */
 export const getVocs = async (params) => {

@@ -1,7 +1,7 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
 import router from '@/router/router.js';
+import * as api from '@/api/apiService.js';
 
 function navigateToCustomer(id) {
   router.push(`/customer/${id}`);
@@ -62,18 +62,19 @@ async function submitFile() {
 
   try {
     // 파일 전송
-    const response = await axios.post('http://localhost:8888/customers/excel/read', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    // const response = await axios.post('http://localhost:8888/customers/excel/read', formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // });
+    const response = await api.uploadExcel(formData);
     orderBy.value = null;
     sortBy.value = null;
     currentPage.value = 1;
 
     loadCustomers(currentPage.value, orderBy.value, sortBy.value);
     // 응답 처리
-    console.log(response.data);
+    console.log(response);
   } catch (error) {
     console.log(fileToUpload.value)
     console.error(error);
@@ -88,10 +89,11 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/customers/page', {params});
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    // const response = await axios.get('http://localhost:8888/customers/page', {params});
+    // console.log(response.data);
+    const response = await api.getCustomers(params);
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -100,12 +102,14 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/customers/excel/download', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
+    // const response = await axios.get('http://localhost:8888/customers/excel/download', {
+    //   params: defaultParams,
+    //   responseType: 'blob'
+    // });
+    const response = await api.downloadExcel(defaultParams);
+    console.log(response);
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'customers.xlsx');

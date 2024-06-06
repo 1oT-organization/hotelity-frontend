@@ -1,8 +1,8 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
-
+import * as api from '@/api/apiService.js'
 import router from '@/router/router.js';
+import {getNotices} from "@/api/apiService.js";
 
 function navigateToCustomer(id) {
   // router.push(`/customer/${id}`);
@@ -42,40 +42,14 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/notices/page', {params});
+    // const response = await axios.get('http://localhost:8888/sales/notices/page', {params});
+    const response = await api.getNotices(params);
     console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
-  }
-}
-
-async function downloadExcel() {
-  try {
-    const response = await axios.get('http://localhost:8888/sales/notices/page/excel/download', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
-
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'notice.xlsx');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function loadList() {
-  try {
-    await downloadExcel();
-  } catch (error) {
-    console.error(error);
   }
 }
 
@@ -185,8 +159,8 @@ onMounted(() => {
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
-            <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i
-                class="bi bi-download"></i></button>
+<!--            <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i-->
+<!--                class="bi bi-download"></i></button>-->
           </div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">

@@ -52,6 +52,8 @@ const route = useRoute();
 const notice = ref(null);
 const noticeCodePk = route.params;
 
+console.log('notice 오냐?', notice)
+
 console.log('noticeCodePk',noticeCodePk);
 
 const fetchNotice = async () => {
@@ -70,7 +72,8 @@ const closeNotice = () => {
 
 const modifyNotice = async () => {
   try {
-    await axios.put(`http://localhost:8888/sales/notices/${noticeCodePk}/notice`, notice.value);
+    console.log('notice.value: ', notice.value)
+    await axios.put(`http://localhost:8888/sales/notices/${noticeCodePk.id}`, notice.value);
     alert('공지사항이 저장되었습니다.');
   } catch (error) {
     console.error('Error saving notice:', error);
@@ -80,7 +83,9 @@ const modifyNotice = async () => {
 
 const deleteNotice = async () => {
   try {
-    await axios.delete(`http://localhost:8888/notices/${noticeCodePk}/notice`);
+    console.log('noticeCodePk: ', noticeCodePk)
+    console.log('noticeCodePk.id: ', noticeCodePk.id)
+    await axios.delete(`http://localhost:8888/sales/notices/${noticeCodePk.id}`);
     alert('공지사항이 삭제되었습니다.');
     router.push('/');
   } catch (error) {

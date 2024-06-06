@@ -194,8 +194,7 @@
 <script setup>
 
 import {ref, defineComponent, onMounted, watch} from 'vue';
-import axios from 'axios';
-
+import * as api from '@/api/apiService.js';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import StaySearch from "@/component/hotel-service/stay/StaySearch.vue";
@@ -265,14 +264,15 @@ async function fetchData(params) {
     delete params.branchCodeFk;
   }
 
-  const url = `http://localhost:8888/hotel-service/stays/page`
+  // const url = `http://localhost:8888/hotel-service/stays/page`
   try {
-    console.log("url" + url)
-    const response = await axios.get(url, {params});
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount; // 총 페이지 수를 업데이트
+    // console.log("url" + url)
+    // const response = await axios.get(url, {params});
+    const response = await api.getStays(params);
+    console.log(response);
+    totalPages.value = response.data.totalPagesCount; // 총 페이지 수를 업데이트
     isFetchDailyStay.value = false; // Add this line
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -281,8 +281,8 @@ async function fetchData(params) {
 // datePicker의 체크인 일자 선택 실행
 async function fetchDailyStay(dateString) {
   try {
-    const response = await axios.get(`http://localhost:8888/hotel-service/stays/daily/${dateString}`);
-    stays.value = response.data.data.content.flat(); // Add this line
+    const response = await api.getDailyStays(dateString);
+    stays.value = response.data.content.flat(); // Add this line
     isFetchDailyStay.value = true; // Add this line
     return stays.value;
   } catch (error) {
