@@ -46,6 +46,7 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import * as api from '@/api/apiService.js';
 
 const router = useRouter();
 const route = useRoute();
@@ -56,9 +57,12 @@ console.log('noticeCodePk',noticeCodePk);
 
 const fetchNotice = async () => {
   try {
-    const response = await axios.get(`http://localhost:8888/sales/notices/${noticeCodePk.id}/notice`);
+    const response = await api.getNotice(noticeCodePk.id);
+    console.log(noticeCodePk.id);
     console.log('response',response)
-    notice.value = response.data;
+    // localhost로 요청 시 .data 붙이기
+    // notice.value = response.data;
+    notice.value = response;
   } catch (error) {
     console.error('Error fetching notice:', error);
   }
@@ -70,7 +74,10 @@ const closeNotice = () => {
 
 const modifyNotice = async () => {
   try {
-    await axios.put(`http://localhost:8888/sales/notices/${noticeCodePk}/notice`, notice.value);
+    console.log(noticeCodePk.id)
+    console.log(notice.value)
+
+    await api.updateNotice(noticeCodePk.id, notice.value);
     alert('공지사항이 저장되었습니다.');
   } catch (error) {
     console.error('Error saving notice:', error);
@@ -80,7 +87,8 @@ const modifyNotice = async () => {
 
 const deleteNotice = async () => {
   try {
-    await axios.delete(`http://localhost:8888/notices/${noticeCodePk}/notice`);
+    // await axios.delete(`http://localhost:8888/notices/${noticeCodePk}/notice`);
+    await api.deleteNotice(noticeCodePk.id);
     alert('공지사항이 삭제되었습니다.');
     router.push('/');
   } catch (error) {
