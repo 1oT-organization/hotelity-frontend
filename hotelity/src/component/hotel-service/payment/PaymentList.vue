@@ -52,6 +52,7 @@ const defaultParams = {
   paymentCodePk: null,
   customerCodeFk: null,
   customerName: null,
+  paymentAmount: null,
   paymentDate: null,
   paymentCancelStatus: null,
   paymentMethod: null,
@@ -206,6 +207,7 @@ onMounted(() => {
             <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentCodePk')">결제내역코드</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">고객</a></li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentAmount')">결제 금액</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentDate')">결제 일자</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentMethod')">결제 수단</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentTypeCodeFk')">결제 종류 코드</a></li>
@@ -270,6 +272,11 @@ onMounted(() => {
                   <i class="bi bi-caret-down-fill"
                      :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
                 </th>
+                <th scope="col" @click="sort('paymentAmount')">결제 금액
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'paymentAmount' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'paymentAmount' && sortBy === 1 }"></i>
+                </th>
                 <th scope="col" @click="sort('paymentDate')">결제 일자
                   <i class="bi bi-caret-up-fill"
                      :class="{ active: orderBy === 'paymentDate' && sortBy === 0 }"></i>
@@ -307,6 +314,7 @@ onMounted(() => {
                   @click=navigateToCustomer(payment.paymentCodePk)>
                 <td>{{ payment.paymentCodePk }}</td>
                 <td>{{ payment.customerName }}</td>
+                <td>{{ payment.paymentAmount }}</td>
                 <td>{{
                     new Date(payment.paymentDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',

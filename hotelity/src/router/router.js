@@ -35,6 +35,9 @@ import TemplateList from "@/component/marketing/TemplateList.vue";
 import TemplateInfo from "@/component/marketing/TemplateInfo.vue";
 import TemplateSelect from "@/component/marketing/TemplateSelect.vue";
 
+// 테스트 용
+import VocSelect from "@/component/sales/VocSelect.vue";
+
 const routes = [
     {
         path: '/login',
@@ -295,6 +298,15 @@ const routes = [
             category: 'sales',
         },
     },
+    {
+        path: '/vocSelect',
+        name: 'VocSelect',
+        component: VocSelect,
+        meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    }
 ];
 
 const router = createRouter({
