@@ -61,11 +61,15 @@
 
           window.localStorage.setItem('Authorization', accessToken);
 
-          console.log(authStore.$state.isAuthenticated);
-          authStore.login();
-          const redirect = router.currentRoute.value.query.redirect || '/';
+          authStore.login({
+              branchCode: branchCode.value,
+              employeeCode: employeeCode.value,
+          });
 
-          console.log(authStore.$state.isAuthenticated);
+          document.querySelector(".sidebar").classList.remove('open');
+          document.querySelector(".content").classList.remove('open');
+
+          const redirect = router.currentRoute.value.query.redirect || '/';
           router.push(redirect);
         } else {
           alert('로그인 실패');

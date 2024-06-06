@@ -44,7 +44,6 @@ const routes = [
         name: 'Login',
         component: Login,
         meta: {
-            hideSidebar: true,
             hideNavbar: true
         }
     },

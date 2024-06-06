@@ -4,7 +4,6 @@
   import Sidebar from '@/component/common/sidebar/Sidebar.vue';
   import {onMounted, ref, watch} from "vue";
   import { useRoute } from 'vue-router';
-  import router from "@/router/router.js";
 
   const route = useRoute();
   const currentRoute = ref(route.fullPath);
@@ -14,8 +13,20 @@
     console.log('Route changed to:', newRoute.fullPath);
     currentRoute.value = newRoute.fullPath;
 
+    if (currentRoute.value.includes('login')) {
+      document.querySelector(".sidebar").classList.add('open');
+      document.querySelector(".content").classList.add('open');
+    }
+
     setSidebarMenu(route.meta['category']);
     setNavItemsActive(route.meta['category']);
+  });
+
+  onMounted(() => {
+    if (currentRoute.value.includes('login')) {
+      document.querySelector(".sidebar").classList.add('open');
+      document.querySelector(".content").classList.add('open');
+    }
   });
 
   const sideBarRef = ref(null);
@@ -64,7 +75,7 @@
 </script>
 
 <template>
-  <Sidebar v-if="!$route.meta.hideSidebar" ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
+  <Sidebar ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
   <div class="content">
     <Navbar v-if="!$route.meta.hideNavbar" @toggleOpen="toggleOpenClass" @setMenu="setSidebarMenu" />
     <RouterView/>

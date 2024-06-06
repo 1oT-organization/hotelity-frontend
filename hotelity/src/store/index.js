@@ -7,13 +7,16 @@ pinia.use(piniaPluginPersistedstate);
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
+    userInfo: null,
   }),
   actions: {
-    login() {
+    login(userInfo) {
       this.isAuthenticated = true;
+      this.userInfo = userInfo;
     },
     logout() {
       this.isAuthenticated = false;
+      this.userInfo = null;
     },
   },
   persist: true
