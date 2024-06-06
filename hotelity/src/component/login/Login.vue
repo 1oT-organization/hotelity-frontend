@@ -37,7 +37,7 @@
   import { useAuthStore } from '@/store';
   import { useRouter } from 'vue-router';
   import { ref, onMounted } from 'vue';
-  import { getBranches, login } from '@/api';
+  import { getBranches, login } from '@/api/apiService.js';
 
   const authStore = useAuthStore();
   const router = useRouter();
@@ -47,14 +47,7 @@
   const password = ref('');
 
   const signIn = () => {
-    console.log('signIn');
-
-    console.log(branchCode.value);
-    console.log(employeeCode.value);
-    console.log(password.value);
-
     if (validateInput()) {
-
       const loginInfo = {
         branchCode: branchCode.value,
         employeeCode: employeeCode.value,
@@ -62,8 +55,6 @@
       };
 
       login(loginInfo).then((res) => {
-        console.log(res);
-
         if (res.status === 200) {
           const header = res.headers;
           const accessToken = header['authorization'];
@@ -86,8 +77,6 @@
   };
 
   onMounted(() => {
-    console.log('Login mounted');
-
     setBranches();
   });
 
@@ -128,7 +117,6 @@
   };
 
   const dropdownItemClickListener = (e) => {
-    console.log(e.target);
 
     // floatingBranch input에 선택한 branchName 적용
     const floatingBranch = document.getElementById('floatingBranch');
