@@ -65,7 +65,7 @@ let calendar = null;
 const updateEvents = () => {
   console.log("updateEvents 실행됨")
   const events = props.reservations ? Object.entries(props.reservations).map(([date, reservations]) => ({
-    title: `예약 ${reservations.length} 건`,
+    title: `체크인 ${reservations.length} 건`,
     start: date
   })) : [];
 
