@@ -190,8 +190,8 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="membership in memberships.content" :key="memberships.membershipLevelCodePk"
-                  @click=navigateToCustomer(membership.membershipLevelCodePk)>
+              <tr v-for="membership in memberships.content" :key="memberships.membershipLevelCodePk">
+<!--                  @click=navigateToCustomer(membership.membershipLevelCodePk)>--> <!-- 추후 상세 페이지 연결 -->
                 <td>{{ membership.membershipLevelCodePk }}</td>
                 <td>{{ membership.membershipLevelName }}</td>
                 <td>{{
