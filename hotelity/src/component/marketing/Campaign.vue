@@ -1,6 +1,5 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-// import axios from 'axios';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js'
 
@@ -68,7 +67,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/marketing/campaigns/search/page', {params});
     const response = await api.getCampaigns(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -253,8 +251,8 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="campaign in campaigns.content" :key="campaigns.campaignSentCustomerCodePk"
-                  @click=navigateToCustomer(campaign.campaignSentCustomerCodePk)>
+              <tr v-for="campaign in campaigns.content" :key="campaigns.campaignSentCustomerCodePk">
+<!--                  @click=navigateToCustomer(campaign.campaignSentCustomerCodePk)>-->
                 <td>{{ campaign.campaignSentCustomerCodePk }}</td>
                 <td>{{ campaign.customerName }}</td>
                 <td>{{ campaign.campaignSendType }}</td>
