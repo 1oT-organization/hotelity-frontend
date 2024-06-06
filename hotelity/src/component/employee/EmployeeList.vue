@@ -152,7 +152,7 @@
               </thead>
               <tbody>
               <tr v-for="employee in employees.content" :key="employees.employeeCodePk"
-                  @click=navigateToCustomer(customer.customerCodePk)>
+                  @click=navigateToEmployee(employee.employeeCodePk)>
                 <td>{{ employee.employeeCodePk }}</td>
                 <td>{{ employee.employeeName }}</td>
                 <td>{{ employee.nameOfBranch }}</td>
@@ -193,11 +193,11 @@
 
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
 import router from '@/router/router.js';
+import * as api from '@/api/apiService.js';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+function navigateToEmployee(id) {
+  router.push(`/employeeInfo/${id}`);
 }
 
 const isLoading = ref(true);
@@ -237,10 +237,12 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/employees/page', {params});
-    console.log(response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    // const response = await axios.get('http://localhost:8888/employees/page', {params});
+    // console.log(response.data);
+    const response = await api.getEmployees(params);
+    totalPages.value = response.data.totalPagesCount;
+    console.log(response);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -249,12 +251,13 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/employees/excel', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
+    // const response = await axios.get('http://localhost:8888/employees/excel', {
+    //   params: defaultParams,
+    //   responseType: 'blob'
+    // });
+    const response = await api.downloadEmployeeExcel(defaultParams);
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'employees.xlsx');
