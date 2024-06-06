@@ -1,10 +1,15 @@
 <script setup>
+import BarChart from './BarChart.vue';
+import PieChart from './PieChart.vue';
 
 </script>
 
 <template>
-  <div>
-    <h1>Home</h1>
+  <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <BarChart/>
+      <PieChart/>
+    </div>
   </div>
 </template>
 
