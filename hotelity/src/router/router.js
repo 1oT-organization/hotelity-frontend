@@ -19,7 +19,6 @@ import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import FacilityList from "@/component/hotel-management/FacilityList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
-import ReservationPage from '@/component/hotel-service/reservation/ReservationPage.vue';
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
 import StayPage from "@/component/hotel-service/stay/StayPage.vue";
@@ -33,6 +32,10 @@ import Coupon from "@/component/sales/Coupon.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
 
 import Campaign from "@/component/marketing/Campaign.vue";
+import CampaignSend from "@/component/marketing/CampaignSend.vue";
+import TemplateList from "@/component/marketing/TemplateList.vue";
+import TemplateInfo from "@/component/marketing/TemplateInfo.vue";
+import TemplateSelect from "@/component/marketing/TemplateSelect.vue";
 
 const routes = [
     {
@@ -168,18 +171,9 @@ const routes = [
 
     /* 호텔서비스 */
     {
-        path: '/reservationPage',
-        name: 'ReservationPage',
+        path: '/reservation',
+        name: 'Reservation',
 
-        component: ReservationPage,
-        meta: {
-            requiresAuth: true,
-            category: 'hotelService',
-        },
-    },
-    {
-        path: '/reservationList',
-        name: 'ReservationList',
         component: ReservationList,
         meta: {
             requiresAuth: true,
@@ -213,6 +207,42 @@ const routes = [
         meta: {
             requiresAuth: true,
             category: 'marketing',
+        },
+    },
+    {
+        path: '/campaignSend',
+        name: 'CampaignSend',
+        component: CampaignSend,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateList',
+        name: 'TemplateList',
+        component: TemplateList,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateInfo/:id',
+        name: 'TemplateInfo',
+        component: TemplateInfo,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
+        },
+    },
+    {
+        path: '/templateSelect/:id',
+        name: 'TemplateSelect',
+        component: TemplateSelect,
+        meta: {
+            requiresAuth: true,
+            category:'marketing',
         },
     },
 
@@ -278,21 +308,21 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    const authStore = useAuthStore();
+// router.beforeEach((to, from, next) => {
+//     const authStore = useAuthStore();
 
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!authStore.isAuthenticated) {
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath },
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!authStore.isAuthenticated) {
+//             next({
+//                 path: '/login',
+//                 query: { redirect: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;
