@@ -268,21 +268,21 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    const authStore = useAuthStore();
-
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!authStore.isAuthenticated) {
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath },
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     const authStore = useAuthStore();
+//
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!authStore.isAuthenticated) {
+//             next({
+//                 path: '/login',
+//                 query: { redirect: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;

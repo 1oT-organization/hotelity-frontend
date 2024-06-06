@@ -192,6 +192,7 @@ watch(selectedMonth, async (newMonth) => {
         }
 
         console.log(obj);
+
       }
     }
 );

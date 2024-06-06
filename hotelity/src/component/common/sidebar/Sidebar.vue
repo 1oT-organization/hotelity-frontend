@@ -118,7 +118,7 @@ const menu = {
     subMenu: [
       {
         text: '예약 일정',
-        path: '/reservationList',
+        path: '/reservation',
         iconClass: 'emoji bi bi-calendar-fill'
       },
       {
