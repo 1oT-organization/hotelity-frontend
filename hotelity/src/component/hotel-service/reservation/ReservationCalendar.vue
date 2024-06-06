@@ -75,6 +75,8 @@ const updateEvents = () => {
   }
   console.log("addEventSource 실행됨")
   calendar.addEventSource({events, id: 'reservations'});
+
+  change.value = false;
 };
 
 // 페이지 열리면 캘린더 렌더링

@@ -264,6 +264,12 @@ onMounted(() => {
                   <i class="bi bi-caret-down-fill"
                      :class="{ active: orderBy === 'roomName' && sortBy === 1 }"></i>
                 </th>
+                <th scope="col" @click="sort('roomLevelName')">객실 등급명
+                  <i class="bi bi-caret-up-fill"
+                     :class="{ active: orderBy === 'roomLevelName' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'roomLevelName' && sortBy === 1 }"></i>
+                </th>
                 <th scope="col" @click="sort('roomPrice')">가격
                   <i class="bi bi-caret-up-fill"
                      :class="{ active: orderBy === 'roomPrice' && sortBy === 0 }"></i>
@@ -284,13 +290,13 @@ onMounted(() => {
                 <td>{{ room.branchCodeFk }}</td>
                 <td>{{ room.roomNumber }}</td>
                 <td>{{ room.roomName }}</td>
+                <td>{{ room.roomLevelName }}</td>
                 <td>{{ '₩' + room.roomPrice.toLocaleString('ko-KR') }}</td>
                 <td>{{ room.roomSpecificInfo }}</td>
                 <td>{{ room.roomSubRoomsCount }}</td>
                 <td>{{ room.roomCapacity }}</td>
                 <td>{{ room.roomBathroomCount }}</td>
                 <td>{{ room.roomDiscountRate * 100 + '%' }}</td>
-                <td>{{ room.roomLevelName }}</td>
               </tr>
               </tbody>
             </table>
