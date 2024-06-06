@@ -1,6 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="customer">
     <h2>고객 정보</h2>
+    <button class="close-btn" @click="closeNotice">✖</button>
     <div class="customer-info">
       <div class="field-group">
         <button>수정</button>
@@ -9,39 +10,43 @@
 
       <div class="field-group">
         <label>고객 코드</label>
-        <input type="text" value="ooooooo" />
+        <input type="text" v-model="customer.customerCodePk" />
       </div>
       <div class="field-group">
         <label>고객 타입</label>
-        <input type="text" value="개인" />
+        <input type="text" v-model="customer.customerType" />
+      </div>
+      <div class="field-group">
+        <label>이름</label>
+        <input type="text" v-model="customer.customerName" />
       </div>
       <div class="field-group">
         <label>영문 이름</label>
-        <input type="text" value="LEE JUN HYUNG" />
+        <input type="text" v-model="customer.customerEnglishName" />
       </div>
       <div class="field-group">
         <label>국가</label>
-        <input type="text" value="대한민국" />
+        <input type="text" v-model="customer.nationName" />
       </div>
       <div class="field-group">
         <label>이메일</label>
-        <input type="email" value="asdasd@asdasd.com" />
+        <input type="email" v-model="customer.customerEmail" />
       </div>
       <div class="field-group">
         <label>성별</label>
-        <input type="text" value="남" />
+        <input type="text" v-model="customer.customerGender" />
       </div>
       <div class="field-group">
         <label>회원 멤버십 등급</label>
-        <input type="text" value="플래티넘" />
+        <input type="text" v-model="customer.membershipLevelName" />
       </div>
       <div class="field-group">
         <label>주소</label>
-        <input type="text" value="안양시" />
+        <input type="text" v-model="customer.customerAddress" />
       </div>
       <div class="field-group">
         <label>가입일자</label>
-        <input type="date" value="2024-04-30" />
+        <input type="date" v-model="customer.customerRegisteredDate" />
       </div>
 
     </div>
@@ -58,10 +63,10 @@
         </thead>
         <tbody>
         <tr>
-          <td>2022.01.28</td>
-          <td>객실 이용</td>
-          <td>카드</td>
-          <td>500,000</td>
+          <td>{{customer.payment[0].paymentDate}}</td>
+          <td>{{customer.payment[0].paymentTypeName}}</td>
+          <td>{{customer.payment[0].paymentMethod}}</td>
+          <td>{{customer.payment[0].paymentAmount}}</td>
         </tr>
         <tr>
           <td>2022.07.30</td>
@@ -120,6 +125,34 @@
 </template>
 
 <script setup>
+import {useRoute, useRouter} from "vue-router";
+import {onMounted, ref} from "vue";
+import axios from "axios";
+
+const router = useRouter();
+const route = useRoute();
+const customer = ref(null);
+const customerCodePk = route.params;
+
+console.log('customerCodePk',customerCodePk);
+
+const fetchCustomer = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8888/customers/${customerCodePk.id}/customer`);
+    console.log('response',response)
+    customer.value = response.data;
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+  }
+};
+
+const closeNotice = () => {
+  router.push('/customerList');
+};
+
+onMounted(() => {
+  fetchCustomer();
+});
 
 </script>
 
