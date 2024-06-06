@@ -1,9 +1,9 @@
 <script setup>
 import {useRouter, useRoute} from 'vue-router';
-import axios from 'axios';
+import * as api from '@/api/apiService.js';
 import {reactive, ref, onMounted} from 'vue';
-import $ from 'jquery';
 
+const router = useRouter();
 const route = useRoute();
 
 const editEmployee = () => {
@@ -12,7 +12,9 @@ const editEmployee = () => {
 
 const deleteEmployee = () => {
   if (window.confirm('삭제하시겠습니까?')) {
-    console.log("직원 정보 삭제 로직 예정")
+    api.deleteEmployee(route.params.id).then(() => {
+      router.back();
+    });
   }
 };
 const uploadImage = async (event) => {
@@ -24,16 +26,13 @@ const uploadImage = async (event) => {
   const formData = new FormData();
   formData.append('image', file);
 
-  console.log('이거뭐임??ㅇㄴㅁ라ㅣㅓㅗ아ㅣㅎㅁ졷', route.params.id)
   try {
-    const response = await axios.post(`http://localhost:8888/employees/${route.params.id}/image`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    const response = await api.uploadEmployeeImage(route.params.id, formData);
 
     if (response.status === 200) {
       console.log('Image uploaded successfully:', response.data);
+      alert('이미지가 업로드되었습니다.');
+      await fetchEmployeeData(route.params.id);
     } else {
       console.error('Error uploading image:', response.data);
     }
@@ -67,11 +66,9 @@ async function fetchEmployeeData(employeeCodePk) {
   }
 
   try {
-    const response = await axios.get(`http://localhost:8888/employees/${employeeCodePk}`);
-    console.log('뭐가 오냐?', response);
+    const response = await api.getEmployee(employeeCodePk);
     console.log('API response:', response);
-    console.log('employee 확인: ', employee);
-    const data = response.data.data;
+    const data = response.data;
     employee.employeeCodePk = data.employeeCodePk;
     employee.branchCodeFk = data.branchCodeFk;
     employee.employeeName = data.employeeName;
@@ -91,6 +88,11 @@ async function fetchEmployeeData(employeeCodePk) {
     employee.nameOfRank = data.nameOfRank;
     Object.assign(employee, response);
 
+    if (data.employeeProfileImageLink) {
+      const imgElement = document.querySelector(".photo img");
+      imgElement.setAttribute('src', data.employeeProfileImageLink);
+    }
+
   } catch (error) {
     console.error("Error fetching employee data:", error);
   }
@@ -101,16 +103,6 @@ onMounted(() => {
 
   fetchEmployeeData(route.params.id).then(() => {
     isLoading.value = false;
-  });
-
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
-});
-
-$(document).ready(function () {
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
   });
 });
 </script>
@@ -139,7 +131,8 @@ $(document).ready(function () {
 
           <div class="employee-details">
             <div class="photo">
-              <img :src="employee.employeeProfileImageLink" alt="Employee Photo"/>
+<!--              <img :src="employee.employeeProfileImageLink" alt="Employee Photo"/>-->
+              <img src="../../assets/img/icon-user.png" alt="Employee Photo"/>
             </div>
 
             <div class="image-upload">
