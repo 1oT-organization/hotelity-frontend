@@ -13,14 +13,15 @@
     console.log('Route changed to:', newRoute.fullPath);
     currentRoute.value = newRoute.fullPath;
 
+    setSidebarMenu(route.meta['category']);
+    setNavItemsActive(route.meta['category']);
+  });
+
+  onMounted(() => {
     if (currentRoute.value.includes('login')) {
       document.querySelector(".sidebar").classList.add('open');
       document.querySelector(".content").classList.add('open');
-      return;
     }
-
-    setSidebarMenu(route.meta['category']);
-    setNavItemsActive(route.meta['category']);
   });
 
   const sideBarRef = ref(null);
