@@ -13,6 +13,11 @@
     console.log('Route changed to:', newRoute.fullPath);
     currentRoute.value = newRoute.fullPath;
 
+    if (currentRoute.value.includes('login')) {
+      document.querySelector(".sidebar").classList.add('open');
+      document.querySelector(".content").classList.add('open');
+    }
+
     setSidebarMenu(route.meta['category']);
     setNavItemsActive(route.meta['category']);
   });
