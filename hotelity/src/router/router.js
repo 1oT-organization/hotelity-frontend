@@ -16,7 +16,6 @@ import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
-import FacilityList from "@/component/hotel-management/FacilityList.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
 
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
