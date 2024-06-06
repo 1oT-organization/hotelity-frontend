@@ -115,80 +115,6 @@
           </table>
         </div>
       </div>
-
-      <!-- 모달 시작 -->
-      <div v-if="showModal" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">예약 확인</h5>
-              <button type="button" class="btn-close" @click="toggleModal"></button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="mb-3">
-                  <label for="branchCode" class="form-label">지점 코드</label>
-                  <input type="text" class="form-control" id="branchCode" v-model="formData.branchCodePk">
-                </div>
-                <div class="mb-3">
-                  <label for="branchName" class="form-label">지점명</label>
-                  <input type="text" class="form-control" id="branchName" v-model="formData.branchName">
-                </div>
-                <div class="mb-3">
-                  <label for="address" class="form-label">주소</label>
-                  <input type="text" class="form-control" id="branchAddress" v-model="formData.branchAddress">
-                </div>
-                <div class="mb-3">
-                  <label for="phoneNumber" class="form-label">전화번호</label>
-                  <input type="text" class="form-control" id="branchPhoneNumber" v-model="formData.branchPhoneNumber">
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="toggleModal">닫기</button>
-              <button type="button" class="btn btn-primary" @click="submitForm">저장</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 모달 끝 -->
-
-      <!-- Modify Modal Start -->
-      <div v-if="isModifyModalOpen" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">지점 수정</h5>
-              <button type="button" class="btn-close" @click="isModifyModalOpen = false"></button>
-            </div>
-            <div class="modal-body">
-              <form @submit.prevent="modifyBranch(selectedBranch.branchCodePk)">
-                <div class="mb-3">
-                  <label for="branchCode" class="form-label">지점코드</label>
-                  <input type="text" class="form-control" id="branchCode" v-model="selectedBranch.branchCodePk"
-                         readonly>
-                </div>
-                <div class="mb-3">
-                  <label for="branchName" class="form-label">지점명</label>
-                  <input type="text" class="form-control" id="branchName" v-model="selectedBranch.branchName">
-                </div>
-                <div class="mb-3">
-                  <label for="branchAddress" class="form-label">주소</label>
-                  <input type="text" class="form-control" id="branchAddress" v-model="selectedBranch.branchAddress">
-                </div>
-                <div class="mb-3">
-                  <label for="branchPhoneNumber" class="form-label">전화번호</label>
-                  <input type="text" class="form-control" id="branchPhoneNumber"
-                         v-model="selectedBranch.branchPhoneNumber">
-                </div>
-                <button type="submit" class="btn btn-primary" @click="modifyBranch">저장</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modify Modal End -->
-
     </div>
   </div>
 </template>
@@ -333,43 +259,6 @@ function formatDateTime(date) {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
-
-// 모달 가시성 상태
-const showModal = ref(false);
-
-// 폼 데이터 상태
-const formData = ref({
-  reservationCodePk: '',
-  customerCodeFk: '',
-  customerName: '',
-  customerEnglishName: '',
-  reservationCheckinDate: '',
-  reservationCheckoutDate: '',
-  roomCodeFk: '',
-  roomNumber: '',
-  roomName: '',
-  roomLevelName: '',
-  branchCode:'',
-  branchName: ''
-});
-
-// 모달 가시성 토글 함수
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
-
-// 폼 제출 함수
-const submitForm = async () => {
-  try {
-    const response = await axios.post('http://localhost:8888/hotel-management/branches', formData.value);
-    console.log('response.data:', response.data);
-    console.log('formData.value:', formData.value);
-    toggleModal();  // 폼 제출 후 모달 닫기
-    loadBranch();
-  } catch (error) {
-    console.error('Error registering branch:', error);
-  }
-};
 
 </script>
 

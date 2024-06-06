@@ -59,12 +59,10 @@
                         style="width: 130px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
                         placeholder="체크인 일자"></DatePicker>
           </div>
-          <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event"
-                        format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
-                        placeholder="체크아웃 일자"></DatePicker>
-          </div>
+          <!--          <div class="btn-group me-2">-->
+          <!--            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"-->
+          <!--                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem" placeholder="체크아웃 일자"></DatePicker>-->
+          <!--          </div>-->
           <!--          <button class="btn btn-primary" @click="onSearchButtonClick">적용</button>-->
         </div>
 

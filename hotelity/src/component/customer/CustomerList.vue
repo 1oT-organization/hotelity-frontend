@@ -18,7 +18,7 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
-const sortBy = ref(0); // 0: ascending, 1: descending
+const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
 const defaultParams = {

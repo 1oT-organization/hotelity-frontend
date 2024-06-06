@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const baseURL = 'http://ae582f63474d441b3a1a6e9e71f40bc8-1385203214.ap-northeast-2.elb.amazonaws.com:8888';
-const baseURL = 'http://localhost:8888';
+const baseURL = 'http://ae582f63474d441b3a1a6e9e71f40bc8-1385203214.ap-northeast-2.elb.amazonaws.com:8888';
 
 const apiClient = axios.create({
     baseURL: baseURL,

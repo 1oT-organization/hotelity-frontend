@@ -258,8 +258,8 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk">
-<!--                  @click=navigateToCustomer(ancillary.ancillaryCodePk)>-->
+              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk"
+                  @click=navigateToCustomer(ancillary.ancillaryCodePk)>
                 <td>{{ ancillary.ancillaryCodePk }}</td>
                 <td>{{ ancillary.ancillaryCategoryName }}</td>
                 <td>{{ ancillary.branchName }}</td>
