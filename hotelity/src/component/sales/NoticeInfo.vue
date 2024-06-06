@@ -43,7 +43,6 @@
   </template>
 
 <script setup>
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import * as api from '@/api/apiService.js';
@@ -60,8 +59,6 @@ const fetchNotice = async () => {
     const response = await api.getNotice(noticeCodePk.id);
     console.log(noticeCodePk.id);
     console.log('response',response)
-    // localhost로 요청 시 .data 붙이기
-    // notice.value = response.data;
     notice.value = response;
   } catch (error) {
     console.error('Error fetching notice:', error);
@@ -87,7 +84,6 @@ const modifyNotice = async () => {
 
 const deleteNotice = async () => {
   try {
-    // await axios.delete(`http://localhost:8888/notices/${noticeCodePk}/notice`);
     await api.deleteNotice(noticeCodePk.id);
     alert('공지사항이 삭제되었습니다.');
     router.push('/');

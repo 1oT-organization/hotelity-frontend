@@ -217,7 +217,7 @@ const sortBy = ref(0);  // 0: descending, 1: ascending
 const orderBy = ref('stayCheckinTime');
 
 const selectedStayCheckinDate = ref(null);
-// const selectedStayCheckoutDate = ref(null);
+const selectedStayCheckoutDate = ref(null);
 
 // fetch마다 다르게 리스트를 출력하기 위함
 const isFetchDailyStay = ref(false);
@@ -264,10 +264,7 @@ async function fetchData(params) {
     delete params.branchCodeFk;
   }
 
-  // const url = `http://localhost:8888/hotel-service/stays/page`
   try {
-    // console.log("url" + url)
-    // const response = await axios.get(url, {params});
     const response = await api.getStays(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount; // 총 페이지 수를 업데이트
