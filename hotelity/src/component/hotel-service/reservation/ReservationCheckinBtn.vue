@@ -9,33 +9,33 @@ import axios from 'axios';
 
 const props = defineProps({
   checkedRows: Array,
-  reservations: Object
+  // reservations: Object
 });
 
 const showPopup = ref(false);
 const popupMessage = ref('');
 
 const checkIn = async () => {
-  const checkedReservationCodes = props.checkedRows.filter(code => code !== null);
-  for (const reservationCode of checkedReservationCodes) {
-    const reservation = props.reservations.content.find(reservation => reservation.reservationCodePk === reservationCode);
-    if (reservation.stayStatus !== 1) {
-      try {
-        await axios.post('http://localhost:8888/hotel-service/stays/checkin',
-            {
-              reservationCodeFk: reservationCode,
-              employeeCodeFk: 4,
-              stayPeopleCount: 2
-            });
-        showPopup.value = true;
-        popupMessage.value = '체크인 되었습니다';
-        setTimeout(() => {
-          showPopup.value = false;
-        }, 1000);
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
+  const checkedReservations = props.checkedRows.filter(reservation => reservation !== null);
+  if (checkedReservations.length > 0 && checkedReservations[0] != null) {
+    const reservationCodePk = checkedReservations[0].reservationCodePk;
+    console.log("reservationCodePk");
+    console.log(reservationCodePk);
+    try {
+      await axios.post('http://localhost:8888/hotel-service/stays/checkin',
+          {
+            reservationCodeFk: reservationCodePk,
+            employeeCodeFk: 4,
+            stayPeopleCount: 2
+          });
+      showPopup.value = true;
+      popupMessage.value = '체크인 되었습니다';
+      setTimeout(() => {
+        showPopup.value = false;
+      }, 1000);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
     }
   }
 };
