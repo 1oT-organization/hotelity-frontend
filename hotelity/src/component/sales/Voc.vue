@@ -3,8 +3,8 @@ import {ref, watch, onMounted} from 'vue';
 import axios from 'axios';
 import router from '@/router/router.js';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
+function navigateToVocSelect(id) {
+  router.push(`/vocSelect/${id}`);
 }
 
 const isLoading = ref(true);
@@ -180,6 +180,57 @@ onMounted(() => {
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('vocTitle')">VOC 제목</a></li>
             </ul>
           </div>
+          <br>
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th scope="col" @click="sort('vocCodePk')">VOC 코드
+                    <i class="bi bi-caret-up-fill"
+                       :class="{ active: orderBy === 'vocCodePk' && sortBy === 0 }"></i>
+                    <i class="bi bi-caret-down-fill"
+                       :class="{ active: orderBy === 'vocCodePk' && sortBy === 1 }"></i>
+                  </th>
+                  <th scope="col">VOC 일자</th>
+                  <th scope="col">지점 이름</th>
+                  <th scope="col">담당 직원</th>
+                  <th scope="col">고객 코드</th>
+                  <th scope="col">VOC 카테고리</th>
+                  <th scope="col">VOC 제목</th>
+                  <th scope="col">VOC 처리상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="voc in vocs.content" :key="voc.vocCodePk"
+                    @click=navigateToVocSelect(voc.vocCodePk)>
+                  <td>{{ voc.vocCodePk }}</td>
+                  <td>{{
+                      new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                      }) + ' ' + new Date(voc.vocCreatedDate).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                      })
+                    }}
+                  </td>
+                  <td>{{ voc.branchCodeFk }}</td>
+                  <td>{{ voc.employeeName }}</td>
+                  <td>{{ voc.customerCodeFk }}</td>
+                  <td>{{ voc.vocCategory }}</td>
+                  <td>{{ voc.vocTitle }}</td>
+                  <td>
+                    <span v-if="voc.vocProcessStatus === 0">미처리</span>
+                    <span v-else-if="voc.vocProcessStatus === 1">처리</span>
+                  </td>
+
+                </tr>
+                </tbody>
+              </table>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
                  v-model="searchValue">
           <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
@@ -290,7 +341,8 @@ onMounted(() => {
     <!-- Table End -->
   </div>
   <!-- Content End -->
-
+</div>
+</div>
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
