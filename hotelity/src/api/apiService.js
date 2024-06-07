@@ -16,6 +16,97 @@ export const reissue = async () => {
 
 
 
+/* 대시보드 */
+/* 오늘 예약 분석 */
+export const getTodayReservationAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/reservations/daily');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching today reservation analysis:', e);
+        throw e;
+    }
+}
+
+/* 오늘 결제 분석 */
+export const getTodayPaymentAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/payments/daily');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching today payment analysis:', e);
+        throw e;
+    }
+}
+
+/* 이번달, 지난달, 작년의 이번달의 예약 */
+export const getMonthlyReservationsAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/reservations/monthly');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching monthly analysis:', e);
+        throw e;
+    }
+}
+
+/* 이번달, 지난달, 작년의 이번달의 결제 */
+export const getMonthlyPaymentsAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/payments/monthly');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching monthly payments analysis:', e);
+        throw e;
+    }
+}
+
+/* 올해, 지난해의 예약 */
+export const getYearlyReservationsAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/reservations/yearly');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching yearly reservations analysis:', e);
+        throw e;
+    }
+}
+
+/* 올해, 지난해의 결제 */
+export const getYearlyPaymentsAnalysis = async () => {
+    try {
+        const response = await apiClient.get('/chat/payments/yearly');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching yearly payments analysis:', e);
+        throw e;
+    }
+}
+
+/* 오늘 공지 */
+export const getTodayNotice = async () => {
+    try {
+        const response = await apiClient.get('/chat/notices/daily');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching today notice:', e);
+        throw e;
+    }
+}
+
+/* 오늘 VOC */
+export const getTodayVoc = async () => {
+    try {
+        const response = await apiClient.get('/chat/vocs/daily');
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching today voc:', e);
+        throw e;
+    }
+}
+
+
+
 /* 고객 */
 /* 고객 리스트 */
 export const getCustomers = async (params) => {
