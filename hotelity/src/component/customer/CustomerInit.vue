@@ -2,16 +2,8 @@
 
 import {useRouter} from 'vue-router';
 
-import {ref, onMounted} from 'vue';
+import {onMounted, ref} from 'vue';
 import * as api from '@/api/apiService.js';
-
-function navigateToCustomerList() {
-  router.push('/customerList');
-}
-
-function navigateToCustomerInit() {
-  router.push('/');
-}
 
 const router = useRouter();
 
@@ -50,19 +42,21 @@ async function handleSubmit() {
     const response = await api.createCustomer(form.value);
     console.log(response);
     window.alert(response.data.content); // 상태 체크 팝업 창
-    navigateToCustomerList();
+    router.back();
   } catch (error) {
     console.error(error);
     window.alert(error); // 상태 체크 팝업 창
     form.value = JSON.parse(JSON.stringify(initialFormState)); // form 객체를 초기 상태로 재설정
-    navigateToCustomerInit();
+    router.back();
   }
 }
 
 async function nationList() {
   try {
-    const response = await api.getNations();
-    return response;
+    return api.getNations().then(response => {
+      isLoading.value = false;
+      return response;
+    });
   } catch (error) {
     console.error(error);
   }
@@ -70,23 +64,7 @@ async function nationList() {
 
 onMounted(async () => {
   countries.value = await nationList();
-
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
-
-  fetchData().then(() => {
-    isLoading.value = false;
-  });
 });
-
-function fetchData() {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-}
 </script>
 
 <template>
@@ -149,8 +127,8 @@ function fetchData() {
             <div class="third">
               <label for="gender">성별:</label>
               <select id="gender" v-model="form.customerGender">
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
+                <option value="남">남</option>
+                <option value="여">여</option>
               </select>
             </div>
             <div class="third">
