@@ -298,7 +298,7 @@ const routes = [
         },
     },
     {
-        path: '/vocSelect',
+        path: '/vocSelect/:id',
         name: 'VocSelect',
         component: VocSelect,
         meta: {
