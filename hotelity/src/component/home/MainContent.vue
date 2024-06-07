@@ -21,7 +21,7 @@
         <button @click="fetchPaymentYearlyData">Year</button>
       </div>
       <div class="data-display">
-        <pre v-if="paymentData">{{ paymentData.data }}</pre>
+        <pre v-if="paymentData" class="data-content">{{ paymentData.data }}</pre>
         <p v-else style="height: 120px;">AI 비서를 통해 결제 통계를 확인하세요</p>
       </div>
     </div>
@@ -33,7 +33,7 @@
         <button @click="fetchVocData">VOC</button>
       </div>
       <div class="data-display">
-        <pre v-if="noticeVocData">{{ noticeVocData.data }}</pre>
+        <pre v-if="noticeVocData" class="data-content">{{ noticeVocData.data }}</pre>
         <p v-else style="height: 120px;">AI 비서를 통해 VOC, 공지를 확인하세요</p>
       </div>
     </div>
