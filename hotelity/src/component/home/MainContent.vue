@@ -51,8 +51,8 @@
   </template>
   
   <script>
-  import axios from 'axios';
-  
+  import * as api from '@/api/apiService';
+
   export default {
     data() {
       return {
@@ -64,64 +64,56 @@
     methods: {
       async fetchReservationDailyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/reservations/daily');
-          this.reservationData = response.data;
+          this.reservationData = await api.getTodayReservationAnalysis();
         } catch (error) {
           console.error("Error fetching daily data:", error);
         }
       },
       async fetchReservationMonthlyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/reservations/monthly');
-          this.reservationData = response.data;
+          this.reservationData = await api.getMonthlyReservationsAnalysis();
         } catch (error) {
           console.error("Error fetching monthly data:", error);
         }
       },
       async fetchReservationYearlyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/reservations/yearly');
-          this.reservationData = response.data;
+          this.reservationData = await api.getYearlyReservationsAnalysis();
         } catch (error) {
           console.error("Error fetching yearly data:", error);
         }
       },
     async fetchPaymentDailyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/payments/daily');
-          this.paymentData = response.data;
+          this.paymentData = await api.getTodayPaymentAnalysis();
         } catch (error) {
           console.error("Error fetching daily data:", error);
         }
       },
       async fetchPaymentMonthlyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/payments/monthly');
-          this.paymentData = response.data;
+          this.paymentData = await api.getMonthlyPaymentsAnalysis();
         } catch (error) {
           console.error("Error fetching monthly data:", error);
         }
       },
       async fetchPaymentYearlyData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/payments/yearly');
-          this.paymentData = response.data;
+          this.paymentData = await api.getYearlyPaymentsAnalysis();
         } catch (error) {
           console.error("Error fetching yearly data:", error);
         }
       },
       async fetchNoticeData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/notices/daily');
-          this.noticeVocData = response.data;
+          this.noticeVocData = await api.getTodayNotice();
         } catch (error) {
           console.error("Error fetching yearly data:", error);
         }
       },
       async fetchVocData() {
         try {
-          const response = await axios.get('http://localhost:8888/chat/vocs/daily');
-          this.noticeVocData = response.data;
+          this.noticeVocData = await api.getTodayVoc();
         } catch (error) {
           console.error("Error fetching yearly data:", error);
         }
