@@ -106,7 +106,7 @@
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 0 }"></i>
               </th>
-              <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 예정일
+              <th scope="col" @click="sort('reservationCheckoutDate')">체크아웃 예정일
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill"
                    :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 0 }"></i>
@@ -278,7 +278,7 @@ async function fetchDailyStay(dateString) {
 }
 
 async function updateDate(date) {
-  selectedStayCheckinDate.value = date;
+  selectedStayCheckoutDate.value = date;
   const response = await fetchDailyStay(formatDate(date));
   if (response) {
     stays.value = response; // Update the stays array with the response
