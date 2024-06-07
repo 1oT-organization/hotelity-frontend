@@ -16,6 +16,11 @@ const showPopup = ref(false);
 const popupMessage = ref('');
 
 const checkout = async () => {
+  if (props.checkedRows.length !== props.stays.length) {
+    console.error('checkedRows and stays arrays have different lengths');
+    return;
+  }
+
   for (let i = 0; i < props.checkedRows.length; i++) {
     if (props.checkedRows[i]) {
       const stayCodePk = props.stays[i].stayCodePk;

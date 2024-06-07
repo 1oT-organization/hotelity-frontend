@@ -157,6 +157,7 @@
   .data-content {
   width: 100%; /* 가로 길이 고정 */
   text-wrap: balance;
+  font-family: LINESeedKR-Bd;
 }
 
 .dashboard4 {

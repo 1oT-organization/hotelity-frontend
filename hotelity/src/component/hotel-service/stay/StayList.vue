@@ -54,10 +54,10 @@
         <!-- calendar container -->
         <div class="calendar-container" v-show="isCalendarContainerVisible">
           <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedStayCheckinDate" @update:modelValue="updateDate($event)"
+            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="updateDate($event)"
                         format="yyyy-MM-dd"
                         style="width: 130px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
-                        placeholder="체크인 일자"></DatePicker>
+                        placeholder="체크아웃 일자"></DatePicker>
           </div>
           <!--          <div class="btn-group me-2">-->
           <!--            <DatePicker :modelValue="selectedStayCheckoutDate" @update:modelValue="selectedStayCheckoutDate = $event" format="yyyy-MM-dd"-->
@@ -78,7 +78,7 @@
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 0 }"></i>
               </th>
-              <th scope="col" @click="sort('customerName')">한글 이름
+              <th scope="col" @click="sort('customerName')">고객 명
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
               </th>
@@ -98,10 +98,6 @@
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 0 }"></i>
               </th>
-              <th scope="col" @click="sort('roomCapacity')">객실 수용 인원
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomCapacity' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomCapacity' && sortBy === 0 }"></i>
-              </th>
               <th scope="col" @click="sort('stayPeopleCount')">투숙 인원
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 0 }"></i>
@@ -109,6 +105,11 @@
               <th scope="col" @click="sort('stayCheckinTime')">체크인 일자
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 0 }"></i>
+              </th>
+              <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 예정일
+                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 1 }"></i>
+                <i class="bi bi-caret-down-fill"
+                   :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 0 }"></i>
               </th>
               <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 일자
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 1 }"></i>
@@ -119,19 +120,11 @@
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 0 }"></i>
               </th>
-              <th scope="col" @click="sort('employeeCodeFk')">담당 직원 코드
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeCodeFk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'employeeCodeFk' && sortBy === 0 }"></i>
-              </th>
               <th scope="col" @click="sort('branchCodeFk')">지점 코드
                 <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
                 <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
               </th>
-              <th scope="col" @click="sort('reservationCodeFk')">예약 코드
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill"
-                   :class="{ active: orderBy === 'reservationCodeFk' && sortBy === 0 }"></i>
-              </th>
+
             </tr>
             </thead>
             <tbody>
@@ -143,14 +136,12 @@
               <td>{{ stay.roomNumber }}</td>
               <td>{{ stay.roomName }}</td>
               <td>{{ stay.roomLevelName }}</td>
-              <td>{{ stay.roomCapacity }}</td>
               <td>{{ stay.stayPeopleCount }}</td>
               <td>{{ formatDate(stay.stayCheckinTime) }}</td>
+              <td>{{ formatDate(stay.reservationCheckoutDate) }}</td>
               <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
               <td>{{ stay.stayPeriod }}</td>
-              <td>{{ stay.employeeCodeFk }}</td>
               <td>{{ stay.branchCodeFk }}</td>
-              <td>{{ stay.reservationCodeFk }}</td>
             </tr>
 
             <tr v-else v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
@@ -161,14 +152,12 @@
               <td>{{ stay.roomNumber }}</td>
               <td>{{ stay.roomName }}</td>
               <td>{{ stay.roomLevelName }}</td>
-              <td>{{ stay.roomCapacity }}</td>
               <td>{{ stay.stayPeopleCount }}</td>
               <td>{{ formatDate(stay.stayCheckinTime) }}</td>
+              <td>{{ formatDate(stay.reservationCheckoutDate) }}</td>
               <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
               <td>{{ stay.stayPeriod }}</td>
-              <td>{{ stay.employeeCodeFk }}</td>
               <td>{{ stay.branchCodeFk }}</td>
-              <td>{{ stay.reservationCodeFk }}</td>
             </tr>
             </tbody>
           </table>
@@ -234,6 +223,7 @@ const defaultParams = {
   stayPeopleCount: null,
   stayCheckinTime: null,
   stayCheckoutTime: null,
+  reservationCheckoutDate: null,
   stayPeriod: null,
   employeeCodeFk: null,
   PICEmployeeName: null,
@@ -275,7 +265,7 @@ async function fetchData(params) {
   }
 }
 
-// datePicker의 체크인 일자 선택 실행
+// datePicker의 체크아웃 일자 선택 실행
 async function fetchDailyStay(dateString) {
   try {
     const response = await api.getDailyStays(dateString);
