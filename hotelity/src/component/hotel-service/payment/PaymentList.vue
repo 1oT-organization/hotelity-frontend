@@ -267,6 +267,11 @@ onMounted(() => {
                   <i class="bi bi-caret-down-fill"
                      :class="{ active: orderBy === 'paymentCodePk' && sortBy === 1 }"></i>
                 </th>
+                <th scope="col" @click="sort('customerCodeFk')">고객코드
+                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodeFk' && sortBy === 0 }"></i>
+                  <i class="bi bi-caret-down-fill"
+                     :class="{ active: orderBy === 'customerCodeFk' && sortBy === 1 }"></i>
+                </th>
                 <th scope="col" @click="sort('customerName')">고객
                   <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
                   <i class="bi bi-caret-down-fill"
@@ -313,6 +318,7 @@ onMounted(() => {
               <tr v-for="payment in payments.content" :key="payments.paymentCodePk"
                   @click=navigateToCustomer(payment.paymentCodePk)>
                 <td>{{ payment.paymentCodePk }}</td>
+                <td>{{ payment.customerCodeFk }}</td>
                 <td>{{ payment.customerName }}</td>
                 <td>{{ payment.paymentAmount }}</td>
                 <td>{{
