@@ -191,7 +191,7 @@
 
   .nav-container .navbar .dropdown-item:hover,
   .nav-container .navbar .dropdown-item.active {
-    background: var(--dark);
+    background: var(--secondary);
   }
 
   .nav-container .navbar .dropdown-toggle::after {
