@@ -37,7 +37,7 @@
 #spinner.show {
     transition: opacity .5s ease-out, visibility 0s linear 0s;
     visibility: visible;
-    opacity: 1;
+    opacity: 0.5;
 }
 
 
@@ -92,6 +92,7 @@
     min-height: 100vh;
     background: var(--dark);
     transition: 0.5s;
+    background: var(--secondary);
 }
 
 @media (min-width: 992px) {
@@ -314,4 +315,8 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+}
+
+.c-pointer {
+    cursor: pointer;
 }
