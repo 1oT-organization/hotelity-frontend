@@ -267,12 +267,11 @@ export const downloadEmployeeExcel = async (params) => {
 /* 직원 이미지 업로드 */
 export const uploadEmployeeImage = async (employeeId, formData) => {
     try {
-        const response = await apiClient.post(`/employees/${employeeId}/image`, formData, {
+        return await apiClient.post(`/employees/${employeeId}/image`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        return response.data;
     } catch (e) {
         console.error('Error uploading employee image:', e);
         throw e;

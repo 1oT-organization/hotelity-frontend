@@ -3,10 +3,6 @@ import {ref, watch, onMounted} from 'vue';
 import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 onMounted(() => {
   // Initialize datepicker
   $("#payment-date").datepicker({
@@ -310,8 +306,7 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="payment in payments.content" :key="payments.paymentCodePk"
-                  @click=navigateToCustomer(payment.paymentCodePk)>
+              <tr v-for="payment in payments.content" :key="payments.paymentCodePk">
                 <td>{{ payment.paymentCodePk }}</td>
                 <td>{{ payment.customerName }}</td>
                 <td>{{ payment.paymentAmount }}</td>
