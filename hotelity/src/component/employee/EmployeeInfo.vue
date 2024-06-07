@@ -89,7 +89,8 @@ async function fetchEmployeeData(employeeCodePk) {
     Object.assign(employee, response);
 
     if (data.employeeProfileImageLink) {
-      const imgElement = document.querySelector(".photo img");
+      // const imgElement = document.querySelector(".photo img");
+      const imgElement = document.querySelector(".img-fluid.rounded-circle");
       imgElement.setAttribute('src', data.employeeProfileImageLink);
     }
 
@@ -120,7 +121,7 @@ onMounted(() => {
 
     <!-- Content Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="rounded-top p-4">
         <div class="employee-info">
           <h2>직원 정보</h2>
 
@@ -129,16 +130,62 @@ onMounted(() => {
             <button @click="deleteEmployee">직원 정보 삭제</button>
           </div>
 
-          <div class="employee-details">
+          <div class="image-upload">
+            <input type="file" @change="uploadImage">
+<!--            <button>이미지 업로드</button>-->
+          </div>
+
+          <div class="col-sm-12">
+            <div class="rounded h-100 p-4">
+              <div class="testimonial-item text-center">
+                <img class="img-fluid rounded-circle mx-auto mb-4" src="../../assets/img/icon-user.png"
+                     style="width: 20%; height: 20%;" alt="">
+                <h5 class="mb-1">{{ employee.employeeName }}</h5>
+                <p>{{ employee.nameOfPosition + " / " + employee.nameOfRank }}</p>
+                <p>{{ employee.nameOfBranch + " " + employee.nameOfDepartment }}</p>
+<!--                <p class="mb-0">Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod-->
+<!--                  eos labore diam</p>-->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="rounded h-100 p-4">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th scope="col">사원번호</th>
+                    <th scope="col">내선번호</th>
+                    <th scope="col">전화번호</th>
+                    <th scope="col">이메일</th>
+                    <th scope="col">주소</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>{{ employee.employeeCodePk }}</td>
+                    <td>{{ employee.employeeOfficePhoneNumber }}</td>
+                    <td>{{ employee.employeePhoneNumber }}</td>
+                    <td>{{ employee.employeeEmail }}</td>
+                    <td>{{ employee.employeeAddress }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="employee-details" style="display: none">
             <div class="photo">
 <!--              <img :src="employee.employeeProfileImageLink" alt="Employee Photo"/>-->
               <img src="../../assets/img/icon-user.png" alt="Employee Photo"/>
             </div>
 
-            <div class="image-upload">
-              <input type="file" @change="uploadImage">
-              <button>이미지 업로드</button>
-            </div>
+<!--            <div class="image-upload">-->
+<!--              <input type="file" @change="uploadImage">-->
+<!--              <button>이미지 업로드</button>-->
+<!--            </div>-->
 
             <div class="details">
               <div class="form-group">
@@ -218,118 +265,123 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.form-group .half {
-  display: inline-block;
-  width: calc(50% - 10px);
-}
+  .image-upload {
+    display: table-caption;
+  }
 
-.form-group .half:first-child {
-  margin-right: 10px;
-}
+  .form-group .half {
+    display: inline-block;
+    width: calc(50% - 10px);
+  }
 
-.form-group .third {
-  display: inline-block;
-  width: calc(33% - 10px);
-}
+  .form-group .half:first-child {
+    margin-right: 10px;
+  }
 
-.form-group .third:first-child {
-  margin-right: 10px;
-}
+  .form-group .third {
+    display: inline-block;
+    width: calc(33% - 10px);
+  }
 
-.employee-info {
-  width: 100%;
-  margin: 0 auto;
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+  .form-group .third:first-child {
+    margin-right: 10px;
+  }
 
-.employee-details {
-  display: flex;
-  gap: 15%;
-}
+  .employee-info {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
-/*
-.details {
-  display: flex;
-}
-*/
+  .employee-details {
+    display: flex;
+    gap: 15%;
+  }
 
-.row {
-  display: flex;
-  margin-bottom: 30px;
-}
+  /*
+  .details {
+    display: flex;
+  }
+  */
 
-.row label {
-  width: 100px;
-  font-weight: bold;
-  flex-shrink: 0;
-}
+  .row {
+    display: flex;
+    margin-bottom: 30px;
+  }
 
-.photo {
-  margin-top: 5%;
-  flex-shrink: 0;
-}
+  .row label {
+    width: 100px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
 
-.photo img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+  .photo {
+    margin-top: 5%;
+    flex-shrink: 0;
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
+  .photo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-table th, table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
 
-table th {
-  background-color: #f2f2f2;
-}
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
 
-.dropdown-icon {
-  transition: transform 0.5s;
-}
+  table th {
+    background-color: #f2f2f2;
+  }
 
-.filter-container {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 500px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 10px;
-}
+  .dropdown-icon {
+    transition: transform 0.5s;
+  }
 
-.filter-container::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
-}
+  .filter-container {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: 500px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 10px;
+  }
 
-.position-relative-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
+  .filter-container::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+  }
 
-.emoji {
-  margin-right: 10px;
-}
+  .position-relative-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .emoji {
+    margin-right: 10px;
+  }
+
 </style>
