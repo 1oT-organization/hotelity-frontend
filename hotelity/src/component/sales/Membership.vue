@@ -5,10 +5,6 @@ import router from '@/router/router.js';
 import * as api from '@/api/apiService.js'
 import {getMemberships} from "@/api/apiService.js";
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 const isLoading = ref(true);
 const memberships = ref([]);
 const currentPage = ref(1);

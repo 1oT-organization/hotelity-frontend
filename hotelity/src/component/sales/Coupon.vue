@@ -3,10 +3,6 @@ import {ref, watch, onMounted} from 'vue';
 import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 const isLoading = ref(true);
 const coupons = ref([]);
 const currentPage = ref(1);

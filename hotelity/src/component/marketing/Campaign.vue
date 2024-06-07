@@ -4,10 +4,6 @@ import {ref, watch, onMounted} from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js'
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 onMounted(() => {
   // Initialize datepicker
   $("#campaign-date").datepicker({

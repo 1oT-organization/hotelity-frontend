@@ -16,7 +16,7 @@
         <div id="employee" class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee, $event)">직원</div>
         <div id="hotelService" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService, $event)">호텔 서비스</div>
         <div id="hotelManagement" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement, $event)">호텔 관리</div>
-        <div id="marketing" class="nav-item nav-link" @click="navigateTo(destination.marketing, $event)">마케팅</div>
+<!--        <div id="marketing" class="nav-item nav-link" @click="navigateTo(destination.marketing, $event)">마케팅</div>-->
         <div id="sales" class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales, $event)">영업관리</div>
 
       </div>
@@ -29,7 +29,7 @@
             <span class="d-none d-lg-inline-flex">{{ userInfo ? userInfo.employeeName : ""}}</span>
             <i class="bi bi-caret-down-fill dropdown-icon" style="background: none"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+          <div class="dropdown-menu dropdown-menu-end border-0 rounded-0 rounded-bottom m-0">
             <div @click="navigateToEmployeeInfo" class="dropdown-item">My Profile</div>
             <div @click="signOut" class="dropdown-item">Log Out</div>
           </div>
@@ -191,7 +191,7 @@
 
   .nav-container .navbar .dropdown-item:hover,
   .nav-container .navbar .dropdown-item.active {
-    background: var(--dark);
+    background: var(--secondary);
   }
 
   .nav-container .navbar .dropdown-toggle::after {

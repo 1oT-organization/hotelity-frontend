@@ -4,10 +4,6 @@ import * as api from '@/api/apiService.js'
 
 import router from '@/router/router.js';
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 function openRoomDetails(roomCodePk) {
   console.log('roomCodePk:', roomCodePk);
   const url = `/roomDetails/${roomCodePk}`;

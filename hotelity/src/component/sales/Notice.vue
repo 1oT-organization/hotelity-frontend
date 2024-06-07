@@ -4,8 +4,7 @@ import * as api from '@/api/apiService.js'
 import router from '@/router/router.js';
 import {getNotices} from "@/api/apiService.js";
 
-function navigateToCustomer(id) {
-  // router.push(`/customer/${id}`);
+function navigateToNoticeDetail(id) {
   router.push(`/noticeInfo/${id}`);
 }
 
@@ -202,7 +201,7 @@ onMounted(() => {
               </thead>
               <tbody>
               <tr v-for="notice in notices.content" :key="notice.noticeCodePk"
-                  @click=navigateToCustomer(notice.noticeCodePk)>
+                  @click=navigateToNoticeDetail(notice.noticeCodePk)>
                 <td>{{ notice.noticeCodePk }}</td>
                 <td>{{ notice.noticeTitle }}</td>
                 <td>{{ notice.branchCodeFk }}</td>

@@ -4,10 +4,6 @@ import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
 import {downloadFacilityExcel} from "@/api/apiService.js";
 
-function navigateToCustomer(id) {
-  router.push(`/customer/${id}`);
-}
-
 const isLoading = ref(true);
 const ancillaries = ref([]);
 const currentPage = ref(1);
@@ -258,8 +254,7 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk"
-                  @click=navigateToCustomer(ancillary.ancillaryCodePk)>
+              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk">
                 <td>{{ ancillary.ancillaryCodePk }}</td>
                 <td>{{ ancillary.ancillaryCategoryName }}</td>
                 <td>{{ ancillary.branchName }}</td>

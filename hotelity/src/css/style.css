@@ -92,6 +92,7 @@
     min-height: 100vh;
     background: var(--dark);
     transition: 0.5s;
+    background: var(--secondary);
 }
 
 @media (min-width: 992px) {

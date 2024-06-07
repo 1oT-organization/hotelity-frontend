@@ -237,8 +237,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/employees/page', {params});
-    // console.log(response.data);
     const response = await api.getEmployees(params);
     totalPages.value = response.data.totalPagesCount;
     console.log(response);
@@ -251,10 +249,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/employees/excel', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadEmployeeExcel(defaultParams);
 
     const url = window.URL.createObjectURL(new Blob([response]));
