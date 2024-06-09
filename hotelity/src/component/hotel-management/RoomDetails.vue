@@ -64,7 +64,8 @@
 <script setup>
 import {ref, onMounted, computed} from 'vue';
 import {useRoute} from 'vue-router';
-import axios from 'axios';
+import * as api from '@/api/apiService.js';
+// import axios from 'axios';
 
 const route = useRoute();
 const room = ref({
@@ -100,7 +101,8 @@ const filledRoomImageUrls = computed(() => {
 const deleteRoom = async (roomCodePk) => {
   if (confirm('해당 객실을 정말 삭제하시겠습니까?')) {
     try {
-      await axios.delete(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
+      // await axios.delete(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
+      await api.deleteRoom(roomCodePk);
     } catch (error) {
       console.error('Error deleting branch:', error);
     }
@@ -117,8 +119,9 @@ onMounted(async () => {
   console.log('roomCodePk', roomCodePk);
   console.log('route.params', route.params);
   try {
-    const response = await axios.get(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
-    room.value = response.data.data.content;
+    // const response = await axios.get(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
+    const response = await api.getRoom(roomCodePk);
+    room.value = response.data.content;
     console.log('room.value', room.value);
     roomImageUrls.value = room.value.roomImageDTOList;
     console.log('roomImageUrls', roomImageUrls.value);
