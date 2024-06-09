@@ -31,7 +31,6 @@ const checkIn = async () => {
     };
 
     try {
-      // await axios.post('http://localhost:8888/hotel-service/stays/checkin',
       await api.createStay(stayInfo);
       showPopup.value = true;
       popupMessage.value = '체크인 되었습니다';
