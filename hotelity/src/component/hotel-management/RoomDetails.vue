@@ -121,7 +121,7 @@ onMounted(async () => {
   try {
     // const response = await axios.get(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
     const response = await api.getRoom(roomCodePk);
-    room.value = response.data.data.content;
+    room.value = response.data.content;
     console.log('room.value', room.value);
     roomImageUrls.value = room.value.roomImageDTOList;
     console.log('roomImageUrls', roomImageUrls.value);
