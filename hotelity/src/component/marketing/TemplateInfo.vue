@@ -47,7 +47,7 @@ onMounted(async () => {
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
         <h3 class="mb-4">템플릿 정보</h3>
         <div class="form-submit">
           <form @submit.prevent="handleSubmit">
