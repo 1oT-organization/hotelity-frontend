@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: vue001ser
+  name: vue001-service
+  namespace: default  # 네임스페이스가 동일한지 확인
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 80
-      protocol: TCP
-    - port: 443
-      targetPort: 443
-      protocol: TCP
   selector:
     app: vue001kube
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+  type: LoadBalancer  # 또는 NodePort
