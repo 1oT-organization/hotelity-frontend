@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vue001dep
-  namespace: default  # 네임스페이스가 지정되어 있는지 확인
 spec:
   replicas: 2  # 원하는 경우 복제본 수를 지정
   selector:
