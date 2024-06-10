@@ -51,16 +51,6 @@
             <p v-else style="height: 120px;">AI 비서를 통해 VOC, 공지를 확인하세요</p>
           </div>
         </div>
-
-        <div class="dashboard dashboard4">
-          <button class="guide-download">GUIDE DOWNLOAD</button>
-          <div class="footer-info">
-            <p class="system-support">시스템 지원 : 1oT</p>
-            <p>Number : 010-9874-3010</p>
-            <p>Email : 1ot@gmail.com</p>
-            <p>Address : 서울특별시 동작구 보라매로 87 </p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -183,7 +173,8 @@ export default {
 }
 
 .chart-container {
-  width: 48%;
+  width: 100%;
+  max-width: 600px;
 }
 
 .dashboard-container {
@@ -201,7 +192,7 @@ export default {
 }
 
 .dashboard4 {
-  flex: 1 1 calc(100% - 20px);
+  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,7 +222,7 @@ button {
 }
 
 .data-content {
-  width: 100%; /* 가로 길이 고정 */
+  width: 100%;
   text-wrap: balance;
   font-family: LINESeedKR-Bd;
 }
@@ -250,5 +241,16 @@ button {
 
 .footer-info {
   text-align: center;
+}
+
+@media (max-width: 1200px) {
+  .dashboard {
+    flex: 1 1 calc(100% - 20px);
+  }
+
+  .chart-container {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 </style>

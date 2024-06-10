@@ -28,8 +28,9 @@ onMounted(async () => {
       <div class="row g-4">
         <BarChart/>
         <PieChart/>
+        <MainContent/>
       </div>
-      <MainContent/>
+
     </div>
   </div>
 </template>
