@@ -73,58 +73,51 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col">체크아웃</th>
-              <th scope="col" @click="sort('stayCodePk')">투숙 코드
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCodePk' && sortBy === 0 }"></i>
+              <th scope="col" style="width: 80px;">체크아웃</th>
+              <th scope="col" @click="sort('stayCodePk')"
+                  :class="{ 'active-asc': orderBy === 'stayCodePk' && sortBy === 0, 'active-desc': orderBy === 'stayCodePk' && sortBy === 1}" style="width: 80px;">
+                투숙 코드
               </th>
-              <th scope="col" @click="sort('customerName')">고객 명
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('customerName')"
+                  :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1}" style="width: 80px;">
+                이름
               </th>
-              <th scope="col" @click="sort('roomCodeFk')">객실 코드
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomCodeFk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomCodeFk' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('roomCodeFk')"
+                  :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1}" style="width: 80px;">
+                객실코드
               </th>
-              <th scope="col" @click="sort('roomNumber')">객실 호수
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomNumber' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomNumber' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('roomNumber')"
+                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}" style="width: 80px;">
+                객실번호
               </th>
-              <th scope="col" @click="sort('roomName')">객실명
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomName' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomName' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('roomName')"
+                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}" style="width: 80px;">
+                객실명
               </th>
-              <th scope="col" @click="sort('roomLevelName')">객실 등급
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'roomLevelName' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('roomLevelName')"
+                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1}" style="width: 80px;">
+                객실등급명
               </th>
-              <th scope="col" @click="sort('stayPeopleCount')">투숙 인원
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeopleCount' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('stayPeopleCount')"
+                  :class="{ 'active-asc': orderBy === 'stayPeopleCount' && sortBy === 0, 'active-desc': orderBy === 'stayPeopleCount' && sortBy === 1}" style="width: 80px;">
+                투숙인원
               </th>
-              <th scope="col" @click="sort('stayCheckinTime')">체크인 일자
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayCheckinTime' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('stayCheckinTime')"
+                  :class="{ 'active-asc': orderBy === 'stayCheckinTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckinTime' && sortBy === 1}" style="width: 80px;">
+                체크인 일자
               </th>
-              <th scope="col" @click="sort('reservationCheckoutDate')">체크아웃 예정일
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill"
-                   :class="{ active: orderBy === 'reservationCheckoutDate' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('reservationCheckoutDate')"
+                  :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1}" style="width: 80px;">
+                체크아웃 예정일
               </th>
-              <th scope="col" @click="sort('stayCheckoutTime')">체크아웃 일자
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill"
-                   :class="{ active: orderBy === 'stayCheckoutTime' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('stayCheckoutTime')"
+                  :class="{ 'active-asc': orderBy === 'stayCheckoutTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckoutTime' && sortBy === 1}" style="width: 80px;">
+                체크아웃 일자
               </th>
-              <th scope="col" @click="sort('stayPeriod')">숙박 일수
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'stayPeriod' && sortBy === 0 }"></i>
+              <th scope="col" @click="sort('stayPeriod')"
+                  :class="{ 'active-asc': orderBy === 'stayPeriod' && sortBy === 0, 'active-desc': orderBy === 'stayPeriod' && sortBy === 1}" style="width: 80px;">
+                숙박일수
               </th>
-              <th scope="col" @click="sort('branchCodeFk')">지점 코드
-                <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
-                <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
-              </th>
-
             </tr>
             </thead>
             <tbody>
@@ -141,7 +134,6 @@
               <td>{{ formatDate(stay.reservationCheckoutDate) }}</td>
               <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
               <td>{{ stay.stayPeriod }}</td>
-              <td>{{ stay.branchCodeFk }}</td>
             </tr>
 
             <tr v-else v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
@@ -157,7 +149,6 @@
               <td>{{ formatDate(stay.reservationCheckoutDate) }}</td>
               <td>{{ formatDate(stay.stayCheckoutTime) }}</td>
               <td>{{ stay.stayPeriod }}</td>
-              <td>{{ stay.branchCodeFk }}</td>
             </tr>
             </tbody>
           </table>
@@ -528,5 +519,26 @@ function formatDateTime(date) {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
+}
+
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

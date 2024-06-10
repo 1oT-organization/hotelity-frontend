@@ -263,50 +263,37 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('paymentCodePk')">결제내역코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentCodePk' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentCodePk')"
+                    :class="{ 'active-asc': orderBy === 'paymentCodePk' && sortBy === 0, 'active-desc': orderBy === 'paymentCodePk' && sortBy === 1}" style="width: 80px;">
+                  결제내역코드
                 </th>
-                <th scope="col" @click="sort('customerCodeFk')">고객코드
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodeFk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerCodeFk' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerCodeFk')"
+                    :class="{ 'active-asc': orderBy === 'customerCodeFk' && sortBy === 0, 'active-desc': orderBy === 'customerCodeFk' && sortBy === 1}" style="width: 80px;">
+                  고객코드
                 </th>
-                <th scope="col" @click="sort('customerName')">고객
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerName')"
+                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1}" style="width: 80px;">
+                  고객명
                 </th>
-                <th scope="col" @click="sort('paymentAmount')">결제 금액
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'paymentAmount' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentAmount' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentAmount')"
+                    :class="{ 'active-asc': orderBy === 'paymentAmount' && sortBy === 0, 'active-desc': orderBy === 'paymentAmount' && sortBy === 1}" style="width: 80px;">
+                  결제금액
                 </th>
-                <th scope="col" @click="sort('paymentDate')">결제 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentDate' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentDate')"
+                    :class="{ 'active-asc': orderBy === 'paymentDate' && sortBy === 0, 'active-desc': orderBy === 'paymentDate' && sortBy === 1}" style="width: 80px;">
+                  결제일자
                 </th>
-                <th scope="col" @click="sort('paymentMethod')">결제 수단
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentMethod' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentMethod' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentMethod')"
+                    :class="{ 'active-asc': orderBy === 'paymentMethod' && sortBy === 0, 'active-desc': orderBy === 'paymentMethod' && sortBy === 1}" style="width: 80px;">
+                  결제수단
                 </th>
-                <th scope="col" @click="sort('paymentTypeName')">결제 종류
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentTypeName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentTypeName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentTypeName')"
+                    :class="{ 'active-asc': orderBy === 'paymentTypeName' && sortBy === 0, 'active-desc': orderBy === 'paymentTypeName' && sortBy === 1}" style="width: 80px;">
+                  결제종류
                 </th>
-                <th scope="col" @click="sort('paymentCancelStatus')">결제 취소 여부
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentCancelStatus' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentCancelStatus' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('paymentCancelStatus')"
+                    :class="{ 'active-asc': orderBy === 'paymentCancelStatus' && sortBy === 0, 'active-desc': orderBy === 'paymentCancelStatus' && sortBy === 1}" style="width: 80px;">
+                  결제취소여부
                 </th>
               </tr>
               </thead>
@@ -457,5 +444,26 @@ tr {
 
 .bi-caret-up-fill, .bi-caret-down-fill {
   visibility: visible;
+}
+
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>
