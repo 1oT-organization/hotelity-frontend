@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
 import router from '@/router/router.js';
 
@@ -46,7 +46,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('couponIssueCodePk');  // default sorting by customerCodePk
+const orderBy = ref('couponIssueCodePk');  // default sorting by couponIssueCodePk
 
 const defaultParams = {
   couponIssueCodePk: null,
@@ -67,7 +67,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', {params});
+    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', { params });
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -255,52 +255,17 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('couponIssueCodePk')">쿠폰 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponIssueCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponIssueCodePk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponName')">쿠폰 이름
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'couponName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('customerName')">고객
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponDiscountRate')">쿠폰 할인율
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponIssueDate')">쿠폰 발급 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponIssueDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponIssueDate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponExpireDate')">쿠폰 만료 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponExpireDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponExpireDate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponUseDate')">쿠폰 사용 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponUseDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponUseDate' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('couponIssueCodePk')" :class="{ 'active-asc': orderBy === 'couponIssueCodePk' && sortBy === 0, 'active-desc': orderBy === 'couponIssueCodePk' && sortBy === 1 }">쿠폰 코드</th>
+                <th scope="col" @click="sort('couponName')" :class="{ 'active-asc': orderBy === 'couponName' && sortBy === 0, 'active-desc': orderBy === 'couponName' && sortBy === 1 }">쿠폰 이름</th>
+                <th scope="col" @click="sort('customerName')" :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">고객</th>
+                <th scope="col" @click="sort('couponDiscountRate')" :class="{ 'active-asc': orderBy === 'couponDiscountRate' && sortBy === 0, 'active-desc': orderBy === 'couponDiscountRate' && sortBy === 1 }">쿠폰 할인율</th>
+                <th scope="col" @click="sort('couponIssueDate')" :class="{ 'active-asc': orderBy === 'couponIssueDate' && sortBy === 0, 'active-desc': orderBy === 'couponIssueDate' && sortBy === 1 }">쿠폰 발급 일자</th>
+                <th scope="col" @click="sort('couponExpireDate')" :class="{ 'active-asc': orderBy === 'couponExpireDate' && sortBy === 0, 'active-desc': orderBy === 'couponExpireDate' && sortBy === 1 }">쿠폰 만료 일자</th>
+                <th scope="col" @click="sort('couponUseDate')" :class="{ 'active-asc': orderBy === 'couponUseDate' && sortBy === 0, 'active-desc': orderBy === 'couponUseDate' && sortBy === 1 }">쿠폰 사용 일자</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="couponIssue in couponIssues.content" :key="couponIssue.couponIssueCodePk"
-                  @click=navigateToCustomer(couponIssue.couponIssueCodePk)>
+              <tr v-for="couponIssue in couponIssues.content" :key="couponIssue.couponIssueCodePk" @click=navigateToCustomer(couponIssue.couponIssueCodePk)>
                 <td>{{ couponIssue.couponIssueCodePk }}</td>
                 <td>{{ couponIssue.couponName }}</td>
                 <td>{{ couponIssue.customerName }}</td>
@@ -340,10 +305,7 @@ onMounted(() => {
           <!-- 페이징 컨트롤 -->
           <div class="pagination">
             <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+            <button v-for="page in pageSize" :key="page" @click="changePage((pageGroup - 1) * pageSize + page)" :disabled="(pageGroup - 1) * pageSize + page > totalPages" :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
               {{ (pageGroup - 1) * pageSize + page }}
             </button>
             <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
@@ -354,74 +316,8 @@ onMounted(() => {
     <!-- Table End -->
   </div>
   <!-- Content End -->
-
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
 
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-
-.dropdown-icon {
-  transition: transform 0.5s;
-}
-
-tr {
-  cursor: pointer;
-}
-
-.filter-container {
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 500px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 10px;
-}
-
-.filter-container::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
-}
-
-.position-relative-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
-
-.emoji {
-  margin-right: 10px;
-}
-
-.selected {
-  background-color: rgba(255, 170, 0, 0.38);
-  color: black;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
-}
-</style>

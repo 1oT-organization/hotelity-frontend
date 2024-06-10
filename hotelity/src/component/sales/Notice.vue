@@ -1,8 +1,8 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
-import * as api from '@/api/apiService.js'
+import { ref, watch, onMounted } from 'vue';
+import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
-import {getNotices} from "@/api/apiService.js";
+import { getNotices } from "@/api/apiService.js";
 
 function navigateToNoticeDetail(id) {
   router.push(`/noticeInfo/${id}`);
@@ -20,7 +20,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('noticeCodePk');  // default sorting by customerCodePk
+const orderBy = ref('noticeCodePk');  // default sorting by noticeCodePk
 
 const defaultParams = {
   noticeCodePk: null,
@@ -41,7 +41,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/notices/page', {params});
     const response = await api.getNotices(params);
     console.log(response.data);
     totalPages.value = response.data.totalPagesCount;
@@ -87,14 +86,13 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
@@ -158,8 +156,6 @@ onMounted(() => {
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
-<!--            <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i-->
-<!--                class="bi bi-download"></i></button>-->
           </div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">
@@ -182,26 +178,16 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('noticeCodePk')">공지 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'noticeCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'noticeCodePk' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('noticeCodePk')" :class="{ 'active-asc': orderBy === 'noticeCodePk' && sortBy === 0, 'active-desc': orderBy === 'noticeCodePk' && sortBy === 1 }">공지 코드</th>
                 <th scope="col">제목</th>
-                <th scope="col" @click="sort('branchCodeFk')">지점
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점</th>
                 <th scope="col">직원명</th>
                 <th scope="col">작성 일자</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="notice in notices.content" :key="notice.noticeCodePk"
-                  @click=navigateToNoticeDetail(notice.noticeCodePk)>
+                  @click="navigateToNoticeDetail(notice.noticeCodePk)">
                 <td>{{ notice.noticeCodePk }}</td>
                 <td>{{ notice.noticeTitle }}</td>
                 <td>{{ notice.branchCodeFk }}</td>
@@ -246,69 +232,3 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-
-.dropdown-icon {
-  transition: transform 0.5s;
-}
-
-tr {
-  cursor: pointer;
-}
-
-.filter-container {
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 500px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 10px;
-}
-
-.filter-container::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 20px;
-  border-width: 0 10px 10px 10px;
-  border-style: solid;
-  border-color: transparent transparent white transparent;
-}
-
-.position-relative-container {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
-
-.emoji {
-  margin-right: 10px;
-}
-
-.selected {
-  background-color: rgba(255, 170, 0, 0.38);
-  color: black;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
-}
-</style>

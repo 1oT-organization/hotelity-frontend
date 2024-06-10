@@ -127,8 +127,8 @@ onMounted(async () => {
             <div class="third">
               <label for="gender">성별:</label>
               <select id="gender" v-model="form.customerGender">
-                <option value="남">남</option>
-                <option value="여">여</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
               </select>
             </div>
             <div class="third">
