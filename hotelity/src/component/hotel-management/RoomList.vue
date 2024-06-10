@@ -1,6 +1,6 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
-import * as api from '@/api/apiService.js'
+import { ref, watch, onMounted } from 'vue';
+import * as api from '@/api/apiService.js';
 
 import router from '@/router/router.js';
 
@@ -22,8 +22,8 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
-const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('roomCodePk');  // default sorting by customerCodePk
+const sortBy = ref(0); // 0: ascending, 1: descending
+const orderBy = ref('roomCodePk'); // default sorting by roomCodePk
 
 const defaultParams = {
   roomCodePk: null,
@@ -47,7 +47,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/rooms', {params});
     const response = await api.getRooms(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -60,10 +59,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/rooms/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadRoomExcel(defaultParams);
 
     const url = window.URL.createObjectURL(new Blob([response]));
@@ -129,14 +124,13 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
@@ -194,8 +188,7 @@ onMounted(() => {
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('roomName')">객실 이름</a></li>
             </ul>
           </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
           <button class="btn btn-primary ms-2" @click="loadroom(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
@@ -228,10 +221,10 @@ onMounted(() => {
               </select>
             </div>
             <div class="btn-group me-2">
-              <input type="number" v-model="defaultParams.minPrice"></input>
+              <input type="number" v-model="defaultParams.minPrice" placeholder="최소 가격"></input>
             </div>
             <div class="btn-group me-2">
-              <input type="number" v-model="defaultParams.maxPrice"></input>
+              <input type="number" v-model="defaultParams.maxPrice" placeholder="최대 가격"></input>
             </div>
             <button class="btn btn-primary" @click="loadroom(1, orderBy.value, sortBy.value)">적용</button>
           </div>
@@ -242,43 +235,12 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('roomCodePk')">객실 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'roomCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'roomCodePk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('branchCodeFk')">지점
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'branchCodeFk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('roomNumber')">호수
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'roomNumber' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'roomNumber' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('roomName')">객실 명
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'roomName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'roomName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('roomLevelName')">객실 등급명
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'roomLevelName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'roomLevelName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('roomPrice')">가격
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'roomPrice' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'roomPrice' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col">특이사항</th>
+                <th scope="col" @click="sort('roomCodePk')" :class="{ 'active-asc': orderBy === 'roomCodePk' && sortBy === 0, 'active-desc': orderBy === 'roomCodePk' && sortBy === 1 }">객실 코드</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점</th>
+                <th scope="col" @click="sort('roomNumber')" :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1 }">호수</th>
+                <th scope="col" @click="sort('roomName')" :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">객실 명</th>
+                <th scope="col" @click="sort('roomLevelName')" :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }">객실 등급명</th>
+                <th scope="col" @click="sort('roomPrice')" :class="{ 'active-asc': orderBy === 'roomPrice' && sortBy === 0, 'active-desc': orderBy === 'roomPrice' && sortBy === 1 }">가격</th>
                 <th scope="col">방개수</th>
                 <th scope="col">수용인원</th>
                 <th scope="col">화장실개수</th>
@@ -294,7 +256,6 @@ onMounted(() => {
                 <td>{{ room.roomName }}</td>
                 <td>{{ room.roomLevelName }}</td>
                 <td>{{ '₩' + room.roomPrice.toLocaleString('ko-KR') }}</td>
-                <td>{{ room.roomSpecificInfo }}</td>
                 <td>{{ room.roomSubRoomsCount }}</td>
                 <td>{{ room.roomCapacity }}</td>
                 <td>{{ room.roomBathroomCount }}</td>
@@ -422,7 +383,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
 import router from '@/router/router.js';
 
@@ -46,7 +46,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('couponIssueCodePk');  // default sorting by customerCodePk
+const orderBy = ref('couponIssueCodePk');  // default sorting by couponIssueCodePk
 
 const defaultParams = {
   couponIssueCodePk: null,
@@ -67,7 +67,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', {params});
+    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', { params });
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -255,52 +255,17 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('couponIssueCodePk')">쿠폰 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponIssueCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponIssueCodePk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponName')">쿠폰 이름
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'couponName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('customerName')">고객
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponDiscountRate')">쿠폰 할인율
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponIssueDate')">쿠폰 발급 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponIssueDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponIssueDate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponExpireDate')">쿠폰 만료 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponExpireDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponExpireDate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponUseDate')">쿠폰 사용 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponUseDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponUseDate' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('couponIssueCodePk')" :class="{ 'active-asc': orderBy === 'couponIssueCodePk' && sortBy === 0, 'active-desc': orderBy === 'couponIssueCodePk' && sortBy === 1 }">쿠폰 코드</th>
+                <th scope="col" @click="sort('couponName')" :class="{ 'active-asc': orderBy === 'couponName' && sortBy === 0, 'active-desc': orderBy === 'couponName' && sortBy === 1 }">쿠폰 이름</th>
+                <th scope="col" @click="sort('customerName')" :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">고객</th>
+                <th scope="col" @click="sort('couponDiscountRate')" :class="{ 'active-asc': orderBy === 'couponDiscountRate' && sortBy === 0, 'active-desc': orderBy === 'couponDiscountRate' && sortBy === 1 }">쿠폰 할인율</th>
+                <th scope="col" @click="sort('couponIssueDate')" :class="{ 'active-asc': orderBy === 'couponIssueDate' && sortBy === 0, 'active-desc': orderBy === 'couponIssueDate' && sortBy === 1 }">쿠폰 발급 일자</th>
+                <th scope="col" @click="sort('couponExpireDate')" :class="{ 'active-asc': orderBy === 'couponExpireDate' && sortBy === 0, 'active-desc': orderBy === 'couponExpireDate' && sortBy === 1 }">쿠폰 만료 일자</th>
+                <th scope="col" @click="sort('couponUseDate')" :class="{ 'active-asc': orderBy === 'couponUseDate' && sortBy === 0, 'active-desc': orderBy === 'couponUseDate' && sortBy === 1 }">쿠폰 사용 일자</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="couponIssue in couponIssues.content" :key="couponIssue.couponIssueCodePk"
-                  @click=navigateToCustomer(couponIssue.couponIssueCodePk)>
+              <tr v-for="couponIssue in couponIssues.content" :key="couponIssue.couponIssueCodePk" @click=navigateToCustomer(couponIssue.couponIssueCodePk)>
                 <td>{{ couponIssue.couponIssueCodePk }}</td>
                 <td>{{ couponIssue.couponName }}</td>
                 <td>{{ couponIssue.customerName }}</td>
@@ -340,10 +305,7 @@ onMounted(() => {
           <!-- 페이징 컨트롤 -->
           <div class="pagination">
             <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+            <button v-for="page in pageSize" :key="page" @click="changePage((pageGroup - 1) * pageSize + page)" :disabled="(pageGroup - 1) * pageSize + page > totalPages" :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
               {{ (pageGroup - 1) * pageSize + page }}
             </button>
             <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
@@ -354,12 +316,12 @@ onMounted(() => {
     <!-- Table End -->
   </div>
   <!-- Content End -->
-
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+/*
 .pagination {
   display: flex;
   justify-content: center;
@@ -369,6 +331,52 @@ onMounted(() => {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -421,7 +429,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

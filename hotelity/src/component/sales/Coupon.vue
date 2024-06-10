@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
 
@@ -15,7 +15,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('couponCodePk');  // default sorting by customerCodePk
+const orderBy = ref('couponCodePk');  // default sorting by couponCodePk
 
 const defaultParams = {
   couponCodePk: null,
@@ -35,7 +35,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/coupons/page', {params});
     const response = await api.getCoupons(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -48,10 +47,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/coupons/page/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadCouponExcel(defaultParams);
 
     const url = window.URL.createObjectURL(new Blob([response]));
@@ -109,14 +104,13 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
@@ -211,7 +205,7 @@ onMounted(() => {
                 <option value="호텔 라운지바 쿠폰">호텔 라운지바 쿠폰</option>
                 <option value="스파 쿠폰">스파 쿠폰</option>
                 <option value="워터파크 쿠폰">워터파크 쿠폰</option>
-                <option value="베이커리 쿠폰">워터파크 쿠폰</option>
+                <option value="베이커리 쿠폰">베이커리 쿠폰</option>
               </select>
             </div>
             <button class="btn btn-primary" @click="loadCoupon(1, orderBy.value, sortBy.value)">적용</button>
@@ -223,52 +217,17 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('couponCodePk')">쿠폰 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponCodePk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponName')">쿠폰 이름
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'couponName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponDiscountRate')">쿠폰 할인율
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponDiscountRate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponType')">쿠폰 종류
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponType' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponType' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('membershipLevelCodeFk')">멤버십 등급
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'membershipLevelCodeFk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'membershipLevelCodeFk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponLaunchingDate')">쿠폰 출시 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponLaunchingDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponLaunchingDate' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('couponInfo')">쿠폰 상세 설명
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'couponInfo' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'couponInfo' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('couponCodePk')" :class="{ 'active-asc': orderBy === 'couponCodePk' && sortBy === 0, 'active-desc': orderBy === 'couponCodePk' && sortBy === 1 }">쿠폰 코드</th>
+                <th scope="col" @click="sort('couponName')" :class="{ 'active-asc': orderBy === 'couponName' && sortBy === 0, 'active-desc': orderBy === 'couponName' && sortBy === 1 }">쿠폰 이름</th>
+                <th scope="col" @click="sort('couponDiscountRate')" :class="{ 'active-asc': orderBy === 'couponDiscountRate' && sortBy === 0, 'active-desc': orderBy === 'couponDiscountRate' && sortBy === 1 }">쿠폰 할인율</th>
+                <th scope="col" @click="sort('couponType')" :class="{ 'active-asc': orderBy === 'couponType' && sortBy === 0, 'active-desc': orderBy === 'couponType' && sortBy === 1 }">쿠폰 종류</th>
+                <th scope="col" @click="sort('membershipLevelCodeFk')" :class="{ 'active-asc': orderBy === 'membershipLevelCodeFk' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelCodeFk' && sortBy === 1 }">멤버십 등급</th>
+                <th scope="col" @click="sort('couponLaunchingDate')" :class="{ 'active-asc': orderBy === 'couponLaunchingDate' && sortBy === 0, 'active-desc': orderBy === 'couponLaunchingDate' && sortBy === 1 }">쿠폰 출시 일자</th>
+                <th scope="col" @click="sort('couponInfo')" :class="{ 'active-asc': orderBy === 'couponInfo' && sortBy === 0, 'active-desc': orderBy === 'couponInfo' && sortBy === 1 }">쿠폰 상세 설명</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="coupon in coupons.content" :key="coupon.couponCodePk">
-<!--                  @click=navigateToCustomer(coupon.couponCodePk)>--> <!-- 추후 상세 페이지 연결 -->
                 <td>{{ coupon.couponCodePk }}</td>
                 <td>{{ coupon.couponName }}</td>
                 <td>{{ coupon.couponDiscountRate * 100 + '%' }}</td>
@@ -321,7 +280,8 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+/*
 .pagination {
   display: flex;
   justify-content: center;
@@ -331,6 +291,52 @@ onMounted(() => {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -383,7 +389,25 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>
+

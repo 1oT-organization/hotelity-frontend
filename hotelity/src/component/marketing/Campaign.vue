@@ -294,7 +294,8 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+/*
 .pagination {
   display: flex;
   justify-content: center;
@@ -304,6 +305,52 @@ onMounted(() => {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -356,7 +403,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

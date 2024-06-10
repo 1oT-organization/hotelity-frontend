@@ -20,7 +20,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('vocCodePk');  // default sorting by customerCodePk
+const orderBy = ref('vocCodePk');  // default sorting by vocCodePk
 
 const defaultParams = {
   vocCodePk: null,
@@ -44,7 +44,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/vocs/page', {params});
     const response = await api.getVocs(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -57,10 +56,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/vocs/page/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadVocExcel(defaultParams);
 
     const url = window.URL.createObjectURL(new Blob([response]));
@@ -118,14 +113,13 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
@@ -183,8 +177,7 @@ onMounted(() => {
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('vocTitle')">VOC 제목</a></li>
             </ul>
           </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
           <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
@@ -229,24 +222,18 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('vocCodePk')">VOC 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'vocCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'vocCodePk' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('vocCodePk')" :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }">VOC 코드</th>
                 <th scope="col">VOC 일자</th>
-                <th scope="col">지점 이름</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점 이름</th>
                 <th scope="col">담당 직원</th>
                 <th scope="col">고객 코드</th>
-                <th scope="col">VOC 카테고리</th>
+                <th scope="col" @click="sort('vocCategory')" :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }">VOC 카테고리</th>
                 <th scope="col">VOC 제목</th>
-                <th scope="col">VOC 처리상태</th>
+                <th scope="col" @click="sort('vocProcessStatus')" :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }">VOC 처리상태</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="voc in vocs.content" :key="voc.vocCodePk"
-                  @click=navigateToVocSelect(voc.vocCodePk)>
+              <tr v-for="voc in vocs.content" :key="voc.vocCodePk" @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
                 <td>{{
                     new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
@@ -270,7 +257,6 @@ onMounted(() => {
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>
                 </td>
-
               </tr>
               </tbody>
             </table>
@@ -279,10 +265,7 @@ onMounted(() => {
           <!-- 페이징 컨트롤 -->
           <div class="pagination">
             <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+            <button v-for="page in pageSize" :key="page" @click="changePage((pageGroup - 1) * pageSize + page)" :disabled="(pageGroup - 1) * pageSize + page > totalPages" :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
               {{ (pageGroup - 1) * pageSize + page }}
             </button>
             <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
@@ -297,7 +280,8 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+/*
 .pagination {
   display: flex;
   justify-content: center;
@@ -307,6 +291,52 @@ onMounted(() => {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -359,7 +389,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

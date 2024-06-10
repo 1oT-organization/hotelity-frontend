@@ -25,13 +25,11 @@
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeCode')">직원코드</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeName')">이름</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeePhoneNumber')">전화번호</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeOfficePhoneNumber')">내선번호</a>
-              </li>
+              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeOfficePhoneNumber')">내선번호</a></li>
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeEmail')">이메일</a></li>
             </ul>
           </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
           <button class="btn btn-primary ms-2" @click="loadCustomers(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
@@ -91,68 +89,20 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('employeeCode')">직원 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'employeeCode' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeeCode' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('employeeName')">이름
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeeName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('branchCode')">지점
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'branchCode' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'branchCode' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('rankCode')">직급
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'rankCode' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'rankCode' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('departmentCode')">부서
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'departmentCode' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'departmentCode' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('positionCode')">직책
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'positionCode' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'positionCode' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('employeeOfficePhoneNumber')">내선번호
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('employeePhoneNumber')">전화번호
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeePhoneNumber' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('employeeEmail')">Email
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeEmail' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeeEmail' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('employeeAddress')">주소
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'employeeAddress' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'employeeAddress' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }">직원 코드</th>
+                <th scope="col" @click="sort('employeeName')" :class="{ 'active-asc': orderBy === 'employeeName' && sortBy === 0, 'active-desc': orderBy === 'employeeName' && sortBy === 1 }">이름</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">지점</th>
+                <th scope="col" @click="sort('rankCodeFk')" :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">직급</th>
+                <th scope="col" @click="sort('departmentCodeFk')" :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">부서</th>
+                <th scope="col" @click="sort('positionCodeFk')" :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">직책</th>
+                <th scope="col" @click="sort('employeeOfficePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }">내선번호</th>
+                <th scope="col" @click="sort('employeePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeePhoneNumber' && sortBy === 1 }">전화번호</th>
+                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }">Email</th>
+                <th scope="col" @click="sort('employeeAddress')" :class="{ 'active-asc': orderBy === 'employeeAddress' && sortBy === 0, 'active-desc': orderBy === 'employeeAddress' && sortBy === 1 }">주소</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="employee in employees.content" :key="employees.employeeCodePk"
-                  @click=navigateToEmployee(employee.employeeCodePk)>
+              <tr v-for="employee in employees.content" :key="employee.employeeCodePk" @click="navigateToEmployee(employee.employeeCodePk)">
                 <td>{{ employee.employeeCodePk }}</td>
                 <td>{{ employee.employeeName }}</td>
                 <td>{{ employee.nameOfBranch }}</td>
@@ -190,8 +140,9 @@
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
+
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
 
@@ -211,7 +162,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('employeeCodePk');  // default sorting by customerCodePk
+const orderBy = ref('employeeCodePk');  // default sorting by employeeCodePk
 
 const defaultParams = {
   employeeCode: null,
@@ -342,6 +293,56 @@ onMounted(() => {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
+=======
+/*
+>>>>>>> develop
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
+}
+*/
 .pagination {
   list-style: none;
   display: flex;
@@ -438,7 +439,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

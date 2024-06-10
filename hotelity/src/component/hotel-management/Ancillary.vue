@@ -1,8 +1,8 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
-import {downloadFacilityExcel} from "@/api/apiService.js";
+import { downloadFacilityExcel } from "@/api/apiService.js";
 
 const isLoading = ref(true);
 const ancillaries = ref([]);
@@ -15,8 +15,8 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
-const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('ancillaryCodePk');  // default sorting by customerCodePk
+const sortBy = ref(0); // 0: ascending, 1: descending
+const orderBy = ref('ancillaryCodePk'); // 기본 정렬 기준
 
 const defaultParams = {
   ancillaryCodePk: null,
@@ -29,7 +29,6 @@ const defaultParams = {
   ancillaryCategoryCodeFk: null,
   branchName: null,
   ancillaryCategoryName: null
-
 };
 
 watch(searchValue, (newValue) => {
@@ -40,9 +39,7 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/facilities', {params});
     const response = await api.getFacilities(params);
-    console.log(response);
     totalPages.value = response.data.totalPagesCount;
     return response.data;
   } catch (error) {
@@ -53,12 +50,7 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/facilities/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadFacilityExcel(defaultParams);
-
     const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
@@ -114,14 +106,12 @@ function prevPageGroup() {
 }
 
 function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
-
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
 function toggleFilterContainer() {
@@ -144,25 +134,21 @@ function sort(column) {
 
 onMounted(() => {
   loadancillary(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
   new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
+
+
 <template>
   <div class="container-fluid position-relative d-flex p-0">
-    <!-- Spinner Start -->
     <div v-if="isLoading" id="spinner"
          class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
       <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <!-- Spinner End -->
 
-    <!-- Content Start -->
-    <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
       <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">부대시설 리스트</h3>
@@ -179,8 +165,7 @@ onMounted(() => {
               <li><a class="dropdown-item" href="#" @click="setSearchCriteria('ancillaryName')">시설명</a></li>
             </ul>
           </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
           <button class="btn btn-primary ms-2" @click="loadancillary(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
@@ -223,30 +208,10 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('ancillaryCodePk')">편의시설 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'ancillaryCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'ancillaryCodePk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('ancillaryCategoryName')">타입
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'ancillaryCategoryName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'ancillaryCategoryName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('branchName')">지점
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'branchName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'branchName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('ancillaryName')">시설명
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'ancillaryName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'ancillaryName' && sortBy === 1 }"></i>
-                </th>
+                <th scope="col" @click="sort('ancillaryCodePk')" :class="{ 'active-asc': orderBy === 'ancillaryCodePk' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCodePk' && sortBy === 1 }">편의시설 코드</th>
+                <th scope="col" @click="sort('ancillaryCategoryName')" :class="{ 'active-asc': orderBy === 'ancillaryCategoryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCategoryName' && sortBy === 1 }">타입</th>
+                <th scope="col" @click="sort('branchName')" :class="{ 'active-asc': orderBy === 'branchName' && sortBy === 0, 'active-desc': orderBy === 'branchName' && sortBy === 1 }">지점</th>
+                <th scope="col" @click="sort('ancillaryName')" :class="{ 'active-asc': orderBy === 'ancillaryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryName' && sortBy === 1 }">시설명</th>
                 <th scope="col">위치</th>
                 <th scope="col">전화번호</th>
                 <th scope="col">운영 시작 시간</th>
@@ -268,7 +233,6 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
           <div class="pagination">
             <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
             <button v-for="page in pageSize" :key="page"
@@ -282,11 +246,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- Table End -->
   </div>
-  <!-- Content End -->
-
-  <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
@@ -387,7 +347,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>
