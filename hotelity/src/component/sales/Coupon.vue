@@ -258,17 +258,16 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+         <!-- 페이징 컨트롤 -->
+        <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -281,18 +280,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/*
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
 
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-*/
 .pagination {
   list-style: none;
   display: flex;
