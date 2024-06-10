@@ -2,6 +2,8 @@
 import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
 import router from '@/router/router.js';
+import * as api from '@/api/apiService.js';
+import {downloadCouponIssueExcel} from "@/api/apiService.js";
 
 onMounted(() => {
   // Initialize datepicker
@@ -67,7 +69,8 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', { params });
+    // const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', { params });
+    const response = await api.getCouponIssues(params);
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
     return response.data.data;
@@ -79,15 +82,31 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    const response = await axios.get('http://localhost:8888/sales/coupons/issue/page/excel/download', {
-      params: defaultParams,
-      responseType: 'blob'
-    });
+    // const response = await axios.get('http://localhost:8888/sales/coupons/issue/page/excel/download', {
+    //   params: defaultParams,
+    //   responseType: 'blob'
+    // });
+    const response = await api.downloadCouponIssueExcel(defaultParams);
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    // Get the current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}-${minutes}-${seconds}`;
+    const fileName = `couponIssue_${formattedDate}_${formattedTime}.xlsx`;
+
+    // Create a link to download the file
+    const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'couponIssue.xlsx');
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

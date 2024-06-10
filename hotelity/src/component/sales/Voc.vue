@@ -2,7 +2,6 @@
 import {ref, watch, onMounted} from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
-import {downloadVocExcel} from "@/api/apiService.js";
 
 function navigateToVocSelect(id) {
   router.push(`/vocSelect/${id}`);
@@ -57,11 +56,25 @@ async function fetchData(params) {
 async function downloadExcel() {
   try {
     const response = await api.downloadVocExcel(defaultParams);
+    // Get the current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
 
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}-${minutes}-${seconds}`;
+    const fileName = `voc_${formattedDate}_${formattedTime}.xlsx`;
+
+    // Create a link to download the file
     const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'voc.xlsx');
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
