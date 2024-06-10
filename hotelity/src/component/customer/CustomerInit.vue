@@ -1,14 +1,11 @@
 <script setup>
-
 import {useRouter} from 'vue-router';
-
 import {onMounted, ref} from 'vue';
 import * as api from '@/api/apiService.js';
 
 const router = useRouter();
 
 const isLoading = ref(true);
-
 const countries = ref([]);
 
 const form = ref({
@@ -38,6 +35,13 @@ let initialFormState = {
 };
 
 async function handleSubmit() {
+  // Form validation
+  if (!form.value.customerName || !form.value.customerEmail
+      || !form.value.customerPhoneNumber || !form.value.customerAddress || form.value.customerInfoAgreement === 1) {
+    window.alert('모든 필수 필드를 입력해주세요.');
+    return;
+  }
+
   try {
     const response = await api.createCustomer(form.value);
     console.log(response);
@@ -80,7 +84,7 @@ onMounted(async () => {
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">고객 등록</h3>
         <div class="form-submit">
           <form @submit.prevent="handleSubmit">
@@ -92,18 +96,18 @@ onMounted(async () => {
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <div class="half">
-              <label for="korean-name">한글 이름:</label>
+              <label for="korean-name">* 한글 이름:</label>
               <input type="text" id="korean-name" v-model="form.customerName"/>
             </div>
 
             <div class="half">
-              <label for="english-name">영문 이름:</label>
+              <label for="english-name">* 영문 이름:</label>
               <input type="text" id="english-name" v-model="form.customerEnglishName"/>
             </div>
           </div>
           <div class="form-group">
             <div class="half">
-              <label for="phone">전화번호:</label>
+              <label for="phone">* 전화번호:</label>
               <input type="text" id="phone" v-model="form.customerPhoneNumber"/>
             </div>
 
@@ -145,7 +149,7 @@ onMounted(async () => {
             </div>
           </div>
           <div class="form-group">
-            <label for="email">이메일:</label>
+            <label for="email">* 이메일:</label>
             <input type="email" id="email" v-model="form.customerEmail"/>
           </div>
           <div class="form-group">
@@ -272,5 +276,4 @@ onMounted(async () => {
   margin-top: 20px;
   height: 40px;
 }
-
 </style>
