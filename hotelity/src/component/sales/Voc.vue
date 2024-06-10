@@ -228,19 +228,22 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('vocCodePk')" :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }">VOC 코드</th>
-                <th scope="col">VOC 일자</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점 이름</th>
-                <th scope="col">담당 직원</th>
-                <th scope="col">고객 코드</th>
-                <th scope="col" @click="sort('vocCategory')" :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }">VOC 카테고리</th>
+                <th scope="col" @click="sort('vocCodePk')" :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }" style="width: 100px;">VOC 코드</th>
+                <th scope="col" style="width: 80px;">고객 코드</th>
                 <th scope="col">VOC 제목</th>
-                <th scope="col" @click="sort('vocProcessStatus')" :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }">VOC 처리상태</th>
+                <th scope="col" @click="sort('vocCategory')" :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }" style="width: 110px;">카테고리</th>
+                <th scope="col" style="width: 200px;">VOC 일자</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }" style="width: 80px;">지점</th>
+                <th scope="col" style="width: 100px;">담당 직원</th>
+                <th scope="col" @click="sort('vocProcessStatus')" :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }" style="width: 100px;">처리상태</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="voc in vocs.content" :key="voc.vocCodePk" @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
+                <td>{{ voc.customerCodeFk }}</td>
+                <td>{{ voc.vocTitle }}</td>
+                <td>{{ voc.vocCategory }}</td>
                 <td>{{
                     new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -256,9 +259,6 @@ onMounted(() => {
                 </td>
                 <td>{{ voc.branchCodeFk }}</td>
                 <td>{{ voc.employeeName }}</td>
-                <td>{{ voc.customerCodeFk }}</td>
-                <td>{{ voc.vocCategory }}</td>
-                <td>{{ voc.vocTitle }}</td>
                 <td>
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>

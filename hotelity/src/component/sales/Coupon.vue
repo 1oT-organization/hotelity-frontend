@@ -217,13 +217,13 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('couponCodePk')" :class="{ 'active-asc': orderBy === 'couponCodePk' && sortBy === 0, 'active-desc': orderBy === 'couponCodePk' && sortBy === 1 }">쿠폰 코드</th>
+                <th scope="col" @click="sort('couponCodePk')" :class="{ 'active-asc': orderBy === 'couponCodePk' && sortBy === 0, 'active-desc': orderBy === 'couponCodePk' && sortBy === 1 }" style="width: 80px;">쿠폰 코드</th>
                 <th scope="col" @click="sort('couponName')" :class="{ 'active-asc': orderBy === 'couponName' && sortBy === 0, 'active-desc': orderBy === 'couponName' && sortBy === 1 }">쿠폰 이름</th>
-                <th scope="col" @click="sort('couponDiscountRate')" :class="{ 'active-asc': orderBy === 'couponDiscountRate' && sortBy === 0, 'active-desc': orderBy === 'couponDiscountRate' && sortBy === 1 }">쿠폰 할인율</th>
-                <th scope="col" @click="sort('couponType')" :class="{ 'active-asc': orderBy === 'couponType' && sortBy === 0, 'active-desc': orderBy === 'couponType' && sortBy === 1 }">쿠폰 종류</th>
-                <th scope="col" @click="sort('membershipLevelCodeFk')" :class="{ 'active-asc': orderBy === 'membershipLevelCodeFk' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelCodeFk' && sortBy === 1 }">멤버십 등급</th>
-                <th scope="col" @click="sort('couponLaunchingDate')" :class="{ 'active-asc': orderBy === 'couponLaunchingDate' && sortBy === 0, 'active-desc': orderBy === 'couponLaunchingDate' && sortBy === 1 }">쿠폰 출시 일자</th>
+                <th scope="col" @click="sort('couponDiscountRate')" :class="{ 'active-asc': orderBy === 'couponDiscountRate' && sortBy === 0, 'active-desc': orderBy === 'couponDiscountRate' && sortBy === 1 }" style="width: 80px;">할인율</th>
+                <th scope="col" @click="sort('couponType')" :class="{ 'active-asc': orderBy === 'couponType' && sortBy === 0, 'active-desc': orderBy === 'couponType' && sortBy === 1 }" style="width: 150px">쿠폰 종류</th>
+                <th scope="col" @click="sort('membershipLevelCodeFk')" :class="{ 'active-asc': orderBy === 'membershipLevelCodeFk' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelCodeFk' && sortBy === 1 }" style="width: 100px;">멤버십 등급</th>
                 <th scope="col" @click="sort('couponInfo')" :class="{ 'active-asc': orderBy === 'couponInfo' && sortBy === 0, 'active-desc': orderBy === 'couponInfo' && sortBy === 1 }">쿠폰 상세 설명</th>
+                <th scope="col" @click="sort('couponLaunchingDate')" :class="{ 'active-asc': orderBy === 'couponLaunchingDate' && sortBy === 0, 'active-desc': orderBy === 'couponLaunchingDate' && sortBy === 1 }" style="width: 200px;">쿠폰 출시 일자</th>
               </tr>
               </thead>
               <tbody>
@@ -239,6 +239,7 @@ onMounted(() => {
                   <span v-else-if="coupon.membershipLevelCodeFk === 4">프리미엄</span>
                   <span v-else-if="coupon.membershipLevelCodeFk === 5">VIP</span>
                 </td>
+                <td>{{ coupon.couponInfo }}</td>
                 <td>{{
                     new Date(coupon.couponLaunchingDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -252,7 +253,6 @@ onMounted(() => {
                     })
                   }}
                 </td>
-                <td>{{ coupon.couponInfo }}</td>
               </tr>
               </tbody>
             </table>

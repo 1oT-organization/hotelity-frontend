@@ -174,11 +174,11 @@ $(document).ready(function () {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col">지점 코드</th>
+                <th scope="col" style="width: 100px;">지점 코드</th>
                 <th scope="col">지점명</th>
-                <th scope="col">주소</th>
+                <th scope="col" style="width: 500px;">주소</th>
                 <th scope="col">전화번호</th>
-                <th scope="col"></th>
+                <th scope="col" style="width: 120px;"></th>
               </tr>
               </thead>
               <tbody>

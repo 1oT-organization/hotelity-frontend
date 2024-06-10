@@ -184,11 +184,11 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('noticeCodePk')" :class="{ 'active-asc': orderBy === 'noticeCodePk' && sortBy === 0, 'active-desc': orderBy === 'noticeCodePk' && sortBy === 1 }">공지 코드</th>
+                <th scope="col" @click="sort('noticeCodePk')" :class="{ 'active-asc': orderBy === 'noticeCodePk' && sortBy === 0, 'active-desc': orderBy === 'noticeCodePk' && sortBy === 1 }" style="width: 80px;">공지 코드</th>
                 <th scope="col">제목</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점</th>
-                <th scope="col">직원명</th>
-                <th scope="col">작성 일자</th>
+                <th scope="col" style="width: 100px;">직원명</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }" style="width: 70px;">지점</th>
+                <th scope="col" style="width: 210px;">작성 일자</th>
               </tr>
               </thead>
               <tbody>
@@ -196,8 +196,8 @@ onMounted(() => {
                   @click="navigateToNoticeDetail(notice.noticeCodePk)">
                 <td>{{ notice.noticeCodePk }}</td>
                 <td>{{ notice.noticeTitle }}</td>
-                <td>{{ notice.branchCodeFk }}</td>
                 <td>{{ notice.picemployeeName }}</td>
+                <td>{{ notice.branchCodeFk }}</td>
                 <td>{{
                     new Date(notice.noticePostedDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
