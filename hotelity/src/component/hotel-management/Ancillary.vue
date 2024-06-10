@@ -71,6 +71,13 @@ async function loadList() {
   }
 }
 
+function openAncillaryDetails(ancillaryCodePk) {
+  console.log('ancillaryCodePk:', ancillaryCodePk);
+  const url = `/ancillaryDetails/${ancillaryCodePk}`;
+  const windowFeatures = "width=550,height=600,scrollbars=yes,resizable=yes";
+  window.open(url, '_blank', windowFeatures);
+}
+
 async function loadancillary(page, orderByValue = 'ancillaryCodePk', sortByValue = 0) {
   try {
     const data = await fetchData({
@@ -225,7 +232,7 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk">
+              <tr v-for="ancillary in ancillaries.content" :key="ancillary.ancillaryCodePk" @click=openAncillaryDetails(ancillary.ancillaryCodePk)>
                 <td>{{ ancillary.ancillaryCodePk }}</td>
                 <td>{{ ancillary.ancillaryCategoryName }}</td>
                 <td>{{ ancillary.branchName }}</td>
