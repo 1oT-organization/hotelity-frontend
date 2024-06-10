@@ -271,54 +271,41 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('customerCodePk')">고객 코드
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerCodePk' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerCodePk')"
+                    :class="{ 'active-asc': orderBy === 'customerCodePk' && sortBy === 0, 'active-desc': orderBy === 'customerCodePk' && sortBy === 1 }">
+                  고객 코드
                 </th>
-                <th scope="col" @click="sort('customerName')">한글 이름
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerName')"
+                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">
+                  이름
                 </th>
-                <th scope="col" @click="sort('customerEnglishName')">영문 이름
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'customerEnglishName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerEnglishName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerGender')"
+                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }">
+                  성별
                 </th>
-                <th scope="col" @click="sort('customerGender')">성별
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerGender' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerGender' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerPhoneNumber')"
+                    :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }">
+                  전화번호
                 </th>
-                <th scope="col" @click="sort('customerPhoneNumber')">전화번호
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerPhoneNumber' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerEmail')"
+                    :class="{ 'active-asc': orderBy === 'customerEmail' && sortBy === 0, 'active-desc': orderBy === 'customerEmail' && sortBy === 1 }">
+                  Email
                 </th>
-                <th scope="col" @click="sort('customerEmail')">Email
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerEmail' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerAddress')"
+                    :class="{ 'active-asc': orderBy === 'customerAddress' && sortBy === 0, 'active-desc': orderBy === 'customerAddress' && sortBy === 1 }">
+                  주소
                 </th>
-                <th scope="col" @click="sort('customerAddress')">주소
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerAddress' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerAddress' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('membershipLevelName')"
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }">
+                  멤버십 등급
                 </th>
-                <th scope="col" @click="sort('membershipLevelName')">멤버십 등급
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('nationName')"
+                    :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }">
+                  국가
                 </th>
-                <th scope="col" @click="sort('nationName')">국가
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'nationName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'nationName' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('customerType')">고객 타입
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerType' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill" :class="{ active: orderBy === 'customerType' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerType')"
+                    :class="{ 'active-asc': orderBy === 'customerType' && sortBy === 0, 'active-desc': orderBy === 'customerType' && sortBy === 1 }">
+                  고객 타입
                 </th>
               </tr>
               </thead>
@@ -327,7 +314,6 @@ onMounted(() => {
                   @click=navigateToCustomer(customer.customerCodePk)>
                 <td>{{ customer.customerCodePk }}</td>
                 <td>{{ customer.customerName }}</td>
-                <td>{{ customer.customerEnglishName }}</td>
                 <td>{{ customer.customerGender }}</td>
                 <td>{{ customer.customerPhoneNumber }}</td>
                 <td>{{ customer.customerEmail }}</td>
@@ -470,7 +456,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>
