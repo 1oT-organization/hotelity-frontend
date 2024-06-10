@@ -511,13 +511,6 @@ function toggleDropdownMenu() {
 
 onMounted(async () => {
   await loadStays(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
-
-  $('#filter-icon').on('click', function () {
-    $('#filter').toggle();
-  });
 });
 
 // 날짜 변환

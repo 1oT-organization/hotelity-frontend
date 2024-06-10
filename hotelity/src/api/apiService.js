@@ -198,8 +198,7 @@ export const getNations = async () => {
 /* 직원 리스트 */
 export const getEmployees = async (params) => {
     try {
-        const response = await apiClient.get('/employees/page', {params});
-        return response.data;
+        return await apiClient.get('/employees/page', {params});
     } catch (e) {
         console.error('Error fetching employees:', e);
         throw e;
@@ -295,8 +294,7 @@ export const deleteEmployeeImage = async (employeeId) => {
 /* 부대시설 리스트 */
 export const getFacilities = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-management/facilities', {params});
-        return response.data;
+        return await apiClient.get('/hotel-management/facilities', {params});
     } catch (e) {
         console.error('Error fetching facilities:', e);
         throw e;
@@ -409,8 +407,7 @@ export const deleteBranch = async (branchId) => {
 /* 객실 리스트 */
 export const getRooms = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-management/rooms', {params});
-        return response.data;
+        return await apiClient.get('/hotel-management/rooms', {params});
     } catch (e) {
         console.error('Error fetching rooms:', e);
         throw e;
@@ -658,8 +655,7 @@ export const downloadStayExcel = async (params) => {
 /* 캠페인 발송 리스트 */
 export const getCampaigns = async (params) => {
     try {
-        const response = await apiClient.get('/marketing/campaigns/search/page', {params});
-        return response.data;
+        return await apiClient.get('/marketing/campaigns/search/page', {params});
     } catch (e) {
         console.error('Error fetching campaigns:', e);
         throw e;
@@ -714,8 +710,7 @@ export const createTemplate = async (templateInfo) => {
 /* 쿠폰 리스트 */
 export const getCoupons = async (params) => {
     try {
-        const response = await apiClient.get('/sales/coupons/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/coupons/page', {params});
     } catch (e) {
         console.error('Error fetching coupons:', e);
         throw e;
@@ -808,8 +803,7 @@ export const getMemberships = async (params) => {
 /* 공지사항 리스트 */
 export const getNotices = async (params) => {
     try {
-        const response = await apiClient.get('/sales/notices/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/notices/page', {params});
     } catch (e) {
         console.error('Error fetching notices:', e);
         throw e;
@@ -876,8 +870,7 @@ export const deleteNotice = async (noticeId) => {
 /* VOC 리스트 */
 export const getVocs = async (params) => {
     try {
-        const response = await apiClient.get('/sales/vocs/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/vocs/page', {params});
     } catch (e) {
         console.error('Error fetching vocs:', e);
         throw e;
