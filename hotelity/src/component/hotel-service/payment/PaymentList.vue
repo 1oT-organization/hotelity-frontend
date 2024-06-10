@@ -123,19 +123,25 @@ async function loadPayments(page, orderByValue = 'paymentCodePk', sortByValue = 
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
   loadPayments(page, orderBy.value, sortBy.value);
 }
 
+
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -290,13 +296,7 @@ onMounted(() => {
                   <i class="bi bi-caret-down-fill"
                      :class="{ active: orderBy === 'paymentMethod' && sortBy === 1 }"></i>
                 </th>
-                <th scope="col" @click="sort('paymentTypeCodeFk')">결제 종류 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'paymentTypeCodeFk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'paymentTypeCodeFk' && sortBy === 1 }"></i>
-                </th>
-                <th scope="col" @click="sort('paymentTypeName')">결제 종류 이름
+                <th scope="col" @click="sort('paymentTypeName')">결제 종류
                   <i class="bi bi-caret-up-fill"
                      :class="{ active: orderBy === 'paymentTypeName' && sortBy === 0 }"></i>
                   <i class="bi bi-caret-down-fill"
@@ -330,7 +330,6 @@ onMounted(() => {
                   }}
                 </td>
                 <td>{{ payment.paymentMethod }}</td>
-                <td>{{ payment.paymentTypeCodeFk }}</td>
                 <td>{{ payment.paymentTypeName }}</td>
                 <td>{{ payment.paymentCancelStatus }}</td>
               </tr>
@@ -338,17 +337,16 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+         <!-- 페이징 컨트롤 -->
+         <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -362,14 +360,49 @@ onMounted(() => {
 
 <style>
 .pagination {
+  list-style: none;
   display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
   justify-content: center;
-  margin-top: 20px;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
 }
 
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {

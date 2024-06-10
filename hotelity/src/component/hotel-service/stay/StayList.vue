@@ -163,18 +163,16 @@
           </table>
         </div>
 
-        <!-- 페이징 컨트롤 -->
-        <div class="pagination">
-          <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-          <button v-for="page in pageSize" :key="page"
-                  @click="changePage((pageGroup - 1) * pageSize + page)"
-                  :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                  :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-            {{ (pageGroup - 1) * pageSize + page }}
-          </button>
-          <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-        </div>
-
+       <!-- 페이징 컨트롤 -->
+       <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
       </div>
     </div>
   </div>
@@ -300,21 +298,27 @@ async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue
 }
 
 function changePage(page) {
-  selectedPage.value = page; // 클릭한 페이지 번호를 업데이트
+  selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
-  loadStays(page);
+  loadStays(page, orderBy.value, sortBy.value);
 }
+
 
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -419,6 +423,53 @@ function formatDateTime(date) {
 </script>
 
 <style>
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
+}
+
+
 .filter-container {
   position: absolute;
   top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
