@@ -16,6 +16,7 @@ import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import AncillaryDetails from "@/component/hotel-management/AncillaryDetails.vue";
 
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
@@ -43,6 +44,7 @@ const routes = [
         name: 'Login',
         component: Login,
         meta: {
+            hideSidebar: true,
             hideNavbar: true
         }
     },
@@ -140,6 +142,7 @@ const routes = [
         name: 'RoomDetails',
         component: RoomDetails,
         meta: {
+            hideSidebar: true,
             hideNavbar: true,
             requiresAuth: true,
             category: 'hotelManagement',
@@ -150,6 +153,17 @@ const routes = [
         name: 'FacilityList',
         component: Ancillary,
         meta: {
+            requiresAuth: true,
+            category: 'hotelManagement',
+        },
+    },
+    {
+        path: '/ancillaryDetails/:id',
+        name: 'ancillaryDetails',
+        component: AncillaryDetails,
+        meta: {
+            hideSidebar: true,
+            hideNavbar: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
