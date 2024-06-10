@@ -203,17 +203,7 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+         
         </div>
       </div>
     </div>
@@ -225,63 +215,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/*
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-*/
-.pagination {
-  list-style: none;
-  display: flex;
-  padding: 0;
-  margin-top: 10px;
-  text-align: center;
-  justify-content: center;
-}
-.pagination button {
-  display: inline;
-  text-align: center;
-  float: left;
-  font-size: 14px;
-  text-decoration: none;
-  padding: 5px 12px;
-  color: #999;
-  margin-left: -6px;
-  border: 1px solid #ddd;
-  line-height: 1.5;
-  background: #fff;
-}
-.pagination button.selected {
-  cursor: default;
-  border-color: #909090;
-  background: #b4b4b4;
-  color: #fff;
-}
-.pagination button:active {
-  outline: none;
-}
-
-.modal-2 button:first-child {
-  -moz-border-radius: 50px 0 0 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px 0 0 50px;
-}
-.modal-2 button:last-child {
-  -moz-border-radius: 0 50px 50px 0;
-  -webkit-border-radius: 0;
-  border-radius: 0 50px 50px 0;
-}
-.modal-2 button:hover {
-  color: #000000;
-  background-color: #eee;
-}
 
 .dropdown-icon {
   transition: transform 0.5s;

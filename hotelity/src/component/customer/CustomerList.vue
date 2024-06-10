@@ -35,7 +35,7 @@ const defaultParams = {
   customerGender: null,
   nationName: null,
   customerType: null,
-  membershipLevelName: null
+  membershipLevelName: null,
 };
 const fileToUpload = ref(null);
 
@@ -134,7 +134,6 @@ async function loadCustomers(page, orderByValue = 'customerCodePk', sortByValue 
 }
 
 function changePage(page) {
-  console.log('이건 오나 체인지 페이지')
   selectedPage.value = page;
   currentPage.value = page;
   pageGroup.value = Math.ceil(page / pageSize);
@@ -144,7 +143,6 @@ function changePage(page) {
 
 
 function nextPageGroup() {
-  console.log('오나 넥스트페이지')
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
     const newPage = (pageGroup.value - 1) * pageSize + 1;
@@ -272,39 +270,35 @@ onMounted(() => {
               <thead>
               <tr>
                 <th scope="col" @click="sort('customerCodePk')"
-                    :class="{ 'active-asc': orderBy === 'customerCodePk' && sortBy === 0, 'active-desc': orderBy === 'customerCodePk' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'customerCodePk' && sortBy === 0, 'active-desc': orderBy === 'customerCodePk' && sortBy === 1 }" style="width: 80px;">
                   고객 코드
                 </th>
                 <th scope="col" @click="sort('customerName')"
-                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }" style="width: 180px;">
                   이름
                 </th>
-                <th scope="col" @click="sort('customerGender')"
-                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }">
-                  성별
+                <th scope="col" @click="sort('membershipLevelName')"
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }" style="width: 100px;">
+                  멤버십 등급
                 </th>
                 <th scope="col" @click="sort('customerPhoneNumber')"
-                    :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }" style="width: 200px;">
                   전화번호
                 </th>
                 <th scope="col" @click="sort('customerEmail')"
                     :class="{ 'active-asc': orderBy === 'customerEmail' && sortBy === 0, 'active-desc': orderBy === 'customerEmail' && sortBy === 1 }">
                   Email
                 </th>
-                <th scope="col" @click="sort('customerAddress')"
-                    :class="{ 'active-asc': orderBy === 'customerAddress' && sortBy === 0, 'active-desc': orderBy === 'customerAddress' && sortBy === 1 }">
-                  주소
-                </th>
-                <th scope="col" @click="sort('membershipLevelName')"
-                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }">
-                  멤버십 등급
+                <th scope="col" @click="sort('customerGender')"
+                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }" style="width: 70px;">
+                  성별
                 </th>
                 <th scope="col" @click="sort('nationName')"
-                    :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }" style="width: 110px;">
                   국가
                 </th>
                 <th scope="col" @click="sort('customerType')"
-                    :class="{ 'active-asc': orderBy === 'customerType' && sortBy === 0, 'active-desc': orderBy === 'customerType' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'customerType' && sortBy === 0, 'active-desc': orderBy === 'customerType' && sortBy === 1 }" style="width: 80px;">
                   고객 타입
                 </th>
               </tr>
@@ -314,11 +308,10 @@ onMounted(() => {
                   @click=navigateToCustomer(customer.customerCodePk)>
                 <td>{{ customer.customerCodePk }}</td>
                 <td>{{ customer.customerName }}</td>
-                <td>{{ customer.customerGender }}</td>
+                <td>{{ customer.membershipLevelName }}</td>
                 <td>{{ customer.customerPhoneNumber }}</td>
                 <td>{{ customer.customerEmail }}</td>
-                <td>{{ customer.customerAddress }}</td>
-                <td>{{ customer.membershipLevelName }}</td>
+                <td>{{ customer.customerGender }}</td>
                 <td>{{ customer.nationName }}</td>
                 <td>{{ customer.customerType }}</td>
               </tr>

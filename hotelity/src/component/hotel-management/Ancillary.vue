@@ -89,19 +89,25 @@ async function loadancillary(page, orderByValue = 'ancillaryCodePk', sortByValue
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
   loadancillary(page, orderBy.value, sortBy.value);
 }
 
+
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -208,14 +214,14 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('ancillaryCodePk')" :class="{ 'active-asc': orderBy === 'ancillaryCodePk' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCodePk' && sortBy === 1 }">편의시설 코드</th>
+                <th scope="col" @click="sort('ancillaryCodePk')" :class="{ 'active-asc': orderBy === 'ancillaryCodePk' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCodePk' && sortBy === 1 }" style="width: 110px;">편의시설 코드</th>
                 <th scope="col" @click="sort('ancillaryCategoryName')" :class="{ 'active-asc': orderBy === 'ancillaryCategoryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCategoryName' && sortBy === 1 }">타입</th>
-                <th scope="col" @click="sort('branchName')" :class="{ 'active-asc': orderBy === 'branchName' && sortBy === 0, 'active-desc': orderBy === 'branchName' && sortBy === 1 }">지점</th>
+                <th scope="col" @click="sort('branchName')" :class="{ 'active-asc': orderBy === 'branchName' && sortBy === 0, 'active-desc': orderBy === 'branchName' && sortBy === 1 }" style="width: 100px;">지점</th>
                 <th scope="col" @click="sort('ancillaryName')" :class="{ 'active-asc': orderBy === 'ancillaryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryName' && sortBy === 1 }">시설명</th>
                 <th scope="col">위치</th>
-                <th scope="col">전화번호</th>
                 <th scope="col">운영 시작 시간</th>
                 <th scope="col">운영 종료 시간</th>
+                <th scope="col">전화번호</th>
               </tr>
               </thead>
               <tbody>
@@ -225,24 +231,24 @@ onMounted(() => {
                 <td>{{ ancillary.branchName }}</td>
                 <td>{{ ancillary.ancillaryName }}</td>
                 <td>{{ ancillary.ancillaryLocation }}</td>
-                <td>{{ ancillary.ancillaryPhoneNumber }}</td>
                 <td>{{ ancillary.ancillaryOpenTime }}</td>
                 <td>{{ ancillary.ancillaryCloseTime }}</td>
+                <td>{{ ancillary.ancillaryPhoneNumber }}</td>
               </tr>
               </tbody>
             </table>
           </div>
 
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+          <!-- 페이징 컨트롤 -->
+        <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -251,18 +257,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/*
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-*/
 .pagination {
   list-style: none;
   display: flex;

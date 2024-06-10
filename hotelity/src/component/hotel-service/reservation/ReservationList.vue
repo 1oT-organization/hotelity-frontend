@@ -69,8 +69,8 @@
 <!--              <th scope="col">체크인</th>-->
               <th scope="col">예약 코드</th>
               <th scope="col">고객 코드</th>
-              <th scope="col">고객명</th>
 <!--              <th scope="col">영문 이름</th>-->
+              <th scope="col">이름</th>
               <th scope="col">객실 코드</th>
               <th scope="col">객실 번호</th>
               <th scope="col">객실명</th>

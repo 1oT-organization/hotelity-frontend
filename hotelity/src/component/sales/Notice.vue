@@ -69,19 +69,25 @@ async function loadNotice(page, orderByValue = 'noticeCodePk', sortByValue = 0) 
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
   loadNotice(page, orderBy.value, sortBy.value);
 }
 
+
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -178,11 +184,11 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('noticeCodePk')" :class="{ 'active-asc': orderBy === 'noticeCodePk' && sortBy === 0, 'active-desc': orderBy === 'noticeCodePk' && sortBy === 1 }">공지 코드</th>
+                <th scope="col" @click="sort('noticeCodePk')" :class="{ 'active-asc': orderBy === 'noticeCodePk' && sortBy === 0, 'active-desc': orderBy === 'noticeCodePk' && sortBy === 1 }" style="width: 80px;">공지 코드</th>
                 <th scope="col">제목</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점</th>
-                <th scope="col">직원명</th>
-                <th scope="col">작성 일자</th>
+                <th scope="col" style="width: 100px;">직원명</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }" style="width: 70px;">지점</th>
+                <th scope="col" style="width: 210px;">작성 일자</th>
               </tr>
               </thead>
               <tbody>
@@ -190,8 +196,8 @@ onMounted(() => {
                   @click="navigateToNoticeDetail(notice.noticeCodePk)">
                 <td>{{ notice.noticeCodePk }}</td>
                 <td>{{ notice.noticeTitle }}</td>
-                <td>{{ notice.branchCodeFk }}</td>
                 <td>{{ notice.picemployeeName }}</td>
+                <td>{{ notice.branchCodeFk }}</td>
                 <td>{{
                     new Date(notice.noticePostedDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -210,17 +216,16 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+           <!-- 페이징 컨트롤 -->
+        <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>

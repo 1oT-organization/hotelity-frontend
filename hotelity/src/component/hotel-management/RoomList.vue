@@ -101,19 +101,25 @@ async function loadroom(page, orderByValue = 'roomCodePk', sortByValue = 0) {
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
   loadroom(page, orderBy.value, sortBy.value);
 }
 
+
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -229,16 +235,16 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('roomCodePk')" :class="{ 'active-asc': orderBy === 'roomCodePk' && sortBy === 0, 'active-desc': orderBy === 'roomCodePk' && sortBy === 1 }">객실 코드</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점</th>
-                <th scope="col" @click="sort('roomNumber')" :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1 }">호수</th>
-                <th scope="col" @click="sort('roomName')" :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">객실 명</th>
+                <th scope="col" @click="sort('roomCodePk')" :class="{ 'active-asc': orderBy === 'roomCodePk' && sortBy === 0, 'active-desc': orderBy === 'roomCodePk' && sortBy === 1 }" style="width: 110px;">객실 코드</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }" style="width: 80px;">지점</th>
+                <th scope="col" @click="sort('roomNumber')" :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1 }" style="width: 80px;">호수</th>
                 <th scope="col" @click="sort('roomLevelName')" :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }">객실 등급명</th>
-                <th scope="col" @click="sort('roomPrice')" :class="{ 'active-asc': orderBy === 'roomPrice' && sortBy === 0, 'active-desc': orderBy === 'roomPrice' && sortBy === 1 }">가격</th>
-                <th scope="col">방개수</th>
-                <th scope="col">수용인원</th>
-                <th scope="col">화장실개수</th>
-                <th scope="col">비수기 할인율</th>
+                <th scope="col" @click="sort('roomName')" :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">객실 명</th>
+                <th scope="col" @click="sort('roomPrice')" :class="{ 'active-asc': orderBy === 'roomPrice' && sortBy === 0, 'active-desc': orderBy === 'roomPrice' && sortBy === 1 }" style="width: 220px;">가격</th>
+                <th scope="col" style="width: 90px;">방개수</th>
+                <th scope="col" style="width: 90px;">수용인원</th>
+                <th scope="col" style="width: 90px;">화장실개수</th>
+                <th scope="col" style="width: 90px;">할인율</th>
               </tr>
               </thead>
               <tbody>
@@ -247,8 +253,8 @@ onMounted(() => {
                 <td>{{ room.roomCodePk }}</td>
                 <td>{{ room.branchCodeFk }}</td>
                 <td>{{ room.roomNumber }}</td>
-                <td>{{ room.roomName }}</td>
                 <td>{{ room.roomLevelName }}</td>
+                <td>{{ room.roomName }}</td>
                 <td>{{ '₩' + room.roomPrice.toLocaleString('ko-KR') }}</td>
                 <td>{{ room.roomSubRoomsCount }}</td>
                 <td>{{ room.roomCapacity }}</td>
@@ -259,17 +265,16 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+        <!-- 페이징 컨트롤 -->
+        <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -282,18 +287,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/*
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-*/
 .pagination {
   list-style: none;
   display: flex;

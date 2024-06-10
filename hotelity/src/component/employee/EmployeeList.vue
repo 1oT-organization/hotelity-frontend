@@ -89,16 +89,14 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }">직원 코드</th>
+                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }" style="width: 80px;">직원 코드</th>
                 <th scope="col" @click="sort('employeeName')" :class="{ 'active-asc': orderBy === 'employeeName' && sortBy === 0, 'active-desc': orderBy === 'employeeName' && sortBy === 1 }">이름</th>
                 <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">지점</th>
                 <th scope="col" @click="sort('rankCodeFk')" :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">직급</th>
                 <th scope="col" @click="sort('departmentCodeFk')" :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">부서</th>
                 <th scope="col" @click="sort('positionCodeFk')" :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">직책</th>
                 <th scope="col" @click="sort('employeeOfficePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }">내선번호</th>
-                <th scope="col" @click="sort('employeePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeePhoneNumber' && sortBy === 1 }">전화번호</th>
-                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }">Email</th>
-                <th scope="col" @click="sort('employeeAddress')" :class="{ 'active-asc': orderBy === 'employeeAddress' && sortBy === 0, 'active-desc': orderBy === 'employeeAddress' && sortBy === 1 }">주소</th>
+                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }" style="width: 230px;">Email</th>
               </tr>
               </thead>
               <tbody>
@@ -110,25 +108,22 @@
                 <td>{{ employee.nameOfDepartment }}</td>
                 <td>{{ employee.nameOfPosition }}</td>
                 <td>{{ employee.employeeOfficePhoneNumber }}</td>
-                <td>{{ employee.employeePhoneNumber }}</td>
                 <td>{{ employee.employeeEmail }}</td>
-                <td>{{ employee.employeeAddress }}</td>
               </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+          <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
