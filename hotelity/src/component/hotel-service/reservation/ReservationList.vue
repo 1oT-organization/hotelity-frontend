@@ -81,7 +81,7 @@
               <th scope="col">체크인 일자</th>
               <th scope="col">체크아웃 일자</th>
               <th scope="col">예약 인원</th>
-              <th scope="col">예약 취소</th>
+<!--              <th scope="col">예약 취소</th>-->
               <th scope="col">투숙 등록</th>
             </tr>
             </thead>
@@ -104,10 +104,10 @@
               <td>{{ formatDate(reservation.reservationCheckinDate) }}</td>
               <td>{{ formatDate(reservation.reservationCheckoutDate) }}</td>
               <td>{{ reservation.reservationPersonnel }}</td>
-              <td>
-                <span v-if="reservation.reservationCancelStatus === 0">N</span>
-                <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>
-              </td>
+<!--              <td>-->
+<!--                <span v-if="reservation.reservationCancelStatus === 0">N</span>-->
+<!--                <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>-->
+<!--              </td>-->
               <td>
                 <span v-if="reservation.stayStatus === 0">N</span>
                 <span v-else-if="reservation.stayStatus === 1">Y</span>
@@ -198,7 +198,6 @@ import * as api from '@/api/apiService.js';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
-import ReservationCheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
 
 const authStore = useAuthStore();
 const isLoading = ref(true);
@@ -210,8 +209,6 @@ const isFilterContainerVisible = ref(false);
 const isCalendarContainerVisible = ref(false);
 const selectedMonth = ref(null);
 const showModal = ref(false); // 모달 표시 여부
-
-const fullRoomName = computed(() => `${reservationDetails.roomName} ${reservationDetails.roomLevelName}`);
 
 // 모달창
 async function openModal(reservationCodePk) {
@@ -324,30 +321,42 @@ let obj = {};
 const change = ref(false);
 provide('change', change);
 
+let previousMonths = ref([]);
+
 watch(selectedMonth, async (newMonth) => {
-      if (newMonth) {
-        const response = await api.getMonthlyReservations(selectedMonth.value);
-        const data = response.data;
-
-        change.value = true;
-
-        console.log("백엔드 메소드 실행 결과: ")
-        console.log(data);
-
-        for (const reservation of data.content) {
-          const date = formatDate(reservation.reservationCheckinDate);
-
-          if (!obj[date]) {
-            obj[date] = [];
-          }
-
-          obj[date].push(reservation);
-        }
-
-        console.log(obj);
-      }
+  if (newMonth) {
+    // 이전에 선택한 월들 중 새로운 월이 있는지 확인
+    if (previousMonths.value.includes(newMonth)) {
+      console.log("동일한 월이므로 api.getMonthlyReservations를 실행하지 않습니다.");
+      return;
     }
-);
+
+    const response = await api.getMonthlyReservations(selectedMonth.value);
+    console.log("선택된 월: ");
+    console.log(selectedMonth.value);
+    const data = response.data;
+
+    change.value = true;
+
+    console.log("백엔드 메소드 실행 결과: ")
+    console.log(data);
+
+    for (const reservation of data.content) {
+      const date = formatDate(reservation.reservationCheckinDate);
+
+      if (!obj[date]) {
+        obj[date] = [];
+      }
+
+      obj[date].push(reservation);
+    }
+
+    console.log(obj);
+
+    // 새로운 월을 이전에 선택한 월들에 추가
+    previousMonths.value.push(newMonth);
+  }
+});
 
 // 필터
 function toggleFilterContainer() {
@@ -418,14 +427,14 @@ function formatDateTime(date) {
 .filter-container {
   position: absolute;
   top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
-  right: -8px; /* 필터 아이콘 오른쪽 끝에 위치 */
+  right: -12px; /* 필터 아이콘 오른쪽 끝에 위치 */
   width: auto;
 }
 
 .calendar-container {
   position: absolute;
   top: 50px;
-  right: 142px;
+  right: 50px;
   width: auto;
   background: #fff;
   border-radius: 5px;
@@ -453,6 +462,7 @@ function formatDateTime(date) {
   border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
 }
 
+// 모달창 스타일
 .modal-body .row .col-md-4.mb-3 {
   margin: 20px;
 }

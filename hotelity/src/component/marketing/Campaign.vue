@@ -369,8 +369,8 @@ tr {
 .filter-container {
   position: absolute;
   top: 50px;
-  right: 10px;
-  width: 500px;
+  right: -12px;
+  width: auto;
   padding: 10px;
   background-color: white;
   border-radius: 5px;
