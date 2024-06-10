@@ -5,7 +5,9 @@
 
 <script setup>
 import {ref} from 'vue';
-import axios from 'axios';
+import * as api from '@/api/apiService.js';
+import {createStay} from "@/api/apiService.js";
+
 
 const props = defineProps({
   checkedRows: Array,
@@ -21,13 +23,15 @@ const checkIn = async () => {
     const reservationCodePk = checkedReservations[0].reservationCodePk;
     console.log("reservationCodePk");
     console.log(reservationCodePk);
+
+    const stayInfo = {
+      reservationCodeFk: reservationCodePk,
+      employeeCodeFk: 4,
+      stayPeopleCount: 2
+    };
+
     try {
-      await axios.post('http://localhost:8888/hotel-service/stays/checkin',
-          {
-            reservationCodeFk: reservationCodePk,
-            employeeCodeFk: 4,
-            stayPeopleCount: 2
-          });
+      await api.createStay(stayInfo);
       showPopup.value = true;
       popupMessage.value = '체크인 되었습니다';
       setTimeout(() => {
