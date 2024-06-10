@@ -427,7 +427,7 @@ function formatDateTime(date) {
 .filter-container {
   position: absolute;
   top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
-  right: -20px; /* 필터 아이콘 오른쪽 끝에 위치 */
+  right: -12px; /* 필터 아이콘 오른쪽 끝에 위치 */
   width: auto;
 }
 
