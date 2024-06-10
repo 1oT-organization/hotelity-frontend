@@ -277,9 +277,9 @@ onMounted(() => {
                     :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }" style="width: 180px;">
                   이름
                 </th>
-                <th scope="col" @click="sort('customerGender')"
-                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }" style="width: 70px;">
-                  성별
+                <th scope="col" @click="sort('membershipLevelName')"
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }" style="width: 100px;">
+                  멤버십 등급
                 </th>
                 <th scope="col" @click="sort('customerPhoneNumber')"
                     :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }" style="width: 200px;">
@@ -289,9 +289,9 @@ onMounted(() => {
                     :class="{ 'active-asc': orderBy === 'customerEmail' && sortBy === 0, 'active-desc': orderBy === 'customerEmail' && sortBy === 1 }">
                   Email
                 </th>
-                <th scope="col" @click="sort('membershipLevelName')"
-                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }" style="width: 100px;">
-                  멤버십 등급
+                <th scope="col" @click="sort('customerGender')"
+                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }" style="width: 70px;">
+                  성별
                 </th>
                 <th scope="col" @click="sort('nationName')"
                     :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }" style="width: 110px;">
@@ -308,10 +308,10 @@ onMounted(() => {
                   @click=navigateToCustomer(customer.customerCodePk)>
                 <td>{{ customer.customerCodePk }}</td>
                 <td>{{ customer.customerName }}</td>
-                <td>{{ customer.customerGender }}</td>
+                <td>{{ customer.membershipLevelName }}</td>
                 <td>{{ customer.customerPhoneNumber }}</td>
                 <td>{{ customer.customerEmail }}</td>
-                <td>{{ customer.membershipLevelName }}</td>
+                <td>{{ customer.customerGender }}</td>
                 <td>{{ customer.nationName }}</td>
                 <td>{{ customer.customerType }}</td>
               </tr>

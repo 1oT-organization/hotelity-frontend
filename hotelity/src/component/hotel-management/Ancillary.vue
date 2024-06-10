@@ -214,14 +214,14 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('ancillaryCodePk')" :class="{ 'active-asc': orderBy === 'ancillaryCodePk' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCodePk' && sortBy === 1 }">편의시설 코드</th>
+                <th scope="col" @click="sort('ancillaryCodePk')" :class="{ 'active-asc': orderBy === 'ancillaryCodePk' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCodePk' && sortBy === 1 }" style="width: 110px;">편의시설 코드</th>
                 <th scope="col" @click="sort('ancillaryCategoryName')" :class="{ 'active-asc': orderBy === 'ancillaryCategoryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryCategoryName' && sortBy === 1 }">타입</th>
-                <th scope="col" @click="sort('branchName')" :class="{ 'active-asc': orderBy === 'branchName' && sortBy === 0, 'active-desc': orderBy === 'branchName' && sortBy === 1 }">지점</th>
+                <th scope="col" @click="sort('branchName')" :class="{ 'active-asc': orderBy === 'branchName' && sortBy === 0, 'active-desc': orderBy === 'branchName' && sortBy === 1 }" style="width: 100px;">지점</th>
                 <th scope="col" @click="sort('ancillaryName')" :class="{ 'active-asc': orderBy === 'ancillaryName' && sortBy === 0, 'active-desc': orderBy === 'ancillaryName' && sortBy === 1 }">시설명</th>
                 <th scope="col">위치</th>
-                <th scope="col">전화번호</th>
                 <th scope="col">운영 시작 시간</th>
                 <th scope="col">운영 종료 시간</th>
+                <th scope="col">전화번호</th>
               </tr>
               </thead>
               <tbody>
@@ -231,9 +231,9 @@ onMounted(() => {
                 <td>{{ ancillary.branchName }}</td>
                 <td>{{ ancillary.ancillaryName }}</td>
                 <td>{{ ancillary.ancillaryLocation }}</td>
-                <td>{{ ancillary.ancillaryPhoneNumber }}</td>
                 <td>{{ ancillary.ancillaryOpenTime }}</td>
                 <td>{{ ancillary.ancillaryCloseTime }}</td>
+                <td>{{ ancillary.ancillaryPhoneNumber }}</td>
               </tr>
               </tbody>
             </table>
