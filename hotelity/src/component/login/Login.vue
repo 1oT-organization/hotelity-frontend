@@ -66,11 +66,10 @@
               employeeCode: employeeCode.value,
           });
 
-          document.querySelector(".sidebar").classList.remove('open');
           document.querySelector(".content").classList.remove('open');
 
           const redirect = router.currentRoute.value.query.redirect || '/';
-          router.push(redirect);
+          router.replace(redirect);
         } else {
           alert('로그인 실패');
         }
