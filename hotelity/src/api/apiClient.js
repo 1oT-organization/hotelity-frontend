@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // nginx 사용
-const baseURL = 'http://ad99c7291a7f6418e86525a012a2df9d-1206189568.ap-northeast-2.elb.amazonaws.com';
+// const baseURL = 'http://ad99c7291a7f6418e86525a012a2df9d-1206189568.ap-northeast-2.elb.amazonaws.com';
 // const baseURL = 'http://ae582f63474d441b3a1a6e9e71f40bc8-1385203214.ap-northeast-2.elb.amazonaws.com:8888';
-// const baseURL = 'http://localhost:8888';
+const baseURL = 'http://localhost:8888';
 
 const apiClient = axios.create({
     baseURL: baseURL,
