@@ -198,7 +198,6 @@ import * as api from '@/api/apiService.js';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import ReservationCalendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
-import ReservationCheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
 
 const authStore = useAuthStore();
 const isLoading = ref(true);
@@ -210,8 +209,6 @@ const isFilterContainerVisible = ref(false);
 const isCalendarContainerVisible = ref(false);
 const selectedMonth = ref(null);
 const showModal = ref(false); // 모달 표시 여부
-
-const fullRoomName = computed(() => `${reservationDetails.roomName} ${reservationDetails.roomLevelName}`);
 
 // 모달창
 async function openModal(reservationCodePk) {

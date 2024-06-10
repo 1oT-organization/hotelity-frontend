@@ -27,12 +27,8 @@
 
         <div style="display: flex; justify-content:right">
           <!-- calendar icon -->
-          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i
+          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i
               class="bi bi-calendar"></i></button>
-
-          <StayCheckoutBtn :checkedRows="checkedRows" :stays="stays.content"/>
-          <!--        StayFilter start -->
-
 
           <!-- StayFilter start -->
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
@@ -73,56 +69,65 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col" style="width: 80px;">체크아웃</th>
               <th scope="col" @click="sort('stayCodePk')"
-                  :class="{ 'active-asc': orderBy === 'stayCodePk' && sortBy === 0, 'active-desc': orderBy === 'stayCodePk' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'stayCodePk' && sortBy === 0, 'active-desc': orderBy === 'stayCodePk' && sortBy === 1}"
+                  style="width: 80px;">
                 투숙 코드
               </th>
               <th scope="col" @click="sort('customerName')"
-                  :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1}"
+                  style="width: 80px;">
                 이름
               </th>
               <th scope="col" @click="sort('roomCodeFk')"
-                  :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1}"
+                  style="width: 80px;">
                 객실코드
               </th>
               <th scope="col" @click="sort('roomNumber')"
-                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}"
+                  style="width: 80px;">
                 객실번호
               </th>
               <th scope="col" @click="sort('roomName')"
-                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}"
+                  style="width: 80px;">
                 객실명
               </th>
               <th scope="col" @click="sort('roomLevelName')"
-                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1}"
+                  style="width: 80px;">
                 객실등급명
               </th>
               <th scope="col" @click="sort('stayPeopleCount')"
-                  :class="{ 'active-asc': orderBy === 'stayPeopleCount' && sortBy === 0, 'active-desc': orderBy === 'stayPeopleCount' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'stayPeopleCount' && sortBy === 0, 'active-desc': orderBy === 'stayPeopleCount' && sortBy === 1}"
+                  style="width: 80px;">
                 투숙인원
               </th>
               <th scope="col" @click="sort('stayCheckinTime')"
-                  :class="{ 'active-asc': orderBy === 'stayCheckinTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckinTime' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'stayCheckinTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckinTime' && sortBy === 1}"
+                  style="width: 80px;">
                 체크인 일자
               </th>
               <th scope="col" @click="sort('reservationCheckoutDate')"
-                  :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1}"
+                  style="width: 80px;">
                 체크아웃 예정일
               </th>
               <th scope="col" @click="sort('stayCheckoutTime')"
-                  :class="{ 'active-asc': orderBy === 'stayCheckoutTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckoutTime' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'stayCheckoutTime' && sortBy === 0, 'active-desc': orderBy === 'stayCheckoutTime' && sortBy === 1}"
+                  style="width: 80px;">
                 체크아웃 일자
               </th>
               <th scope="col" @click="sort('stayPeriod')"
-                  :class="{ 'active-asc': orderBy === 'stayPeriod' && sortBy === 0, 'active-desc': orderBy === 'stayPeriod' && sortBy === 1}" style="width: 80px;">
+                  :class="{ 'active-asc': orderBy === 'stayPeriod' && sortBy === 0, 'active-desc': orderBy === 'stayPeriod' && sortBy === 1}"
+                  style="width: 80px;">
                 숙박일수
               </th>
             </tr>
             </thead>
             <tbody>
             <tr v-if="isFetchDailyStay" v-for="(stay, index) in stays" :key="index" @click="openModal(stay.stayCodePk)">
-              <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
               <td>{{ stay.stayCodePk }}</td>
               <td>{{ stay.customerName }}</td>
               <td>{{ stay.roomCodeFk }}</td>
@@ -136,8 +141,7 @@
               <td>{{ stay.stayPeriod }}</td>
             </tr>
 
-            <tr v-else v-for="(stay, index) in stays.content" :key="stay.stayCodePk">
-              <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
+            <tr v-else v-for="(stay, index) in stays.content" :key="stay.stayCodePk" @click="openModal(stay.stayCodePk)">
               <td>{{ stay.stayCodePk }}</td>
               <td>{{ stay.customerName }}</td>
               <td>{{ stay.roomCodeFk }}</td>
@@ -154,21 +158,80 @@
           </table>
         </div>
 
-       <!-- 페이징 컨트롤 -->
-       <div class="pagination modal-2">
-  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
-  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
-          @click="changePage((pageGroup - 1) * pageSize + page)"
-          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-    {{ (pageGroup - 1) * pageSize + page }}
-  </button>
-  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
-</div>
+        <!-- 페이징 컨트롤 -->
+        <div class="pagination modal-2">
+          <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+          <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+                  @click="changePage((pageGroup - 1) * pageSize + page)"
+                  :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+            {{ (pageGroup - 1) * pageSize + page }}
+          </button>
+          <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+              class="bi bi-caret-right-fill"></i></button>
+        </div>
       </div>
-      <div v-if="showModal">
-        <div>{{ stayDetail }}</div>
-        <button @click="closeModal">Close</button>
+
+      <!-- Modal start -->
+      <div v-if="showModal" class="modal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">투숙 확인</h5>
+              <button type="button" class="btn-close" @click="closeModal"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-3 mb-3">
+                    <label for="customerName" class="form-label">고객명</label>
+                    <input type="text" class="form-control" id="customerName" v-model="stayDetails.customerName" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="roomCodeFk" class="form-label">객실 코드</label>
+                    <input type="text" class="form-control" id="roomCodeFk" v-model="stayDetails.roomCodeFk" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="roomNumber" class="form-label">예약 객실 번호</label>
+                    <input type="text" class="form-control" id="roomNumber" v-model="stayDetails.roomNumber" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="roomName" class="form-label">예약 객실명</label>
+                    <input type="text" class="form-control" id="roomName" :value="stayDetails.roomName + ' ' + stayDetails.roomLevelName" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="stayPeopleCount" class="form-label">투숙 인원</label>
+                    <input type="text" class="form-control" id="stayPeopleCount" :value="stayDetails.stayPeopleCount" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="stayCheckinTime" class="form-label">체크인 일자</label>
+                    <input type="text" class="form-control" id="stayCheckinTime"
+                           v-model="stayDetails.stayCheckinTime" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="reservationCheckoutDate" class="form-label">체크아웃 예정일</label>
+                    <input type="text" class="form-control" id="reservationCheckoutDate"
+                           v-model="stayDetails.reservationCheckoutDate" disabled>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="stayCheckoutTime" class="form-label">체크아웃 일자</label>
+                    <input type="text" class="form-control" id="stayCheckoutTime"
+                           v-model="stayDetails.stayCheckoutTime" disabled>
+                  </div>
+<!--                  <div class="col-md-3 mb-3">-->
+<!--                    <label for="stayPeriod" class="form-label">숙박 일수</label>-->
+<!--                    <input type="text" class="form-control" id="stayPeriod"-->
+<!--                           v-model="stayDetails.stayCheckoutTime" disabled>-->
+<!--                  </div>-->
+                </div>
+                <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
+                <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
+      <!-- Modal end -->
+
     </div>
   </div>
 </template>
@@ -201,11 +264,76 @@ const orderBy = ref('stayCheckinTime');
 const selectedStayCheckinDate = ref(null);
 const selectedStayCheckoutDate = ref(null);
 
-// 모달
+// 모달창
 const showModal = ref(false);
-const stayDetail = ref(null);
 
-// async function openModal
+const showPopup = ref(false);
+const popupMessage = ref('');
+
+async function openModal(stayCodePk) {
+  console.log("openModal 실행됨", stayCodePk)
+  const response = await api.getStay(stayCodePk);
+  console.log(response)
+  if (response.data === null || response.data.content.length === 0) {
+    console.error('Stay not found');
+    return;
+  }
+  stayDetails.value = response.data.content[0];
+  console.log("stayDetails: ")
+  console.log(stayDetails.value.stayCodePk);
+  showModal.value = true;
+  return stayDetails.value;
+}
+
+function closeModal() {
+  showModal.value = false;
+}
+
+// 모달에 들어갈 데이터
+const stayDetails = ref({
+  stayCodePk: '',
+  customerName: '',
+  roomCodeFk: '',
+  roomNumber: '',
+  roomName: '',
+  roomLevelName: '',
+  stayPeopleCount: '',
+  stayCheckinTime: '',
+  reservationCheckoutDate: '',
+  stayCheckoutTime: '',
+  stayPeriod: ''
+});
+
+// 얘 수정해야함 체크아웃(api.checkout)으로!
+const checkOut = async () => {
+  console.log("checkOut 실행됨");
+
+  const stayCheckoutTime = stayDetails.value.stayCheckoutTime;
+  const stayCodePk = stayDetails.value.stayCodePk;
+
+  // 이미 체크아웃이 된 경우
+  if (stayCheckoutTime !== null) {
+    showPopup.value = true;
+    popupMessage.value = '이미 체크아웃 되었습니다';
+    setTimeout(() => {
+      showPopup.value = false;
+    }, 1000);
+    return;
+  }
+
+  try {
+    console.log("Attempting to create stay"); // 이 로그가 출력되는지 확인
+    await api.checkout(stayCodePk);
+    showPopup.value = true;
+    popupMessage.value = '체크아웃 되었습니다';
+    setTimeout(() => {
+      showPopup.value = false;
+    }, 1000);
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // fetch마다 다르게 리스트를 출력하기 위함
 const isFetchDailyStay = ref(false);
@@ -432,6 +560,7 @@ function formatDateTime(date) {
   text-align: center;
   justify-content: center;
 }
+
 .pagination button {
   display: inline;
   text-align: center;
@@ -445,12 +574,14 @@ function formatDateTime(date) {
   line-height: 1.5;
   background: #fff;
 }
+
 .pagination button.selected {
   cursor: default;
   border-color: #909090;
   background: #b4b4b4;
   color: #fff;
 }
+
 .pagination button:active {
   outline: none;
 }
@@ -460,11 +591,13 @@ function formatDateTime(date) {
   -webkit-border-radius: 50px;
   border-radius: 50px 0 0 50px;
 }
+
 .modal-2 button:last-child {
   -moz-border-radius: 0 50px 50px 0;
   -webkit-border-radius: 0;
   border-radius: 0 50px 50px 0;
 }
+
 .modal-2 button:hover {
   color: #000000;
   background-color: #eee;
