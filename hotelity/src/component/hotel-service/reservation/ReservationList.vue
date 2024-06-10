@@ -81,7 +81,7 @@
               <th scope="col">체크인 일자</th>
               <th scope="col">체크아웃 일자</th>
               <th scope="col">예약 인원</th>
-              <th scope="col">예약 취소</th>
+<!--              <th scope="col">예약 취소</th>-->
               <th scope="col">투숙 등록</th>
             </tr>
             </thead>
@@ -104,10 +104,10 @@
               <td>{{ formatDate(reservation.reservationCheckinDate) }}</td>
               <td>{{ formatDate(reservation.reservationCheckoutDate) }}</td>
               <td>{{ reservation.reservationPersonnel }}</td>
-              <td>
-                <span v-if="reservation.reservationCancelStatus === 0">N</span>
-                <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>
-              </td>
+<!--              <td>-->
+<!--                <span v-if="reservation.reservationCancelStatus === 0">N</span>-->
+<!--                <span v-else-if="reservation.reservationCancelStatus === 1">Y</span>-->
+<!--              </td>-->
               <td>
                 <span v-if="reservation.stayStatus === 0">N</span>
                 <span v-else-if="reservation.stayStatus === 1">Y</span>
@@ -427,14 +427,14 @@ function formatDateTime(date) {
 .filter-container {
   position: absolute;
   top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
-  right: -8px; /* 필터 아이콘 오른쪽 끝에 위치 */
+  right: -12px; /* 필터 아이콘 오른쪽 끝에 위치 */
   width: auto;
 }
 
 .calendar-container {
   position: absolute;
   top: 50px;
-  right: 142px;
+  right: 50px;
   width: auto;
   background: #fff;
   border-radius: 5px;
@@ -462,6 +462,7 @@ function formatDateTime(date) {
   border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
 }
 
+// 모달창 스타일
 .modal-body .row .col-md-4.mb-3 {
   margin: 20px;
 }

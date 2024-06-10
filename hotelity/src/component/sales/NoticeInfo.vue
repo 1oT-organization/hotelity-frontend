@@ -66,7 +66,7 @@ const fetchNotice = async () => {
 };
 
 const closeNotice = () => {
-  router.push('/');
+  router.push('/notice');
 };
 
 const modifyNotice = async () => {
