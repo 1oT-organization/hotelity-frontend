@@ -10,7 +10,6 @@ import CustomerList from '@/component/customer/CustomerList.vue';
 
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
-import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
@@ -102,15 +101,6 @@ const routes = [
         path: '/employeeInfo/:id',
         name: 'EmployeeInfo',
         component: EmployeeInfo,
-        meta: {
-            requiresAuth: true,
-            category: 'employee',
-        },
-    },
-    {
-        path: '/employeeStay/:id',
-        name: 'EmployeeStay',
-        component: EmployeeStay,
         meta: {
             requiresAuth: true,
             category: 'employee',

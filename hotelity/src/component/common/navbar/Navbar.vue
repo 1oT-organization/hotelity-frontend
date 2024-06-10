@@ -17,7 +17,7 @@
         <div id="employee" class="nav-item nav-link c-pointer" @click="navigateTo(destination.employee, $event)">직원</div>
         <div id="hotelService" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelService, $event)">호텔 서비스</div>
         <div id="hotelManagement" class="nav-item nav-link c-pointer" @click="navigateTo(destination.hotelManagement, $event)">호텔 관리</div>
-<!--        <div id="marketing" class="nav-item nav-link" @click="navigateTo(destination.marketing, $event)">마케팅</div>-->
+        <div id="marketing" class="nav-item nav-link" @click="navigateTo(destination.marketing, $event)">마케팅</div>
         <div id="sales" class="nav-item nav-link c-pointer" @click="navigateTo(destination.sales, $event)">영업관리</div>
 
       </div>

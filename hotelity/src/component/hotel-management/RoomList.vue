@@ -60,7 +60,6 @@ async function fetchData(params) {
 async function downloadExcel() {
   try {
     const response = await api.downloadRoomExcel(defaultParams);
-
     const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
