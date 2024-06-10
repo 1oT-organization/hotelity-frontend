@@ -47,7 +47,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/rooms', {params});
     const response = await api.getRooms(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -60,12 +59,7 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/rooms/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadRoomExcel(defaultParams);
-
     const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
