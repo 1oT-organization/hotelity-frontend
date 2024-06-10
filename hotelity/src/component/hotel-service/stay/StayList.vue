@@ -36,7 +36,7 @@
         </div>
 
         <!-- filter container -->
-        <div class="filter-container" v-show="isFilterContainerVisible">
+        <div class="filter-container" v-show="isFilterContainerVisible" style="width: auto">
           <div class="btn-group me-2">
             <select class="form-select" v-model="defaultParams.branchCodeFk">
               <option value="null">지점 코드</option>
@@ -602,26 +602,6 @@ function formatDateTime(date) {
   color: #000000;
   background-color: #eee;
 }
-
-
-.filter-container {
-  position: absolute;
-  top: 50px; /* 필터 아이콘의 높이에 따라 조정 */
-  right: -8px; /* 필터 아이콘 오른쪽 끝에 위치 */
-  width: auto;
-}
-
-.calendar-container {
-  position: absolute;
-  top: 50px;
-  right: 142px;
-  width: auto;
-  background: #fff;
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
-}
-
 
 .calendar-container::before {
   content: "";
