@@ -19,6 +19,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const selectedItemName = ref('');
+const selectedFilter = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
@@ -127,6 +128,10 @@ async function loadCustomers(page, orderByValue = 'customerCodePk', sortByValue 
     defaultParams.customerType = document.getElementById('customerType').value === '' ?
         null : document.getElementById('customerType').value;
 
+    selectedFilter.value =
+        `${defaultParams.membershipLevelName ? defaultParams.membershipLevelName : ''}
+        ${defaultParams.customerType ? defaultParams.customerType : ''}`;
+
     customers.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
@@ -170,7 +175,7 @@ function setSearchCriteria(criteria, event) {
     defaultParams[selectedCriteria.value] = null;
   }
 
-  selectedItemName.value = event.target.textContent == '선택' ? '' : event.target.textContent;
+  selectedItemName.value = event.target.textContent === '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
@@ -197,18 +202,13 @@ function sort(column) {
 }
 
 const hideDropdown = () => {
-  console.log(isDropdownOpen.value);
-
   if (isDropdownOpen.value === true) {
     isDropdownOpen.value = false;
   }
-
-  console.log(isDropdownOpen.value);
 };
 
-const hideFilter = (event) => {
-  event.stopPropagation();
-
+const hideFilter = () => {
+  console.log('hideFilter', isFilterContainerVisible.value);
   if (isFilterContainerVisible.value === true) {
     isFilterContainerVisible.value = false;
   }
@@ -265,11 +265,11 @@ onMounted(() => {
           </div>
           <div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer" v-click-outside="hideFilter">
-            <i class="bi bi-funnel"></i>
+                  @click="toggleFilterContainer">
+            <i class="bi bi-funnel">{{ selectedFilter }}</i>
           </button>
         </div>
-          <div class="filter-container" v-show="isFilterContainerVisible">
+          <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
               <select id="membershipLevelName" class="form-select">
                 <option value="">멤버십 등급 선택</option>
@@ -447,7 +447,7 @@ tr {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: none;
   gap: 10px;
 }
 
@@ -476,6 +476,7 @@ tr {
   color: black;
 }
 
+.filter-container.show,
 .dropdown-menu.show {
   display: block;
 }
