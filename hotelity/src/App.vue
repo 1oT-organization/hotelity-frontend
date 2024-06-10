@@ -75,7 +75,7 @@
 </script>
 
 <template>
-  <Sidebar ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
+  <Sidebar v-if="!$route.meta.hideSidebar" ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
   
   <div class="content">
 
