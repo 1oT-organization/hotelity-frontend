@@ -79,8 +79,8 @@
       console.log('이건뭘까요', image.ancillaryImageLink)
       return image.ancillaryImageLink ? image : emptyImage;
     });
-    return length < 10
-        ? [...filledImages, ...new Array(10 - length).fill(emptyImage)]
+    return length < 5
+        ? [...filledImages, ...new Array(5 - length).fill(emptyImage)]
         : filledImages;
   });
   

@@ -51,8 +51,7 @@ onMounted(async () => {
         <h3 class="mb-4">템플릿 정보</h3>
         <div class="form-submit">
           <form @submit.prevent="handleSubmit">
-            <!-- 등록 버튼 누를 시 고객 데이터 저장 -->
-            <button type="submit" class="btn-submit">등록</button>
+            <button type="submit" class="btn-submit">수정</button>
             <br/><br/>
           </form>
         </div>
@@ -65,12 +64,12 @@ onMounted(async () => {
           <div class="template-container" v-if="template">
 
           <div class="form-group">
-            <label for="templateName">템플릿 제목 : </label>
-            <span>{{ template.templateName }}</span>
+            <label for="templateName">템플릿 제목 :&nbsp;&nbsp;</label>
+            <span> {{ template.templateName }}</span>
           </div>
           <div class="form-group">
-            <label for="templateContent">템플릿 내용 : </label><br>
-            <span>{{ template.templateContent }}</span>
+            <label for="templateContent">템플릿 내용 : </label><br><br>
+            <pre style="font-weight: bold;">{{ template.templateContent }}</pre>
           </div>
           </div>
         </form>

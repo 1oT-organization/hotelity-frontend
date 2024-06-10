@@ -18,7 +18,7 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
-const selectedItemName = ref('선택');
+const selectedItemName = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
@@ -170,7 +170,7 @@ function setSearchCriteria(criteria, event) {
     defaultParams[selectedCriteria.value] = null;
   }
 
-  selectedItemName.value = event.target.textContent
+  selectedItemName.value = event.target.textContent == '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
@@ -332,17 +332,20 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="customer in customers.content" :key="customer.customerCodePk"
-                  @click=navigateToCustomer(customer.customerCodePk)>
-                <td>{{ customer.customerCodePk }}</td>
-                <td>{{ customer.customerName }}</td>
-                <td>{{ customer.membershipLevelName }}</td>
-                <td>{{ customer.customerPhoneNumber }}</td>
-                <td>{{ customer.customerEmail }}</td>
-                <td>{{ customer.customerGender }}</td>
-                <td>{{ customer.nationName }}</td>
-                <td>{{ customer.customerType }}</td>
-              </tr>
+                <tr v-if="customers.content && customers.content.length" v-for="customer in customers.content" :key="customer.customerCodePk"
+      @click=navigateToCustomer(customer.customerCodePk)>
+    <td>{{ customer.customerCodePk }}</td>
+    <td>{{ customer.customerName }}</td>
+    <td>{{ customer.membershipLevelName }}</td>
+    <td>{{ customer.customerPhoneNumber }}</td>
+    <td>{{ customer.customerEmail }}</td>
+    <td>{{ customer.customerGender }}</td>
+    <td>{{ customer.nationName }}</td>
+    <td>{{ customer.customerType }}</td>
+  </tr>
+  <tr v-else>
+    <td colspan="8">고객 정보가 없습니다</td>
+  </tr>
               </tbody>
             </table>
           </div>

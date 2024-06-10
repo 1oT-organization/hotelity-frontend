@@ -66,8 +66,10 @@
               employeeCode: employeeCode.value,
           });
 
-          document.querySelector(".sidebar").classList.remove('open');
-          document.querySelector(".content").classList.remove('open');
+          if (document.querySelector(".sidebar") != null) {
+            document.querySelector(".sidebar").classList.remove('open');
+            document.querySelector(".content").classList.remove('open');
+          }
 
           const redirect = router.currentRoute.value.query.redirect || '/';
           router.push(redirect);

@@ -45,7 +45,8 @@ const routes = [
         component: Login,
         meta: {
             hideSidebar: true,
-            hideNavbar: true
+            hideNavbar: true,
+            hideFooter: true
         }
     },
 
@@ -144,6 +145,7 @@ const routes = [
         meta: {
             hideSidebar: true,
             hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
@@ -164,6 +166,7 @@ const routes = [
         meta: {
             hideSidebar: true,
             hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
