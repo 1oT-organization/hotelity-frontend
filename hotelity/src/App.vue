@@ -19,8 +19,10 @@ watch(route, (newRoute, oldRoute) => {
     document.querySelector(".content").classList.add('open');
   }
 
-  setSidebarMenu(route.meta['category']);
-  setNavItemsActive(route.meta['category']);
+  if (!route.meta.hideSidebar) {
+    setSidebarMenu(route.meta['category']);
+    setNavItemsActive(route.meta['category']);
+  }
 });
 
 onMounted(() => {
@@ -38,7 +40,9 @@ const toggleOpenClass = () => {
 };
 
 const setSidebarMenu = (menuName) => {
-  sideBarRef.value.setSidebarMenu(menuName);
+  if (sideBarRef.value !== null) {
+    sideBarRef.value.setSidebarMenu(menuName);
+  }
 };
 
 const removeNavActiveClass = () => {

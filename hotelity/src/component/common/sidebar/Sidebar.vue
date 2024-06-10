@@ -43,18 +43,6 @@ const navigateToHome = () => {
 onMounted(() => {
   console.log('Sidebar mounted');
 
-  fetchData().then(() => {
-    // isLoading.value = false;
-  });
-
-  function fetchData() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  }
-
   // Clock
   const h1 = document.getElementById("time");
 

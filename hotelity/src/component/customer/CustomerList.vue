@@ -19,6 +19,7 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const selectedItemName = ref('');
+const selectedFilter = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
@@ -127,6 +128,10 @@ async function loadCustomers(page, orderByValue = 'customerCodePk', sortByValue 
     defaultParams.customerType = document.getElementById('customerType').value === '' ?
         null : document.getElementById('customerType').value;
 
+    selectedFilter.value =
+        `${defaultParams.membershipLevelName ? defaultParams.membershipLevelName : ''}
+        ${defaultParams.customerType ? defaultParams.customerType : ''}`;
+
     customers.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
@@ -170,7 +175,7 @@ function setSearchCriteria(criteria, event) {
     defaultParams[selectedCriteria.value] = null;
   }
 
-  selectedItemName.value = event.target.textContent == '선택' ? '' : event.target.textContent;
+  selectedItemName.value = event.target.textContent === '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
@@ -197,18 +202,12 @@ function sort(column) {
 }
 
 const hideDropdown = () => {
-  console.log(isDropdownOpen.value);
-
   if (isDropdownOpen.value === true) {
     isDropdownOpen.value = false;
   }
-
-  console.log(isDropdownOpen.value);
 };
 
-const hideFilter = (event) => {
-  event.stopPropagation();
-
+const hideFilter = () => {
   if (isFilterContainerVisible.value === true) {
     isFilterContainerVisible.value = false;
   }
@@ -241,14 +240,22 @@ onMounted(() => {
                     @click="toggleDropdownMenu"
                     :class="{ 'btn-primary': isDropdownOpen }"
                     style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
-              <span class="selected-item">{{ selectedItemName }}</span>
+              <span class="bi bi-search selected-item">{{ selectedItemName }}</span>
             </button>
-            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div></li>
-              <li><div class="dropdown-item" @click="setSearchCriteria('customerCodePk', $event)">고객코드</div></li>
-              <li><div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">이름</div></li>
-              <li><div class="dropdown-item" @click="setSearchCriteria('customerPhoneNumber', $event)">전화번호</div></li>
+            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }"
+                aria-labelledby="dropdownMenuButton">
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('customerCodePk', $event)">고객코드</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">이름</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('customerPhoneNumber', $event)">전화번호</div>
+              </li>
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
@@ -264,12 +271,12 @@ onMounted(() => {
             <button class="btn btn-primary" @click="submitFile">전송</button>
           </div>
           <div>
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer" v-click-outside="hideFilter">
-            <i class="bi bi-funnel"></i>
-          </button>
-        </div>
-          <div class="filter-container" v-show="isFilterContainerVisible">
+            <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
+                    @click="toggleFilterContainer">
+              <span class="bi bi-funnel">{{ selectedFilter }}</span>
+            </button>
+          </div>
+          <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
               <select id="membershipLevelName" class="form-select">
                 <option value="">멤버십 등급 선택</option>
@@ -298,19 +305,23 @@ onMounted(() => {
               <thead>
               <tr>
                 <th scope="col" @click="sort('customerCodePk')"
-                    :class="{ 'active-asc': orderBy === 'customerCodePk' && sortBy === 0, 'active-desc': orderBy === 'customerCodePk' && sortBy === 1 }" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'customerCodePk' && sortBy === 0, 'active-desc': orderBy === 'customerCodePk' && sortBy === 1 }"
+                    style="width: 80px;">
                   고객 코드
                 </th>
                 <th scope="col" @click="sort('customerName')"
-                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }" style="width: 180px;">
+                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }"
+                    style="width: 180px;">
                   이름
                 </th>
                 <th scope="col" @click="sort('membershipLevelName')"
-                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }" style="width: 100px;">
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1 }"
+                    style="width: 100px;">
                   멤버십 등급
                 </th>
                 <th scope="col" @click="sort('customerPhoneNumber')"
-                    :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }" style="width: 200px;">
+                    :class="{ 'active-asc': orderBy === 'customerPhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'customerPhoneNumber' && sortBy === 1 }"
+                    style="width: 200px;">
                   전화번호
                 </th>
                 <th scope="col" @click="sort('customerEmail')"
@@ -318,48 +329,53 @@ onMounted(() => {
                   Email
                 </th>
                 <th scope="col" @click="sort('customerGender')"
-                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }" style="width: 70px;">
+                    :class="{ 'active-asc': orderBy === 'customerGender' && sortBy === 0, 'active-desc': orderBy === 'customerGender' && sortBy === 1 }"
+                    style="width: 70px;">
                   성별
                 </th>
                 <th scope="col" @click="sort('nationName')"
-                    :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }" style="width: 110px;">
+                    :class="{ 'active-asc': orderBy === 'nationName' && sortBy === 0, 'active-desc': orderBy === 'nationName' && sortBy === 1 }"
+                    style="width: 110px;">
                   국가
                 </th>
                 <th scope="col" @click="sort('customerType')"
-                    :class="{ 'active-asc': orderBy === 'customerType' && sortBy === 0, 'active-desc': orderBy === 'customerType' && sortBy === 1 }" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'customerType' && sortBy === 0, 'active-desc': orderBy === 'customerType' && sortBy === 1 }"
+                    style="width: 80px;">
                   고객 타입
                 </th>
               </tr>
               </thead>
               <tbody>
-                <tr v-if="customers.content && customers.content.length" v-for="customer in customers.content" :key="customer.customerCodePk"
-      @click=navigateToCustomer(customer.customerCodePk)>
-    <td>{{ customer.customerCodePk }}</td>
-    <td>{{ customer.customerName }}</td>
-    <td>{{ customer.membershipLevelName }}</td>
-    <td>{{ customer.customerPhoneNumber }}</td>
-    <td>{{ customer.customerEmail }}</td>
-    <td>{{ customer.customerGender }}</td>
-    <td>{{ customer.nationName }}</td>
-    <td>{{ customer.customerType }}</td>
-  </tr>
-  <tr v-else>
-    <td colspan="8">고객 정보가 없습니다</td>
-  </tr>
+              <tr v-if="customers.content && customers.content.length" v-for="customer in customers.content"
+                  :key="customer.customerCodePk"
+                  @click=navigateToCustomer(customer.customerCodePk)>
+                <td>{{ customer.customerCodePk }}</td>
+                <td>{{ customer.customerName }}</td>
+                <td>{{ customer.membershipLevelName }}</td>
+                <td>{{ customer.customerPhoneNumber }}</td>
+                <td>{{ customer.customerEmail }}</td>
+                <td>{{ customer.customerGender }}</td>
+                <td>{{ customer.nationName }}</td>
+                <td>{{ customer.customerType }}</td>
+              </tr>
+              <tr v-else>
+                <td colspan="8">고객 정보가 없습니다</td>
+              </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
           <div class="pagination modal-2">
-  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
-  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
-          @click="changePage((pageGroup - 1) * pageSize + page)"
-          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-    {{ (pageGroup - 1) * pageSize + page }}
-  </button>
-  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
-</div>
+            <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+            <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+                    @click="changePage((pageGroup - 1) * pageSize + page)"
+                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+              {{ (pageGroup - 1) * pageSize + page }}
+            </button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+                class="bi bi-caret-right-fill"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -392,6 +408,7 @@ onMounted(() => {
   text-align: center;
   justify-content: center;
 }
+
 .pagination button {
   display: inline;
   text-align: center;
@@ -405,12 +422,14 @@ onMounted(() => {
   line-height: 1.5;
   background: #fff;
 }
+
 .pagination button.selected {
   cursor: default;
   border-color: #909090;
   background: #b4b4b4;
   color: #fff;
 }
+
 .pagination button:active {
   outline: none;
 }
@@ -420,11 +439,13 @@ onMounted(() => {
   -webkit-border-radius: 50px;
   border-radius: 50px 0 0 50px;
 }
+
 .modal-2 button:last-child {
   -moz-border-radius: 0 50px 50px 0;
   -webkit-border-radius: 0;
   border-radius: 0 50px 50px 0;
 }
+
 .modal-2 button:hover {
   color: #000000;
   background-color: #eee;
@@ -447,7 +468,7 @@ tr {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: none;
   gap: 10px;
 }
 
@@ -476,6 +497,7 @@ tr {
   color: black;
 }
 
+.filter-container.show,
 .dropdown-menu.show {
   display: block;
 }
