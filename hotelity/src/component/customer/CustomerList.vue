@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
 
@@ -18,6 +18,7 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
+const selectedItemName = ref('선택');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('customerCodePk');  // default sorting by customerCodePk
 
@@ -120,13 +121,18 @@ async function loadList() {
 
 async function loadCustomers(page, orderByValue = 'customerCodePk', sortByValue = 0) {
   try {
-    const data = await fetchData({
+
+    defaultParams.membershipLevelName = document.getElementById('membershipLevelName').value === '' ?
+        null : document.getElementById('membershipLevelName').value;
+    defaultParams.customerType = document.getElementById('customerType').value === '' ?
+        null : document.getElementById('customerType').value;
+
+    customers.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    customers.value = data;
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading customers:', error);
@@ -158,22 +164,25 @@ function prevPageGroup() {
   }
 }
 
-function setSearchCriteria(criteria) {
+function setSearchCriteria(criteria, event) {
   // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
+  selectedItemName.value = event.target.textContent
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
 }
 
-function toggleFilterContainer() {
+function toggleFilterContainer(event) {
+  event.stopPropagation();
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
 }
 
-function toggleDropdownMenu() {
+function toggleDropdownMenu(event) {
+  event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
@@ -187,11 +196,26 @@ function sort(column) {
   loadCustomers(currentPage.value, orderBy.value, sortBy.value);
 }
 
+const hideDropdown = () => {
+  console.log(isDropdownOpen.value);
+
+  if (isDropdownOpen.value === true) {
+    isDropdownOpen.value = false;
+  }
+
+  console.log(isDropdownOpen.value);
+};
+
+const hideFilter = (event) => {
+  event.stopPropagation();
+
+  if (isFilterContainerVisible.value === true) {
+    isFilterContainerVisible.value = false;
+  }
+};
+
 onMounted(() => {
   loadCustomers(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
@@ -213,16 +237,18 @@ onMounted(() => {
         <h3 class="mb-4">고객 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+            <button class="btn btn-secondary dropdown-toggle ms-2" type="button" id="dropdownMenuButton"
                     @click="toggleDropdownMenu"
                     :class="{ 'btn-primary': isDropdownOpen }"
                     style="background-color: saddlebrown;">
               <i class="bi bi-search"></i>
+              <span class="selected-item">{{ selectedItemName }}</span>
             </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerCodePk')">고객코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">이름</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerPhoneNumber')">전화번호</a></li>
+            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
+              <li><div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div></li>
+              <li><div class="dropdown-item" @click="setSearchCriteria('customerCodePk', $event)">고객코드</div></li>
+              <li><div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">이름</div></li>
+              <li><div class="dropdown-item" @click="setSearchCriteria('customerPhoneNumber', $event)">전화번호</div></li>
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
@@ -237,14 +263,16 @@ onMounted(() => {
             <input type="file" id="fileInput" style="display: none" @change="handleFileUpload"/>
             <button class="btn btn-primary" @click="submitFile">전송</button>
           </div>
+          <div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer">
+                  @click="toggleFilterContainer" v-click-outside="hideFilter">
             <i class="bi bi-funnel"></i>
           </button>
+        </div>
           <div class="filter-container" v-show="isFilterContainerVisible">
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.membershipLevelName">
-                <option v-bind:value="null">멤버십 등급 선택</option>
+              <select id="membershipLevelName" class="form-select">
+                <option value="">멤버십 등급 선택</option>
                 <option value="일반">일반</option>
                 <option value="골드">골드</option>
                 <option value="플래티넘">플래티넘</option>
@@ -253,8 +281,8 @@ onMounted(() => {
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.customerType">
-                <option v-bind:value="null">고객타입 선택</option>
+              <select id="customerType" class="form-select">
+                <option value="">고객타입 선택</option>
                 <option value="개인">개인</option>
                 <option value="법인">법인</option>
               </select>
@@ -468,5 +496,21 @@ table.table th, table.table td {
   border: 1px solid #dee2e6;
   word-wrap: break-word;
   text-align: center; /* Add this line to center text */
+}
+
+.search-menu {
+  top: 40px;
+}
+
+.selected-item {
+  margin: 0 8px;
+}
+
+#dropdownMenuButton {
+  width: 130px;
+}
+
+.bi-caret-up-fill, .bi-caret-down-fill {
+  visibility: visible;
 }
 </style>

@@ -304,6 +304,7 @@ export const getFacilities = async (params) => {
 }
 
 /* 부대시설 상세 */
+/*
 export const getAncillary = async (AncillaryId) => {
     try {
         const response = await apiClient.get(`/hotel-management/facilities/${AncillaryId}`);
@@ -313,7 +314,7 @@ export const getAncillary = async (AncillaryId) => {
         throw e;
     }
 }
-
+*/
 /* 부대시설 등록 */
 export const createFacility = async (facilityInfo) => {
     try {

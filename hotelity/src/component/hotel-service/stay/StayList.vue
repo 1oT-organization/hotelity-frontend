@@ -128,7 +128,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-if="isFetchDailyStay" v-for="(stay, index) in stays" :key="stay.stayCodePk">
+            <tr v-if="isFetchDailyStay" v-for="(stay, index) in stays" :key="index" @click="openModal(stay.stayCodePk)">
               <td><input type="checkbox" v-model="checkedRows[index]" :disabled="!!stay.stayCheckoutTime"></td>
               <td>{{ stay.stayCodePk }}</td>
               <td>{{ stay.customerName }}</td>
@@ -174,6 +174,10 @@
   <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
 </div>
       </div>
+      <div v-if="showModal">
+        <div>{{ stayDetail }}</div>
+        <button @click="closeModal">Close</button>
+      </div>
     </div>
   </div>
 </template>
@@ -205,6 +209,12 @@ const orderBy = ref('stayCheckinTime');
 
 const selectedStayCheckinDate = ref(null);
 const selectedStayCheckoutDate = ref(null);
+
+// 모달
+const showModal = ref(false);
+const stayDetail = ref(null);
+
+// async function openModal
 
 // fetch마다 다르게 리스트를 출력하기 위함
 const isFetchDailyStay = ref(false);
