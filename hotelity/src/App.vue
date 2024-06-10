@@ -83,7 +83,7 @@ const setSideBarItemActive = () => {
     <div class="style-block">
       <RouterView/>
     </div>
-    <Footer/>
+    <Footer v-if="!$route.meta.hideFooter"/>
   </div>
 
 </template>
