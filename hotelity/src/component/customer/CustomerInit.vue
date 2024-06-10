@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from 'vue-router';
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch, computed} from 'vue';
 import * as api from '@/api/apiService.js';
 
 const router = useRouter();
@@ -33,14 +33,71 @@ let initialFormState = {
   nationCodeFk: 1,
   customerGender: ''
 };
+/*
+watch(() => form.customerPhoneNumber, (newVal) => {
+  let phoneNumber = newVal.replace(/[^0-9]/g, '');
+  let autoHyphenPhone = '';
 
+  if (phoneNumber.length < 4) {
+    autoHyphenPhone = phoneNumber;
+  } else if (phoneNumber.length < 7) {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3)}`;
+  } else if (phoneNumber.length < 11) {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3, 3)}-${phoneNumber.substr(6)}`;
+  } else {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3, 4)}-${phoneNumber.substr(7)}`;
+  }
+
+  form.customerPhoneNumber = autoHyphenPhone;
+}, { deep: true });
+*/
 async function handleSubmit() {
+
+  // Convert the phone number to the correct format
+  // let phoneNumber = form.value.customerPhoneNumber.replace(/[^0-9]/g, '');
+  let phoneNumber = form.value.customerPhoneNumber.replace(/-/g, '');
+  let autoHyphenPhone = '';
+
+  if (phoneNumber.length < 4) {
+    autoHyphenPhone = phoneNumber;
+  } else if (phoneNumber.length < 7) {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3)}`;
+  } else if (phoneNumber.length < 11) {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3, 3)}-${phoneNumber.substr(6)}`;
+  } else {
+    autoHyphenPhone = `${phoneNumber.substr(0, 3)}-${phoneNumber.substr(3, 4)}-${phoneNumber.substr(7)}`;
+  }
+
+  form.value.customerPhoneNumber = autoHyphenPhone;
+
+
   // Form validation
-  if (!form.value.customerName || !form.value.customerEmail
-      || !form.value.customerPhoneNumber || !form.value.customerAddress || form.value.customerInfoAgreement === 1) {
-    window.alert('모든 필수 필드를 입력해주세요.');
+  const phoneNumberPattern = /^\d{2,3}-?\d{3,4}-?\d{4}$/;
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (!form.value.customerName) {
+    window.alert('이름을 입력해주세요.');
     return;
   }
+  if (form.value.customerInfoAgreement === 0) {
+    window.alert('개인정보제공동의에 동의해주세요.');
+    return;
+    }
+  if (!form.value.customerPhoneNumber) {
+    window.alert('전화번호를 입력해주세요.');
+    return;
+  } else if (!phoneNumberPattern.test(form.value.customerPhoneNumber)) {
+    window.alert('전화번호 형식이 올바르지 않습니다.');
+    form.value.customerPhoneNumber = '';
+    return;
+  }
+  if (!form.value.customerEmail) {
+    window.alert('이메일을 입력해주세요.');
+    return;
+    } else if (!emailPattern.test(form.value.customerEmail)) {
+        window.alert('이메일 형식이 올바르지 않습니다.');
+        return;
+      }
 
   try {
     const response = await api.createCustomer(form.value);
@@ -96,7 +153,7 @@ onMounted(async () => {
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <div class="half">
-              <label for="korean-name">* 한글 이름:</label>
+              <label for="korean-name">* 이름:</label>
               <input type="text" id="korean-name" v-model="form.customerName"/>
             </div>
 
@@ -108,7 +165,7 @@ onMounted(async () => {
           <div class="form-group">
             <div class="half">
               <label for="phone">* 전화번호:</label>
-              <input type="text" id="phone" v-model="form.customerPhoneNumber"/>
+              <input type="tel" id="phone" v-model="form.customerPhoneNumber" pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}" />
             </div>
 
             <div class="half">

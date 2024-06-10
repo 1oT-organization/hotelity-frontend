@@ -182,13 +182,13 @@ const menu = {
     name: 'marketing',
     subMenu: [
       {
-        text: '발송 내역',
+        text: '캠페인',
         path: '/campaign',
         iconClass: 'emoji bi bi-envelope-fill'
       },
       {
         text: '템플릿',
-        path: '/campaign',
+        path: '/templateList',
         iconClass: 'emoji bi bi-file-earmark-text-fill'
       },
     ]
