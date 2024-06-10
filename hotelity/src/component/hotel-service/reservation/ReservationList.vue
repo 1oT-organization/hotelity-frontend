@@ -321,30 +321,42 @@ let obj = {};
 const change = ref(false);
 provide('change', change);
 
+let previousMonths = ref([]);
+
 watch(selectedMonth, async (newMonth) => {
-      if (newMonth) {
-        const response = await api.getMonthlyReservations(selectedMonth.value);
-        const data = response.data;
-
-        change.value = true;
-
-        console.log("백엔드 메소드 실행 결과: ")
-        console.log(data);
-
-        for (const reservation of data.content) {
-          const date = formatDate(reservation.reservationCheckinDate);
-
-          if (!obj[date]) {
-            obj[date] = [];
-          }
-
-          obj[date].push(reservation);
-        }
-
-        console.log(obj);
-      }
+  if (newMonth) {
+    // 이전에 선택한 월들 중 새로운 월이 있는지 확인
+    if (previousMonths.value.includes(newMonth)) {
+      console.log("동일한 월이므로 api.getMonthlyReservations를 실행하지 않습니다.");
+      return;
     }
-);
+
+    const response = await api.getMonthlyReservations(selectedMonth.value);
+    console.log("선택된 월: ");
+    console.log(selectedMonth.value);
+    const data = response.data;
+
+    change.value = true;
+
+    console.log("백엔드 메소드 실행 결과: ")
+    console.log(data);
+
+    for (const reservation of data.content) {
+      const date = formatDate(reservation.reservationCheckinDate);
+
+      if (!obj[date]) {
+        obj[date] = [];
+      }
+
+      obj[date].push(reservation);
+    }
+
+    console.log(obj);
+
+    // 새로운 월을 이전에 선택한 월들에 추가
+    previousMonths.value.push(newMonth);
+  }
+});
 
 // 필터
 function toggleFilterContainer() {
