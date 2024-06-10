@@ -78,7 +78,7 @@ async function loadList() {
   }
 }
 
-async function loadCoupon(page, orderByValue = 'vocCodePk', sortByValue = 0) {
+async function loadVoc(page, orderByValue = 'vocCodePk', sortByValue = 0) {
   try {
     const data = await fetchData({
       ...defaultParams,
@@ -96,19 +96,25 @@ async function loadCoupon(page, orderByValue = 'vocCodePk', sortByValue = 0) {
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
-  loadCoupon(page, orderBy.value, sortBy.value);
+  loadVoc(page, orderBy.value, sortBy.value);
 }
+
 
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
@@ -137,11 +143,11 @@ function sort(column) {
     orderBy.value = column;
     sortBy.value = 0;
   }
-  loadCoupon(currentPage.value, orderBy.value, sortBy.value);
+  loadVoc(currentPage.value, orderBy.value, sortBy.value);
 }
 
 onMounted(() => {
-  loadCoupon(currentPage.value, orderBy.value, sortBy.value);
+  loadVoc(currentPage.value, orderBy.value, sortBy.value);
 
   // Bootstrap 드롭다운 초기화
   new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
@@ -178,7 +184,7 @@ onMounted(() => {
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
-          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
+          <button class="btn btn-primary ms-2" @click="loadVoc(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
@@ -213,7 +219,7 @@ onMounted(() => {
                 <option value="1">처리</option>
               </select>
             </div>
-            <button class="btn btn-primary" @click="loadCoupon(1, orderBy.value, sortBy.value)">적용</button>
+            <button class="btn btn-primary" @click="loadVoc(1, orderBy.value, sortBy.value)">적용</button>
           </div>
         </div>
         <br>
@@ -222,19 +228,22 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('vocCodePk')" :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }">VOC 코드</th>
-                <th scope="col">VOC 일자</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }">지점 이름</th>
-                <th scope="col">담당 직원</th>
-                <th scope="col">고객 코드</th>
-                <th scope="col" @click="sort('vocCategory')" :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }">VOC 카테고리</th>
+                <th scope="col" @click="sort('vocCodePk')" :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }" style="width: 100px;">VOC 코드</th>
+                <th scope="col" style="width: 80px;">고객 코드</th>
                 <th scope="col">VOC 제목</th>
-                <th scope="col" @click="sort('vocProcessStatus')" :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }">VOC 처리상태</th>
+                <th scope="col" @click="sort('vocCategory')" :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }" style="width: 110px;">카테고리</th>
+                <th scope="col" style="width: 200px;">VOC 일자</th>
+                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }" style="width: 80px;">지점</th>
+                <th scope="col" style="width: 100px;">담당 직원</th>
+                <th scope="col" @click="sort('vocProcessStatus')" :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }" style="width: 100px;">처리상태</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="voc in vocs.content" :key="voc.vocCodePk" @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
+                <td>{{ voc.customerCodeFk }}</td>
+                <td>{{ voc.vocTitle }}</td>
+                <td>{{ voc.vocCategory }}</td>
                 <td>{{
                     new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -250,9 +259,6 @@ onMounted(() => {
                 </td>
                 <td>{{ voc.branchCodeFk }}</td>
                 <td>{{ voc.employeeName }}</td>
-                <td>{{ voc.customerCodeFk }}</td>
-                <td>{{ voc.vocCategory }}</td>
-                <td>{{ voc.vocTitle }}</td>
                 <td>
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>
@@ -263,13 +269,15 @@ onMounted(() => {
           </div>
 
           <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page" @click="changePage((pageGroup - 1) * pageSize + page)" :disabled="(pageGroup - 1) * pageSize + page > totalPages" :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+        <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -279,3 +287,123 @@ onMounted(() => {
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
+
+<style scoped>
+
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
+}
+
+.dropdown-icon {
+  transition: transform 0.5s;
+}
+
+tr {
+  cursor: pointer;
+}
+
+.filter-container {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 500px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+}
+
+.filter-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+.position-relative-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.emoji {
+  margin-right: 10px;
+}
+
+.selected {
+  background-color: rgba(255, 170, 0, 0.38);
+  color: black;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
+}
+</style>

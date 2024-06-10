@@ -89,16 +89,14 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }">직원 코드</th>
+                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }" style="width: 80px;">직원 코드</th>
                 <th scope="col" @click="sort('employeeName')" :class="{ 'active-asc': orderBy === 'employeeName' && sortBy === 0, 'active-desc': orderBy === 'employeeName' && sortBy === 1 }">이름</th>
                 <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">지점</th>
                 <th scope="col" @click="sort('rankCodeFk')" :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">직급</th>
                 <th scope="col" @click="sort('departmentCodeFk')" :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">부서</th>
                 <th scope="col" @click="sort('positionCodeFk')" :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">직책</th>
                 <th scope="col" @click="sort('employeeOfficePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }">내선번호</th>
-                <th scope="col" @click="sort('employeePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeePhoneNumber' && sortBy === 1 }">전화번호</th>
-                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }">Email</th>
-                <th scope="col" @click="sort('employeeAddress')" :class="{ 'active-asc': orderBy === 'employeeAddress' && sortBy === 0, 'active-desc': orderBy === 'employeeAddress' && sortBy === 1 }">주소</th>
+                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }" style="width: 230px;">Email</th>
               </tr>
               </thead>
               <tbody>
@@ -110,25 +108,22 @@
                 <td>{{ employee.nameOfDepartment }}</td>
                 <td>{{ employee.nameOfPosition }}</td>
                 <td>{{ employee.employeeOfficePhoneNumber }}</td>
-                <td>{{ employee.employeePhoneNumber }}</td>
                 <td>{{ employee.employeeEmail }}</td>
-                <td>{{ employee.employeeAddress }}</td>
               </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+          <div class="pagination modal-2">
+  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+          @click="changePage((pageGroup - 1) * pageSize + page)"
+          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+    {{ (pageGroup - 1) * pageSize + page }}
+  </button>
+  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
+</div>
         </div>
       </div>
     </div>
@@ -292,3 +287,134 @@ onMounted(() => {
   new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
+
+<style scoped>
+/*
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
+}
+
+.dropdown-icon {
+  transition: transform 0.5s;
+}
+
+tr {
+  cursor: pointer;
+}
+
+.filter-container {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 500px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+}
+
+.filter-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+.position-relative-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.emoji {
+  margin-right: 10px;
+}
+
+.selected {
+  background-color: rgba(255, 170, 0, 0.38);
+  color: black;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
+}
+</style>
