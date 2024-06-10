@@ -15,18 +15,32 @@
         <h3 class="mb-4">직원 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+            <button class="btn btn-secondary dropdown-toggle ms-2" type="button" id="dropdownMenuButton"
                     @click="toggleDropdownMenu"
                     :class="{ 'btn-primary': isDropdownOpen }"
                     style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
+              <span class="bi bi-search selected-item">{{ selectedItemName }}</span>
             </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeCode')">직원코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeName')">이름</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeePhoneNumber')">전화번호</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeOfficePhoneNumber')">내선번호</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('employeeEmail')">이메일</a></li>
+            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }"
+                aria-labelledby="dropdownMenuButton">
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('employeeCode', $event)">직원코드</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('employeeName', $event)">이름</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('employeePhoneNumber', $event)">전화번호</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('employeeOfficePhoneNumber', $event)">내선번호</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('employeeEmail', $event)">이메일</div>
+              </li>
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
@@ -39,19 +53,19 @@
           </div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">
-            <i class="bi bi-funnel"></i>
+            <span class="bi bi-funnel">{{ selectedFilter }}</span>
           </button>
-          <div class="filter-container" v-show="isFilterContainerVisible">
+          <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.branchCode">
-                <option :value="null">지점 선택</option>
+              <select id="branchCode" class="form-select" @change="onChangeSelect">
+                <option value="">지점 선택</option>
                 <option value="HQ">HQ</option>
                 <option value="SE">SE</option>
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.rankCode">
-                <option :value="null">직급 선택</option>
+              <select id="rankCode" class="form-select" @change="onChangeSelect">
+                <option value="">직급 선택</option>
                 <option value="1">부장</option>
                 <option value="2">차장</option>
                 <option value="3">과장</option>
@@ -61,8 +75,8 @@
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.positionCode">
-                <option :value="null">직책 선택</option>
+              <select id="positionCode" class="form-select" @change="onChangeSelect">
+                <option value="">직책 선택</option>
                 <option value="1">CEO</option>
                 <option value="2">본부장</option>
                 <option value="3">실장</option>
@@ -70,8 +84,8 @@
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.departmentCode">
-                <option :value="null">부서 선택</option>
+              <select id="departmentCode" class="form-select" @change="onChangeSelect">
+                <option value="">부서 선택</option>
                 <option value="1">운영팀</option>
                 <option value="2">기술팀</option>
                 <option value="3">마케팅팀</option>
@@ -89,18 +103,44 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('employeeCodePk')" :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }" style="width: 80px;">직원 코드</th>
-                <th scope="col" @click="sort('employeeName')" :class="{ 'active-asc': orderBy === 'employeeName' && sortBy === 0, 'active-desc': orderBy === 'employeeName' && sortBy === 1 }">이름</th>
-                <th scope="col" @click="sort('branchCodeFk')" :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">지점</th>
-                <th scope="col" @click="sort('rankCodeFk')" :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">직급</th>
-                <th scope="col" @click="sort('departmentCodeFk')" :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">부서</th>
-                <th scope="col" @click="sort('positionCodeFk')" :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">직책</th>
-                <th scope="col" @click="sort('employeeOfficePhoneNumber')" :class="{ 'active-asc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }">내선번호</th>
-                <th scope="col" @click="sort('employeeEmail')" :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }" style="width: 230px;">Email</th>
+                <th scope="col" @click="sort('employeeCodePk')"
+                    :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }"
+                    style="width: 80px;">직원 코드
+                </th>
+                <th scope="col" @click="sort('employeeName')"
+                    :class="{ 'active-asc': orderBy === 'employeeName' && sortBy === 0, 'active-desc': orderBy === 'employeeName' && sortBy === 1 }">
+                  이름
+                </th>
+                <th scope="col" @click="sort('branch')"
+                    :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">
+                  지점
+                </th>
+                <th scope="col" @click="sort('rank')"
+                    :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">
+                  직급
+                </th>
+                <th scope="col" @click="sort('department')"
+                    :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">
+                  부서
+                </th>
+                <th scope="col" @click="sort('position')"
+                    :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">
+                  직책
+                </th>
+                <th scope="col" @click="sort('employeeOfficePhoneNumber')"
+                    :class="{ 'active-asc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 0, 'active-desc': orderBy === 'employeeOfficePhoneNumber' && sortBy === 1 }">
+                  내선번호
+                </th>
+                <th scope="col" @click="sort('employeeEmail')"
+                    :class="{ 'active-asc': orderBy === 'employeeEmail' && sortBy === 0, 'active-desc': orderBy === 'employeeEmail' && sortBy === 1 }"
+                    style="width: 230px;">Email
+                </th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="employee in employees.content" :key="employee.employeeCodePk" @click="navigateToEmployee(employee.employeeCodePk)">
+              <tr v-if="employees.content && employees.content.length > 0" v-for="employee in employees.content"
+                  :key="employee.employeeCodePk"
+                  @click="navigateToEmployee(employee.employeeCodePk)">
                 <td>{{ employee.employeeCodePk }}</td>
                 <td>{{ employee.employeeName }}</td>
                 <td>{{ employee.nameOfBranch }}</td>
@@ -110,20 +150,24 @@
                 <td>{{ employee.employeeOfficePhoneNumber }}</td>
                 <td>{{ employee.employeeEmail }}</td>
               </tr>
+              <tr v-else>
+                <td colspan="8">직원 정보가 없습니다</td>
+              </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
           <div class="pagination modal-2">
-  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
-  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
-          @click="changePage((pageGroup - 1) * pageSize + page)"
-          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-    {{ (pageGroup - 1) * pageSize + page }}
-  </button>
-  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
-</div>
+            <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+            <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+                    @click="changePage((pageGroup - 1) * pageSize + page)"
+                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+              {{ (pageGroup - 1) * pageSize + page }}
+            </button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+                class="bi bi-caret-right-fill"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -138,7 +182,7 @@
 
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
 
@@ -157,6 +201,8 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
+const selectedItemName = ref('');
+const selectedFilter = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('employeeCodePk');  // default sorting by employeeCodePk
 
@@ -184,9 +230,14 @@ watch(searchValue, (newValue) => {
 async function fetchData(params) {
   try {
     const response = await api.getEmployees(params);
-    totalPages.value = response.data.totalPagesCount;
     console.log(response);
-    return response.data;
+
+    if (response.status !== 200) {
+      return [];
+    }
+
+    totalPages.value = response.data.data.totalPagesCount;
+    return response.data.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -219,13 +270,32 @@ async function loadList() {
 
 async function loadCustomers(page, orderByValue = 'employeeCodePk', sortByValue = 0) {
   try {
-    const data = await fetchData({
+
+    const branchCodeEl = document.getElementById('branchCode');
+    const rankCodeEl = document.getElementById('rankCode');
+    const positionCodeEl = document.getElementById('positionCode');
+    const departmentCodeEl = document.getElementById('departmentCode');
+
+    defaultParams.branchCode = branchCodeEl.value === '' ?
+        null : branchCodeEl.value;
+    defaultParams.rankCode = rankCodeEl.value === '' ?
+        null : rankCodeEl.value;
+    defaultParams.positionCode = positionCodeEl.value === '' ?
+        null : positionCodeEl.value;
+    defaultParams.departmentCode = departmentCodeEl.value === '' ?
+        null : departmentCodeEl.value;
+
+    selectedFilter.value = `${defaultParams.branchCode ? filterNameObj.branchCode : ''}
+        ${defaultParams.rankCode ? filterNameObj.rankCode : ''}
+        ${defaultParams.positionCode ? filterNameObj.positionCode : ''}
+        ${defaultParams.departmentCode ? filterNameObj.departmentCode : ''}`;
+
+    employees.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    employees.value = data;
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading employees:', error);
@@ -251,22 +321,25 @@ function prevPageGroup() {
   }
 }
 
-function setSearchCriteria(criteria) {
+function setSearchCriteria(criteria, event) {
   // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
+  selectedItemName.value = event.target.textContent === '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
 }
 
-function toggleFilterContainer() {
+function toggleFilterContainer(event) {
+  event.stopPropagation();
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
 }
 
-function toggleDropdownMenu() {
+function toggleDropdownMenu(event) {
+  event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
@@ -280,27 +353,33 @@ function sort(column) {
   loadCustomers(currentPage.value, orderBy.value, sortBy.value);
 }
 
+const hideDropdown = () => {
+  if (isDropdownOpen.value === true) {
+    isDropdownOpen.value = false;
+  }
+};
+
+const hideFilter = () => {
+  if (isFilterContainerVisible.value === true) {
+    isFilterContainerVisible.value = false;
+  }
+};
+
+const filterNameObj = {};
+
+const onChangeSelect = (event) => {
+  const el = event.target;
+  const selectedIndex = el.selectedIndex;
+
+  filterNameObj[el.id] = el.options[selectedIndex].text;
+}
+
 onMounted(() => {
   loadCustomers(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
 <style scoped>
-/*
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
-*/
 .pagination {
   list-style: none;
   display: flex;
@@ -309,6 +388,7 @@ onMounted(() => {
   text-align: center;
   justify-content: center;
 }
+
 .pagination button {
   display: inline;
   text-align: center;
@@ -322,12 +402,14 @@ onMounted(() => {
   line-height: 1.5;
   background: #fff;
 }
+
 .pagination button.selected {
   cursor: default;
   border-color: #909090;
   background: #b4b4b4;
   color: #fff;
 }
+
 .pagination button:active {
   outline: none;
 }
@@ -337,11 +419,13 @@ onMounted(() => {
   -webkit-border-radius: 50px;
   border-radius: 50px 0 0 50px;
 }
+
 .modal-2 button:last-child {
   -moz-border-radius: 0 50px 50px 0;
   -webkit-border-radius: 0;
   border-radius: 0 50px 50px 0;
 }
+
 .modal-2 button:hover {
   color: #000000;
   background-color: #eee;
@@ -364,7 +448,7 @@ tr {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: none;
   gap: 10px;
 }
 
@@ -393,6 +477,7 @@ tr {
   color: black;
 }
 
+.filter-container.show,
 .dropdown-menu.show {
   display: block;
 }
@@ -416,5 +501,17 @@ table.table th, table.table td {
   border: 1px solid #dee2e6;
   word-wrap: break-word;
   text-align: center; /* Add this line to center text */
+}
+
+.search-menu {
+  top: 40px;
+}
+
+.selected-item {
+  margin: 0 8px;
+}
+
+#dropdownMenuButton {
+  width: 130px;
 }
 </style>
