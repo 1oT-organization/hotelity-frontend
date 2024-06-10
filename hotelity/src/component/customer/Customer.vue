@@ -109,7 +109,6 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
-import axios from "axios";
 import {getCustomer} from "@/api/apiService";
 
 const router = useRouter();
