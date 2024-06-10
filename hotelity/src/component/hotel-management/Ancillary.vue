@@ -290,18 +290,6 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<<<<<<< Updated upstream
-<style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-=======
 <style scoped>
 .pagination {
   list-style: none;
@@ -347,7 +335,6 @@ onMounted(() => {
 .modal-2 button:hover {
   color: #000000;
   background-color: #eee;
->>>>>>> Stashed changes
 }
 
 .dropdown-icon {
