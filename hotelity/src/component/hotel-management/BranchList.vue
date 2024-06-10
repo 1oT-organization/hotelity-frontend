@@ -163,7 +163,7 @@ $(document).ready(function () {
     <!-- Content Start -->
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
         <h3 class="mb-4">지점 리스트</h3>
         <div class="button" style="display: flex; justify-content: right;">
           <button @click="toggleModal" class="btn btn-success me-2">지점 등록</button>

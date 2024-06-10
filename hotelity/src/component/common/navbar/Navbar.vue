@@ -1,5 +1,6 @@
 <template>
   <!-- Navbar Start -->
+  <div class="navbar-block">
   <div class="nav-container">
     <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
       <div href="index.html" class="navbar-brand d-flex d-lg-none me-4">
@@ -37,6 +38,7 @@
       </div>
     </nav>
   </div>
+</div>
   <!-- Navbar End -->
 </template>
   
@@ -162,6 +164,18 @@
 </script>
   
 <style>
+  .navbar-block {
+  background: #d3dcd6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  
+  margin: 1rem;
+}
+
   .nav-container .navbar .navbar-nav .nav-link {
     margin-left: 25px;
     padding: 12px 0;
