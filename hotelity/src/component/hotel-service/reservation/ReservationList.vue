@@ -5,7 +5,7 @@
 
   <!-- Table Start -->
   <div class="container-fluid pt-4 px-4">
-    <div class="bg-secondary rounded-top p-4">
+    <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
       <h3 class="mb-4">예약 리스트</h3>
       <div class="search-container d-flex align-items-center">
         <Reservation2Search/>
@@ -61,6 +61,8 @@
 
       </div>
       <br>
+
+      <!-- table start -->
       <div class="row">
         <div class="col-12">
           <table class="table table-striped">
@@ -85,7 +87,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(reservation, index) in reservations" :key="reservation.reservationCodePk">
+            <tr v-for="(reservation, index) in reservations" :key="reservation.reservationCodePk"
+                @click="openModal">
               <td>
                 <input type="checkbox" :checked="reservation.stayStatus === 1" :disabled="reservation.stayStatus === 1"
                        @change="checkedRows[index] = $event.target.checked ? reservation : null">
@@ -115,19 +118,81 @@
           </table>
         </div>
       </div>
+      <!-- table end -->
+
+      <!-- Modal start -->
+      <div v-if="isModalOpen" class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">예약 확인</h5>
+              <button type="button" class="btn-close" @click="toggleModal"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="reservationCodePk" class="form-label">예약 코드</label>
+                    <input type="text" class="form-control" id="reservationCodePk"
+                           v-model="reservationCheck.reservationCodePk">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="customerName" class="form-label">예약자 성함</label>
+                    <input type="text" class="form-control" id="customerName" v-model="reservationCheck.customerName">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="reservationPersonnel" class="form-label">예약 인원</label>
+                    <input type="text" class="form-control" id="reservationPersonnel"
+                           v-model="reservationCheck.ReservationPersonnel">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="reservationCheckinDate" class="form-label">체크인 일자</label>
+                    <input type="text" class="form-control" id="reservationCheckinDate"
+                           v-model="reservationCheck.ReservationCheckinDate">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="reservationCheckoutDate" class="form-label">체크아웃 일자</label>
+                    <input type="text" class="form-control" id="reservationCheckoutDate"
+                           v-model="reservationCheck.reservationCheckoutDate">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="branchName" class="form-label">지점 명</label>
+                    <input type="text" class="form-control" id="branchName" v-model="reservationCheck.branchName">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="roomCodeFk" class="form-label">객실 코드</label>
+                    <input type="text" class="form-control" id="roomCodeFk" v-model="reservationCheck.roomCodeFk">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="roomNumber" class="form-label">예약 객실 번호</label>
+                    <input type="text" class="form-control" id="roomNumber" v-model="reservationCheck.roomNumber">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="roomName" class="form-label">예약 객실명</label>
+                    <input type="text" class="form-control" id="roomName" v-model="fullRoomName" disabled>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">체크인</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal end -->
     </div>
   </div>
 </template>
 
 <script setup>
 
-import {ref, onMounted, watch, provide} from 'vue';
+import {ref, onMounted, watch, provide, computed} from 'vue';
 import * as api from '@/api/apiService.js';
 
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import Reservation2Calendar from "@/component/hotel-service/reservation/ReservationCalendar.vue";
 import Reservation2CheckinBtn from "@/component/hotel-service/reservation/ReservationCheckinBtn.vue";
+// import ReservationInfo from "@/component/hotel-service/reservation/ReservationInfo.vue"
 
 const isLoading = ref(true);
 const reservations = ref([]);
@@ -137,6 +202,32 @@ const selectedReservationCheckoutDate = ref(null);
 const isFilterContainerVisible = ref(false);
 const isCalendarContainerVisible = ref(false);
 const selectedMonth = ref(null);
+const isModalOpen = ref(false);
+const fullRoomName = computed(() => `${reservationCheck.roomName} ${reservationCheck.roomLevelName}`);
+
+// 모달창
+function openModal() {
+  isModalOpen.value = true;
+}
+
+// 모달에 들어갈 데이터
+const reservationCheck = ref({
+  reservationCodePk: '',
+  customerName: '',
+  ReservationPersonnel: '',
+  ReservationCheckinDate: '',
+  reservationCheckoutDate: '',
+  branchName: '',
+  roomCodeFk: '',
+  roomNumber: '',
+  roomName: '',
+  roomLevelName: ''
+});
+
+const submitForm = (event) => {
+  event.preventDefault();
+};
+
 
 // 체크박스
 const checkedRows = ref([]);
@@ -259,6 +350,22 @@ function formatDateTime(date) {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
+
+// 예약 확인 모달 창 띄우기
+// const isReservationInfoModalOpen = (reservation) => {
+//
+//   Object.assign(selectedBranch, reservation);
+//
+//   selectedBranch.value = {...reservation};
+//
+//   isReservationInfoModalOpen.value = !isReservationInfoModalOpen.value;
+//   console.log('이거뭐임2', isReservationInfoModalOpen.value)
+// };
+
+// function openReservationInfoModal(reservation) {
+//   selectedReservation.value = reservation;
+//   isReservationInfoModalOpen.value = true;
+// }
 
 </script>
 
