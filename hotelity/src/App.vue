@@ -76,12 +76,32 @@
 
 <template>
   <Sidebar ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
+  
   <div class="content">
+
     <Navbar v-if="!$route.meta.hideNavbar" @toggleOpen="toggleOpenClass" @setMenu="setSidebarMenu" />
+    
+    <div class="style-block">
     <RouterView/>
   </div>
+  </div>
+
 </template>
 
 <style scoped>
+.style-block {
+  background: #f7f7f7;
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.shadow-box {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
 
 </style>

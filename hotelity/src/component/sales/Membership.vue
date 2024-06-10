@@ -129,7 +129,7 @@ onMounted(() => {
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">멤버십</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">

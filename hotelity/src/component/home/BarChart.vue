@@ -1,6 +1,6 @@
 <template>
   <div class="col-sm-12 col-xl-6">
-    <div class="bg-secondary text-center rounded p-4">
+    <div class="bg-secondary text-center rounded p-4"  style="background: #f7f7f7;">
       <h2>올해 예약 건수</h2>
       <canvas ref="chartCanvas"></canvas>
     </div>
