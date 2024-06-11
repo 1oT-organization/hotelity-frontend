@@ -105,7 +105,18 @@ export const getTodayVoc = async () => {
     }
 }
 
-
+/* 사용자 가이드 다운로드 */
+export const downloadTutorial = async () => {
+    try {
+        const response = await apiClient.get('/file/download/tutorial.pdf', {
+            responseType: 'blob', // Important
+        });
+        return response;
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        throw error;
+    }
+};
 
 /* 고객 */
 /* 고객 리스트 */
