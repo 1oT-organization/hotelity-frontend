@@ -1,12 +1,24 @@
 <template>
     <div class="voc-container">
       <div class="voc-details">
-        <h3>VOC 타이틀: {{ voc.vocTitle }}</h3>
-        <p>고객명: {{ voc.customerName }}</p>
+        <div class="voc-title">
+          <h3>{{ voc.vocTitle }}</h3>
+        </div>
+        <div class="voc-test">
+        <div class="voc-customer">
+        <p>{{ voc.customerName }} 님</p>
+        </div>
+        <div class="voc-category">
         <p>VOC 카테고리: {{ voc.vocCategory }}</p>
-        <p>VOC 작성일자: {{ voc.vocCreatedDate }}</p>
-        <p>VOC 내용: {{ voc.vocContent }}</p>
+        <p>VOC 작성일자: {{ new Date(voc.vocCreatedDate).toLocaleString() }}</p>
+      </div>
+    </div>
+        <div class="voc-content">
+          <p>{{ voc.vocContent }}</p>
+        </div>
+        <div class="voc-process-status">
         <p>VOC 처리상태: <span v-if="voc.vocProcessStatus === 1" class="processed">처리완료</span><span v-else class="unprocessed">미처리</span></p>
+        </div>
       </div>
       <form @submit.prevent="submitAnswer" class="answer-form">
         <textarea v-model="answer" placeholder="답변을 입력해주세요." class="answer-textarea"></textarea>
@@ -64,27 +76,79 @@
   }
   */
   .voc-details h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 10px;
   color: #333;
   text-transform: uppercase;  /* Uppercase text for the title */
   letter-spacing: 1px;  /* Letter spacing for better readability */
 }
 
 .voc-details p {
-  font-size: 16px;
-  margin-bottom: 10px;
   color: #555;
 }
 
 .voc-details p:first-of-type {
-  font-size: 18px;  /* Larger font size for VOC content */
   font-weight: 500;  /* Slightly bolder for emphasis */
   color: #000;  /* Darker color for better contrast */
   line-height: 1.5;  /* Improved line height for readability */
 }
   
+.voc-title {
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+}
+
+.voc-title h3 {
+  margin-top: 0.5rem;
+}
+
+.voc-content {
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+  height: 300px;
+}
+
+.voc-content p{
+  font-size: 15px;
+}
+
+.voc-process-status {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 20px;
+}
+
+.voc-customer {
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+  width: 150px;
+  height: 60px;
+  border-radius: 50px;
+  background-color: #95ad9d62;
+}
+
+.voc-customer p {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  font-size: 18px
+}
+
+.voc-test {
+  display: flex;
+  justify-content: space-between;
+}
+
+.voc-category {
+  display: grid;
+  justify-content: end;
+  margin-top: 10px;
+}
+
   .processed {
     color: #28a745;
     font-weight: bold;
