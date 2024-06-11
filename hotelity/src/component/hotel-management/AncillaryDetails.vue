@@ -222,10 +222,11 @@ onMounted(async () => {
 
 .full-screen {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 300px;
+  transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
@@ -235,8 +236,8 @@ onMounted(async () => {
 }
 
 .full-screen img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
 
