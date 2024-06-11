@@ -10,8 +10,12 @@
     <div class="buttonset">
       <button class="upload-button">이미지 업로드</button>
       <div class="setting-button">
-        <button class="btn btn-primary btn-sm me-2" @click=""><i class="bi bi-pencil-square"></i></button>
-        <button class="btn btn-danger btn-sm" @click="deleteRoom(room.roomCodePk)"><i class="bi bi-trash"></i></button>
+        <button class="btn btn-primary btn-sm me-2" @click="toggleEditMode">
+          <i :class="isEditMode ? 'bi bi-save' : 'bi bi-pencil-square'"></i>
+        </button>
+        <button class="btn btn-danger btn-sm" @click="confirmDeleteRoom(room.roomCodePk)">
+          <i class="bi bi-trash"></i>
+        </button>
       </div>
     </div>
     <div class="room-info">
@@ -26,48 +30,51 @@
         </tr>
         <tr>
           <th>객실</th>
-          <td>{{ room.roomLevelName }} {{ room.roomName }}</td>
+          <td><input type="text" v-model="room.roomLevelName" :disabled="!isEditMode" /> <input type="text" v-model="room.roomName" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>객실 호수</th>
-          <td>{{ room.roomNumber }}</td>
+          <td><input type="text" v-model="room.roomNumber" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>가격</th>
-          <td>{{ room.roomPrice ? '₩' + room.roomPrice.toLocaleString('ko-KR') : '₩0' }}</td>
+          <td><input type="number" v-model="room.roomPrice" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>사용 가능 인원</th>
-          <td>{{ room.roomCapacity }}</td>
+          <td><input type="number" v-model="room.roomCapacity" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>방 갯수</th>
-          <td>{{ room.roomSubRoomsCount }}</td>
+          <td><input type="number" v-model="room.roomSubRoomsCount" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>화장실 갯수</th>
-          <td>{{ room.roomBathroomCount }}</td>
+          <td><input type="number" v-model="room.roomBathroomCount" :disabled="!isEditMode" /></td>
         </tr>
         <tr>
           <th>할인율</th>
-          <td>{{ room.roomDiscountRate * 100 + '%' }}</td>
+          <td><input type="number" v-model="room.roomDiscountRate" :disabled="!isEditMode" />%</td>
         </tr>
         <tr>
           <th>객실 상세설명</th>
-          <td>{{ room.roomSpecificInfo }}</td>
+          <td><textarea v-model="room.roomSpecificInfo" :disabled="!isEditMode"></textarea></td>
         </tr>
       </table>
     </div>
   </div>
+  <div v-else>
+    <p>객실 정보를 불러오는 중...</p>
+  </div>
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue';
-import {useRoute} from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import * as api from '@/api/apiService.js';
-// import axios from 'axios';
 
 const route = useRoute();
+const router = useRouter();
 const room = ref({
   roomCodePk: '',
   branchCodeFk: '',
@@ -83,14 +90,12 @@ const room = ref({
 });
 
 const roomImageUrls = ref([]);
-
+const isEditMode = ref(false); // 수정 모드 상태 관리
 
 const filledRoomImageUrls = computed(() => {
   const length = roomImageUrls.value.length;
-  const emptyImage = {roomImageLink: 'https://via.placeholder.com/150'};
-  console.log('이거 ㅜ머임', roomImageUrls.value.map)
+  const emptyImage = { roomImageLink: 'https://via.placeholder.com/150' };
   const filledImages = roomImageUrls.value.map(image => {
-    console.log('이건뭘까요', image.roomImageLink)
     return image.roomImageLink ? image : emptyImage;
   });
   return length < 10
@@ -98,39 +103,51 @@ const filledRoomImageUrls = computed(() => {
       : filledImages;
 });
 
-const deleteRoom = async (roomCodePk) => {
+const confirmDeleteRoom = (roomCodePk) => {
   if (confirm('해당 객실을 정말 삭제하시겠습니까?')) {
-    try {
-      // await axios.delete(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
-      await api.deleteRoom(roomCodePk);
-    } catch (error) {
-      console.error('Error deleting branch:', error);
+    deleteRoom(roomCodePk);
+  }
+};
+
+const deleteRoom = async (roomCodePk) => {
+  try {
+    await api.deleteRoom(roomCodePk);
+    if (confirm('객실이 성공적으로 삭제되었습니다. 확인을 누르면 창이 닫힙니다.')) {
+      window.close(); // 팝업 창을 닫음
     }
+  } catch (error) {
+    console.error('Error deleting room:', error);
+  }
+};
+
+const toggleEditMode = async () => {
+  if (isEditMode.value) {
+    // 수정 모드가 활성화된 상태에서 저장을 수행
+    try {
+      await api.updateRoom(room.value.roomCodePk, room.value);
+      alert('객실 정보가 저장되었습니다.');
+      isEditMode.value = false;
+    } catch (error) {
+      console.error('Error saving room:', error);
+      alert('객실 정보 저장 중 오류가 발생했습니다.');
+    }
+  } else {
+    // 수정 모드로 전환
+    isEditMode.value = true;
   }
 };
 
 onMounted(async () => {
   const roomCodePk = route.params.id;
-
-  console.log('roomImageUrls', roomImageUrls.value);
-
-  console.log('filledRoomImageUrls2', filledRoomImageUrls.value);
-
-  console.log('roomCodePk', roomCodePk);
-  console.log('route.params', route.params);
   try {
-    // const response = await axios.get(`http://localhost:8888/hotel-management/rooms/${roomCodePk}`);
     const response = await api.getRoom(roomCodePk);
     room.value = response.data.content;
-    console.log('room.value', room.value);
     roomImageUrls.value = room.value.roomImageDTOList;
-    console.log('roomImageUrls', roomImageUrls.value);
   } catch (error) {
     console.error(error);
   }
 });
 </script>
-
 
 <style scoped>
 .buttonset {
@@ -145,7 +162,6 @@ onMounted(async () => {
   height: 30px;
   justify-content: flex-end;
 }
-
 
 .room-detail {
   display: flex;
@@ -165,14 +181,14 @@ onMounted(async () => {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  justify-content: flex-start; /* Add this line */
+  justify-content: flex-start;
 }
 
 .room-image {
-  flex: 0 0 auto; /* Make sure the images do not shrink or grow */
+  flex: 0 0 auto;
   width: 150px;
   height: 150px;
-  margin: 5px; /* Add some margin for spacing */
+  margin: 5px;
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
@@ -234,4 +250,3 @@ onMounted(async () => {
   color: white;
 }
 </style>
-  
