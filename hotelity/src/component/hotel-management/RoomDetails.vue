@@ -2,8 +2,17 @@
   <div v-if="room" class="room-detail">
     <div class="room-image-container">
       <div class="room-images">
-        <div class="room-image" v-for="(image, index) in filledRoomImageUrls" :key="image.roomImageLink || index">
-          <img :src="image.roomImageLink || 'https://via.placeholder.com/150'" alt="Room Image"/>
+        <div
+            class="room-image"
+            v-for="(image, index) in filledRoomImageUrls"
+            :key="image.roomImageLink || index"
+            @click="toggleFullScreen(index)"
+        >
+          <img
+              :src="image.roomImageLink || 'https://via.placeholder.com/150'"
+              :class="{ 'full-screen': isFullScreen[index] }"
+              alt="Room Image"
+          />
         </div>
       </div>
     </div>
@@ -115,6 +124,7 @@ const room = ref({
 
 const roomImageUrls = ref([]);
 const isEditMode = ref(false); // 수정 모드 상태 관리
+const isFullScreen = ref([]); // 전체 화면 상태 관리
 
 const filledRoomImageUrls = computed(() => {
   const length = roomImageUrls.value.length;
@@ -161,12 +171,17 @@ const toggleEditMode = async () => {
   }
 };
 
+const toggleFullScreen = (index) => {
+  isFullScreen.value[index] = !isFullScreen.value[index];
+};
+
 onMounted(async () => {
   const roomCodePk = route.params.id;
   try {
     const response = await api.getRoom(roomCodePk);
     room.value = response.data.content;
     roomImageUrls.value = room.value.roomImageDTOList;
+    isFullScreen.value = roomImageUrls.value.map(() => false); // 초기화
   } catch (error) {
     console.error(error);
   }
@@ -217,11 +232,35 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .room-image img {
   max-width: 100%;
   max-height: 100%;
+  object-fit: cover;
+}
+
+.full-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.full-screen img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .upload-button {
