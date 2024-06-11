@@ -911,6 +911,18 @@ export const getVoc = async (vocId) => {
     }
 }
 
+/* VOC 수정 */
+export const replyVoc = async (vocId, vocInfo) => {
+    try {
+        console.log('vocInfo:', vocInfo);
+        const response = await apiClient.put(`/sales/vocs/${vocId}`, vocInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error updating employee:', e);
+        throw e;
+    }
+}
+
 /* VOC 식제 */
 export const deleteVoc = async (vocId) => {
     try {
