@@ -322,7 +322,7 @@ onMounted(() => {
                   }}
                 </td>
                 <td>{{ voc.branchCodeFk }}</td>
-                <td>{{ voc.employeeName }}</td>
+                <td>{{ voc.picemployeeName }}</td>
                 <td>
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>

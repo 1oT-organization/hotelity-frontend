@@ -65,10 +65,10 @@
         <div class="col-12">
           <table class="table table-striped">
             <thead>
-            <tr>
+            <tr style="vertical-align: middle;">
 <!--              <th scope="col">체크인</th>-->
-              <th scope="col">예약 코드</th>
-              <th scope="col">고객 코드</th>
+              <th scope="col" style="width: 60px;">예약 코드</th>
+              <th scope="col" style="width: 60px;">고객 코드</th>
 <!--              <th scope="col">영문 이름</th>-->
               <th scope="col">이름</th>
               <th scope="col">객실 코드</th>
@@ -77,12 +77,12 @@
               <th scope="col">객실 등급</th>
               <!--<th scope="col">객실 수용 인원</th>-->
 <!--              <th scope="col">지점 코드</th>-->
-              <th scope="col">예약 일자</th>
-              <th scope="col">체크인 일자</th>
-              <th scope="col">체크아웃 일자</th>
-              <th scope="col">예약 인원</th>
+              <th scope="col" style="width: 110px;">예약 일자</th>
+              <th scope="col" style="width: 110px;">체크인 일자</th>
+              <th scope="col" style="width: 110px;">체크아웃 일자</th>
+              <th scope="col" style="width: 50px;">예약 인원</th>
 <!--              <th scope="col">예약 취소</th>-->
-              <th scope="col">투숙 등록</th>
+              <th scope="col" style="width: 80px;">투숙 등록</th>
             </tr>
             </thead>
             <tbody>

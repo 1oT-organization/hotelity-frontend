@@ -261,11 +261,11 @@ onMounted(() => {
               <thead>
               <tr>
                 <th scope="col" @click="sort('paymentCodePk')"
-                    :class="{ 'active-asc': orderBy === 'paymentCodePk' && sortBy === 0, 'active-desc': orderBy === 'paymentCodePk' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'paymentCodePk' && sortBy === 0, 'active-desc': orderBy === 'paymentCodePk' && sortBy === 1}" style="width: 55px;">
                   결제내역코드
                 </th>
                 <th scope="col" @click="sort('customerCodeFk')"
-                    :class="{ 'active-asc': orderBy === 'customerCodeFk' && sortBy === 0, 'active-desc': orderBy === 'customerCodeFk' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'customerCodeFk' && sortBy === 0, 'active-desc': orderBy === 'customerCodeFk' && sortBy === 1}" style="width: 45px;">
                   고객코드
                 </th>
                 <th scope="col" @click="sort('customerName')"
@@ -277,19 +277,19 @@ onMounted(() => {
                   결제금액
                 </th>
                 <th scope="col" @click="sort('paymentDate')"
-                    :class="{ 'active-asc': orderBy === 'paymentDate' && sortBy === 0, 'active-desc': orderBy === 'paymentDate' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'paymentDate' && sortBy === 0, 'active-desc': orderBy === 'paymentDate' && sortBy === 1}" style="width: 100px;">
                   결제일자
                 </th>
                 <th scope="col" @click="sort('paymentMethod')"
-                    :class="{ 'active-asc': orderBy === 'paymentMethod' && sortBy === 0, 'active-desc': orderBy === 'paymentMethod' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'paymentMethod' && sortBy === 0, 'active-desc': orderBy === 'paymentMethod' && sortBy === 1}" style="width: 55px;">
                   결제수단
                 </th>
                 <th scope="col" @click="sort('paymentTypeName')"
-                    :class="{ 'active-asc': orderBy === 'paymentTypeName' && sortBy === 0, 'active-desc': orderBy === 'paymentTypeName' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'paymentTypeName' && sortBy === 0, 'active-desc': orderBy === 'paymentTypeName' && sortBy === 1}" style="width: 55px;">
                   결제종류
                 </th>
                 <th scope="col" @click="sort('paymentCancelStatus')"
-                    :class="{ 'active-asc': orderBy === 'paymentCancelStatus' && sortBy === 0, 'active-desc': orderBy === 'paymentCancelStatus' && sortBy === 1}" style="width: 80px;">
+                    :class="{ 'active-asc': orderBy === 'paymentCancelStatus' && sortBy === 0, 'active-desc': orderBy === 'paymentCancelStatus' && sortBy === 1}" style="width: 55px;">
                   결제취소여부
                 </th>
               </tr>
@@ -299,7 +299,7 @@ onMounted(() => {
                 <td>{{ payment.paymentCodePk }}</td>
                 <td>{{ payment.customerCodeFk }}</td>
                 <td>{{ payment.customerName }}</td>
-                <td>{{ payment.paymentAmount }}</td>
+                <td>{{ '₩' + payment.paymentAmount.toLocaleString('ko-KR') }}</td>
                 <td>{{
                     new Date(payment.paymentDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -315,7 +315,9 @@ onMounted(() => {
                 </td>
                 <td>{{ payment.paymentMethod }}</td>
                 <td>{{ payment.paymentTypeName }}</td>
-                <td>{{ payment.paymentCancelStatus }}</td>
+                <td :style="{ color: payment.paymentCancelStatus === 1 ? 'red' : '' }">
+                            {{ payment.paymentCancelStatus === 0 ? '결제완료' : '취소' }}
+                </td>
               </tr>
               </tbody>
             </table>
