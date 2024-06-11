@@ -467,8 +467,7 @@ export const downloadRoomExcel = async (params) => {
 /* 결제 내역 리스트 */
 export const getPayments = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-service/payments/page', {params});
-        return response.data;
+        return await apiClient.get('/hotel-service/payments/page', {params});
     } catch (e) {
         console.error('Error fetching payments:', e);
         throw e;
