@@ -616,6 +616,7 @@ export const checkout = async (stayId) => {
 export const updateStay = async (stayId, stayInfo) => {
     try {
         const response = await apiClient.put(`/hotel-service/stays/${stayId}`, stayInfo);
+        console.log(response.data)
         return response.data;
     } catch (e) {
         console.error('Error updating stay:', e);
