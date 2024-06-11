@@ -252,40 +252,31 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('campaignSentCustomerCodePk')">캠페인코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'campaignSentCustomerCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'campaignSentCustomerCodePk' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('campaignSentCustomerCodePk')"
+                    :class="{ 'active-asc': orderBy === 'campaignSentCustomerCodePk' && sortBy === 0, 'active-desc': orderBy === 'campaignSentCustomerCodePk' && sortBy === 1}" style="width: 70px;">
+                  캠페인 코드
                 </th>
-                <th scope="col" @click="sort('customerName')">수신 고객
-                  <i class="bi bi-caret-up-fill" :class="{ active: orderBy === 'customerName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'customerName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('customerName')"
+                    :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1}" style="width: 80px;">
+                  수신 고객
                 </th>
-                <th scope="col" @click="sort('campaignSendType')">발송방식
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'campaignSendType' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'campaignSendType' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('campaignSendType')"
+                    :class="{ 'active-asc': orderBy === 'campaignSendType' && sortBy === 0, 'active-desc': orderBy === 'campaignSendType' && sortBy === 1}" style="width: 80px;">
+                  발송 방식
                 </th>
-                <th scope="col" @click="sort('membershipLevelName')">멤버십 등급
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'membershipLevelName' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('membershipLevelName')"
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1}" style="width: 100px;">
+                  멤버십 등급
                 </th>
-                <th scope="col">제목</th>
-                <th scope="col" @click="sort('campaignSentDate')">발송 일자
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'campaignSentDate' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'campaignSentDate' && sortBy === 1 }"></i>
+                <th scope="col" style="width: 500px;">제목</th>
+                <th scope="col" @click="sort('campaignSentDate')"
+                    :class="{ 'active-asc': orderBy === 'campaignSentDate' && sortBy === 0, 'active-desc': orderBy === 'campaignSentDate' && sortBy === 1}" style="width: 200px;">
+                  발송 일자
                 </th>
-                <th scope="col">발송여부</th>
-                <th scope="col">템플릿 코드</th>
+                <th scope="col" style="width: 60px;">발송 여부</th>
+                <th scope="col" style="width: 60px;">템플릿 코드</th>
                 <th scope="col">템플릿 이름</th>
-                <th scope="col">발송직원</th>
+                <th scope="col" style="width: 80px;">발송직원</th>
               </tr>
               </thead>
               <tbody>

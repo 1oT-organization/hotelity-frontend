@@ -71,7 +71,7 @@
             <tr>
               <th scope="col" @click="sort('stayCodePk')"
                   :class="{ 'active-asc': orderBy === 'stayCodePk' && sortBy === 0, 'active-desc': orderBy === 'stayCodePk' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 60px;">
                 투숙 코드
               </th>
               <th scope="col" @click="sort('customerName')"
@@ -81,27 +81,27 @@
               </th>
               <th scope="col" @click="sort('roomCodeFk')"
                   :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 65px;">
                 객실코드
               </th>
               <th scope="col" @click="sort('roomNumber')"
                   :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 60px;">
                 객실번호
               </th>
               <th scope="col" @click="sort('roomName')"
-                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1}"
+                  :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1}"
                   style="width: 80px;">
                 객실명
               </th>
               <th scope="col" @click="sort('roomLevelName')"
                   :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 65px;">
                 객실등급명
               </th>
               <th scope="col" @click="sort('stayPeopleCount')"
                   :class="{ 'active-asc': orderBy === 'stayPeopleCount' && sortBy === 0, 'active-desc': orderBy === 'stayPeopleCount' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 55px;">
                 투숙인원
               </th>
               <th scope="col" @click="sort('stayCheckinTime')"
@@ -111,7 +111,7 @@
               </th>
               <th scope="col" @click="sort('reservationCheckoutDate')"
                   :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 85px;">
                 체크아웃 예정일
               </th>
               <th scope="col" @click="sort('stayCheckoutTime')"
@@ -121,7 +121,7 @@
               </th>
               <th scope="col" @click="sort('stayPeriod')"
                   :class="{ 'active-asc': orderBy === 'stayPeriod' && sortBy === 0, 'active-desc': orderBy === 'stayPeriod' && sortBy === 1}"
-                  style="width: 80px;">
+                  style="width: 55px;">
                 숙박일수
               </th>
             </tr>
@@ -184,23 +184,23 @@
                 <div class="row">
                   <div class="col-md-3 mb-3">
                     <label for="customerName" class="form-label">고객명</label>
-                    <input type="text" class="form-control" id="customerName" v-model="stayDetails.customerName" disabled>
+                    <input type="text" class="form-control" id="customerName" v-model="stayDetails.customerName" :disabled="!isEditable">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomCodeFk" class="form-label">객실 코드</label>
-                    <input type="text" class="form-control" id="roomCodeFk" v-model="stayDetails.roomCodeFk" disabled>
+                    <input type="text" class="form-control" id="roomCodeFk" v-model="stayDetails.roomCodeFk" :disabled="!isEditable">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomNumber" class="form-label">예약 객실 번호</label>
-                    <input type="text" class="form-control" id="roomNumber" v-model="stayDetails.roomNumber" disabled>
+                    <input type="text" class="form-control" id="roomNumber" v-model="stayDetails.roomNumber" :disabled="!isEditable">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomName" class="form-label">예약 객실명</label>
-                    <input type="text" class="form-control" id="roomName" :value="stayDetails.roomName + ' ' + stayDetails.roomLevelName" disabled>
+                    <input type="text" class="form-control" id="roomName" :value="stayDetails.roomName + ' ' + stayDetails.roomLevelName" :disabled="!isEditable">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="stayPeopleCount" class="form-label">투숙 인원</label>
-                    <input type="text" class="form-control" id="stayPeopleCount" :value="stayDetails.stayPeopleCount" disabled>
+                    <input type="text" class="form-control" id="stayPeopleCount" :value="stayDetails.stayPeopleCount" :disabled="!isEditable">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="stayCheckinTime" class="form-label">체크인 일자</label>
@@ -215,7 +215,7 @@
                   <div class="col-md-3 mb-3">
                     <label for="stayCheckoutTime" class="form-label">체크아웃 일자</label>
                     <input type="text" class="form-control" id="stayCheckoutTime"
-                           v-model="stayDetails.stayCheckoutTime" disabled>
+                           v-model="stayDetails.stayCheckoutTime" :disabled="!isEditable">
                   </div>
 <!--                  <div class="col-md-3 mb-3">-->
 <!--                    <label for="stayPeriod" class="form-label">숙박 일수</label>-->
@@ -224,6 +224,7 @@
 <!--                  </div>-->
                 </div>
                 <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
+                <button class="btn btn-secondary checkin-btn" @click="handleClick" style="margin-left: 8px;"> {{ editButtonText }}</button>
                 <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
               </form>
             </div>
@@ -239,11 +240,15 @@
 <script setup>
 
 import {ref, defineComponent, onMounted, watch} from 'vue';
+import { useAuthStore } from '@/store';
+
 import * as api from '@/api/apiService.js';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import StaySearch from "@/component/hotel-service/stay/StaySearch.vue";
 import StayCheckoutBtn from "@/component/hotel-service/stay/StayCheckoutBtn.vue";
+
+const authStore = useAuthStore();
 
 const isLoading = ref(true);
 const stays = ref([]);
@@ -263,6 +268,27 @@ const orderBy = ref('stayCheckinTime');
 
 const selectedStayCheckinDate = ref(null);
 const selectedStayCheckoutDate = ref(null);
+
+// 투숙 수정
+const isEditable = ref(false); // 수정 가능 여부
+const editButtonText = ref('수정'); // 수정 버튼 텍스트
+
+async function handleClick() {
+  if (editButtonText.value === '수정') {
+    toggleEditable();
+  } else if (editButtonText.value === '수정 등록') {
+    const result = await updateStay();
+    if (result) {
+      alert('수정되었습니다');
+      toggleEditable();
+    }
+  }
+}
+
+function toggleEditable() {
+  isEditable.value = !isEditable.value;
+  editButtonText.value = isEditable.value ? '수정 등록' : '수정';
+}
 
 // 모달창
 const showModal = ref(false);
@@ -287,6 +313,8 @@ async function openModal(stayCodePk) {
 
 function closeModal() {
   showModal.value = false;
+  isEditable.value = false;
+  editButtonText.value = '수정';
 }
 
 // 모달에 들어갈 데이터
@@ -301,7 +329,8 @@ const stayDetails = ref({
   stayCheckinTime: '',
   reservationCheckoutDate: '',
   stayCheckoutTime: '',
-  stayPeriod: ''
+  stayPeriod: '',
+  reservationCodeFk: ''
 });
 
 // 얘 수정해야함 체크아웃(api.checkout)으로!
@@ -334,6 +363,28 @@ const checkOut = async () => {
     console.error(error);
   }
 };
+
+const modifyStay = {
+  stayCodePk: stayDetails.value.stayCodePk,
+  stayCheckinTime: stayDetails.value.stayCheckinTime,
+  stayCheckoutTime: stayDetails.value.stayCheckoutTime,
+  stayPeopleCount: stayDetails.value.stayPeopleCount,
+  employeeCodeFk: authStore.$state.userInfo.employeeCode
+}
+
+// 투숙 수정
+async function updateStay() {
+  if (editButtonText.value === '수정 등록') {
+    try {
+      await api.updateStay(stayDetails.value.stayCodePk, modifyStay.value);
+      closeModal();
+      return true;
+    } catch (error) {
+      console.error('Error updating stay:', error);
+    }
+  }
+  return false;
+}
 
 // fetch마다 다르게 리스트를 출력하기 위함
 const isFetchDailyStay = ref(false);

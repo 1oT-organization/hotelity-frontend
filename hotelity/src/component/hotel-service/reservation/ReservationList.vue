@@ -15,8 +15,8 @@
 
         <div style="display: flex; justify-content:right">
           <!-- calendar icon -->
-          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i
-              class="bi bi-calendar"></i></button>
+<!--          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i-->
+<!--              class="bi bi-calendar"></i></button>-->
 
           <!--        ReservationFilter start -->
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
@@ -34,26 +34,26 @@
           <button class="btn btn-primary">적용</button>
         </div>
 
-        <div class="calendar-container" v-show="isCalendarContainerVisible">
-          <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event"
-                        format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
-                        placeholder="예약 일자"></DatePicker>
-          </div>
-          <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationCheckinDate"
-                        @update:modelValue="selectedReservationCheckinDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
-                        placeholder="체크인 일자"></DatePicker>
-          </div>
-          <div class="btn-group me-2">
-            <DatePicker :modelValue="selectedReservationCheckoutDate"
-                        @update:modelValue="selectedReservationCheckoutDate = $event" format="yyyy-MM-dd"
-                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"
-                        placeholder="체크아웃 일자"></DatePicker>
-          </div>
-        </div>
+<!--        <div class="calendar-container" v-show="isCalendarContainerVisible">-->
+<!--          <div class="btn-group me-2">-->
+<!--            <DatePicker :modelValue="selectedReservationDate" @update:modelValue="selectedReservationDate = $event"-->
+<!--                        format="yyyy-MM-dd"-->
+<!--                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"-->
+<!--                        placeholder="예약 일자"></DatePicker>-->
+<!--          </div>-->
+<!--          <div class="btn-group me-2">-->
+<!--            <DatePicker :modelValue="selectedReservationCheckinDate"-->
+<!--                        @update:modelValue="selectedReservationCheckinDate = $event" format="yyyy-MM-dd"-->
+<!--                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"-->
+<!--                        placeholder="체크인 일자"></DatePicker>-->
+<!--          </div>-->
+<!--          <div class="btn-group me-2">-->
+<!--            <DatePicker :modelValue="selectedReservationCheckoutDate"-->
+<!--                        @update:modelValue="selectedReservationCheckoutDate = $event" format="yyyy-MM-dd"-->
+<!--                        style="width: 120px; text-align: center; padding: 6px 12px 6px 12px; border-radius: 0.4rem"-->
+<!--                        placeholder="체크아웃 일자"></DatePicker>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <!--        ReservationFilter end-->
 
@@ -65,10 +65,10 @@
         <div class="col-12">
           <table class="table table-striped">
             <thead>
-            <tr>
+            <tr style="vertical-align: middle;">
 <!--              <th scope="col">체크인</th>-->
-              <th scope="col">예약 코드</th>
-              <th scope="col">고객 코드</th>
+              <th scope="col" style="width: 60px;">예약 코드</th>
+              <th scope="col" style="width: 60px;">고객 코드</th>
 <!--              <th scope="col">영문 이름</th>-->
               <th scope="col">이름</th>
               <th scope="col">객실 코드</th>
@@ -77,12 +77,12 @@
               <th scope="col">객실 등급</th>
               <!--<th scope="col">객실 수용 인원</th>-->
 <!--              <th scope="col">지점 코드</th>-->
-              <th scope="col">예약 일자</th>
-              <th scope="col">체크인 일자</th>
-              <th scope="col">체크아웃 일자</th>
-              <th scope="col">예약 인원</th>
+              <th scope="col" style="width: 110px;">예약 일자</th>
+              <th scope="col" style="width: 110px;">체크인 일자</th>
+              <th scope="col" style="width: 110px;">체크아웃 일자</th>
+              <th scope="col" style="width: 50px;">예약 인원</th>
 <!--              <th scope="col">예약 취소</th>-->
-              <th scope="col">투숙 등록</th>
+              <th scope="col" style="width: 80px;">투숙 등록</th>
             </tr>
             </thead>
             <tbody>
@@ -137,15 +137,15 @@
 <!--                  </div>-->
                   <div class="col-md-3 mb-3">
                     <label for="customerName" class="form-label">예약자 성함</label>
-                    <input type="text" class="form-control" id="customerName" v-model="reservationDetails.customerName" disabled>
+                    <input type="text" class="form-control" id="customerName" v-model="reservationDetails.customerName" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="branchName" class="form-label">지점 명</label>
-                    <input type="text" class="form-control" id="branchName" v-model="reservationDetails.branchName" disabled>
+                    <input type="text" class="form-control" id="branchName" v-model="reservationDetails.branchName" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="reservationPersonnel" class="form-label">예약 인원</label>
-                    <select class="form-control" id="reservationPersonnel" v-model="reservationDetails.reservationPersonnel" style="background-color: white;">
+                    <select class="form-control" id="reservationPersonnel" v-model="reservationDetails.reservationPersonnel" style="background-color: white;" :class="{ editable: isEditable }">
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -155,29 +155,32 @@
                   <div class="col-md-3 mb-3">
                     <label for="reservationCheckinDate" class="form-label">체크인 일자</label>
                     <input type="text" class="form-control" id="reservationCheckinDate"
-                           v-model="reservationDetails.reservationCheckinDate" disabled>
+                           :value="formatDate(reservationDetails.reservationCheckinDate)" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomCodeFk" class="form-label">객실 코드</label>
-                    <input type="text" class="form-control" id="roomCodeFk" v-model="reservationDetails.roomCodeFk" disabled>
+                    <input type="text" class="form-control" id="roomCodeFk" v-model="reservationDetails.roomCodeFk" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomNumber" class="form-label">예약 객실 번호</label>
-                    <input type="text" class="form-control" id="roomNumber" v-model="reservationDetails.roomNumber" disabled>
+                    <input type="text" class="form-control" id="roomNumber" v-model="reservationDetails.roomNumber" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="roomName" class="form-label">예약 객실명</label>
-                    <input type="text" class="form-control" id="roomName" :value="reservationDetails.roomName + ' ' + reservationDetails.roomLevelName" disabled>
+                    <input type="text" class="form-control" id="roomName" :value="reservationDetails.roomName + ' ' + reservationDetails.roomLevelName" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="reservationCheckoutDate" class="form-label">체크아웃 일자</label>
                     <input type="text" class="form-control" id="reservationCheckoutDate"
-                           v-model="reservationDetails.reservationCheckoutDate" disabled>
+                           :value="formatDate(reservationDetails.reservationCheckoutDate)" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                 </div>
 <!--                <ReservationCheckinBtn :checkedRows="checkedRows" :reservations="reservations"/>-->
 <!--                <button type="submit" class="btn btn-primary checkin-btn">체크인</button>-->
-                <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkIn"> 체크인</button>
+                <div style="margin-top: 10px; margin-bottom: 10px;">
+                  <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkIn"> 체크인</button>
+                  <button class="btn btn-secondary checkin-btn" @click="toggleEditable" style="margin-left: 8px;"> {{ editButtonText }}</button>
+                </div>
                 <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
               </form>
             </div>
@@ -209,6 +212,13 @@ const isFilterContainerVisible = ref(false);
 const isCalendarContainerVisible = ref(false);
 const selectedMonth = ref(null);
 const showModal = ref(false); // 모달 표시 여부
+const isEditable = ref(false); // 수정 가능 여부
+const editButtonText = ref('수정'); // 수정 버튼 텍스트
+
+function toggleEditable() {
+  isEditable.value = !isEditable.value;
+  editButtonText.value = isEditable.value ? '수정 등록' : '수정';
+}
 
 // 모달창
 async function openModal(reservationCodePk) {
@@ -228,6 +238,8 @@ async function openModal(reservationCodePk) {
 
 function closeModal() {
   showModal.value = false;
+  isEditable.value = false;
+  editButtonText.value = '수정';
 }
 
 // 모달에 들어갈 데이터
@@ -287,6 +299,8 @@ const checkIn = async () => {
     console.error(error);
   }
 };
+
+// 예약 수정
 
 // 체크박스
 const checkedRows = ref([]);
@@ -478,6 +492,12 @@ function formatDateTime(date) {
 .modal-body {
   margin-left: 30px; /* 왼쪽 마진 설정 */
   margin-right: 30px; /* 오른쪽 마진 설정 */
+}
+
+// 수정 가능한 창 표시
+.editable {
+  border: 2px solid limegreen; /* 초록색 테두리 적용 */
+  box-shadow: 0 0 10px limegreen; /* 초록색 그림자 적용 */
 }
 
 .checkin-btn {
