@@ -205,7 +205,7 @@
                   <div class="col-md-3 mb-3">
                     <label for="stayCheckinTime" class="form-label">체크인 일자</label>
                     <input type="text" class="form-control" id="stayCheckinTime"
-                           v-model="stayDetails.stayCheckinTime" :disabled="!isEditable">
+                           v-model="stayDetails.stayCheckinTime" disabled>
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="reservationCheckoutDate" class="form-label">체크아웃 예정일</label>
@@ -240,11 +240,15 @@
 <script setup>
 
 import {ref, defineComponent, onMounted, watch} from 'vue';
+import { useAuthStore } from '@/store';
+
 import * as api from '@/api/apiService.js';
 import ExcelButton from "@/component/common/ExcelButton.vue";
 import DatePicker from "vue3-datepicker";
 import StaySearch from "@/component/hotel-service/stay/StaySearch.vue";
 import StayCheckoutBtn from "@/component/hotel-service/stay/StayCheckoutBtn.vue";
+
+const authStore = useAuthStore();
 
 const isLoading = ref(true);
 const stays = ref([]);
@@ -269,9 +273,16 @@ const selectedStayCheckoutDate = ref(null);
 const isEditable = ref(false); // 수정 가능 여부
 const editButtonText = ref('수정'); // 수정 버튼 텍스트
 
-function handleClick() {
-  toggleEditable();
-  updateStay();
+async function handleClick() {
+  if (editButtonText.value === '수정') {
+    toggleEditable();
+  } else if (editButtonText.value === '수정 등록') {
+    const result = await updateStay();
+    if (result) {
+      alert('수정되었습니다');
+      toggleEditable();
+    }
+  }
 }
 
 function toggleEditable() {
@@ -318,7 +329,8 @@ const stayDetails = ref({
   stayCheckinTime: '',
   reservationCheckoutDate: '',
   stayCheckoutTime: '',
-  stayPeriod: ''
+  stayPeriod: '',
+  reservationCodeFk: ''
 });
 
 // 얘 수정해야함 체크아웃(api.checkout)으로!
@@ -352,16 +364,26 @@ const checkOut = async () => {
   }
 };
 
+const modifyStay = {
+  stayCodePk: stayDetails.value.stayCodePk,
+  stayCheckinTime: stayDetails.value.stayCheckinTime,
+  stayCheckoutTime: stayDetails.value.stayCheckoutTime,
+  stayPeopleCount: stayDetails.value.stayPeopleCount,
+  employeeCodeFk: authStore.$state.userInfo.employeeCode
+}
+
 // 투숙 수정
 async function updateStay() {
   if (editButtonText.value === '수정 등록') {
     try {
-      await api.updateStay(reservationDetails.value.reservationCodePk, reservationDetails.value);
+      await api.updateStay(stayDetails.value.stayCodePk, modifyStay.value);
       closeModal();
+      return true;
     } catch (error) {
       console.error('Error updating stay:', error);
     }
   }
+  return false;
 }
 
 // fetch마다 다르게 리스트를 출력하기 위함
