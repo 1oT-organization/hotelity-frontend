@@ -226,7 +226,6 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="stayPeopleCount" class="form-label">투숙 인원</label>
-<!--                    <input type="text" class="form-control" id="stayPeopleCount" v-model="stayDetails.stayPeopleCount" :disabled="!isEditable">-->
                     <select class="form-control" id="stayPeopleCount" v-model="stayDetails.stayPeopleCount" style="background-color: white;" :class="{ editable: isEditable }" :disabled="!isEditable">
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -240,8 +239,9 @@
                   </div>
                 </div>
                 <div style="margin-top: 20px;">
-                  <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
-                  <button class="btn btn-secondary checkin-btn" @click="handleClick" style="margin-left: 8px;"> {{ editButtonText }}</button>
+                  <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
+                  <button class="btn btn-secondary" @click="handleClick" style="margin-left: 8px;"> {{ editButtonText }}</button>
+                  <button class="btn btn-secondary delete-button" style="margin-left: 8px;" @click="confirmDelete">삭제</button>
                 </div>
                 <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
               </form>
@@ -419,6 +419,18 @@ async function updateStay() {
     }
   }
   return false;
+}
+
+// 투숙 삭제
+async function confirmDelete() {
+  if (window.confirm('삭제 하시겠습니까?')) {
+    try {
+      await api.deleteStay(stayDetails.value.stayCodePk);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting stay:', error);
+    }
+  }
 }
 
 // fetch마다 다르게 리스트를 출력하기 위함
@@ -734,5 +746,10 @@ table.table th, table.table td {
 
 .modal-body {
   margin: 30px;
+}
+
+.delete-button {
+  float: right;
+  background-color: darkred;
 }
 </style>
