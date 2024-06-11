@@ -294,7 +294,7 @@ onMounted(() => {
                     :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }"
                     style="width: 80px;">지점
                 </th>
-                <th scope="col" style="width: 100px;">담당 직원</th>
+                <th scope="col" style="width: 100px;">답변 직원</th>
                 <th scope="col" @click="sort('vocProcessStatus')"
                     :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }"
                     style="width: 100px;">처리상태

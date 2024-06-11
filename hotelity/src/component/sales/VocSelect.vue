@@ -3,6 +3,9 @@
       <div class="voc-details">
         <div class="voc-title">
           <h3>{{ voc.vocTitle }}</h3>
+          <button class="btn btn-danger btn-sm" @click="confirmDeleteVoc(voc.vocCodePk)">
+          <i class="bi bi-trash"></i>
+          </button>
         </div>
         <div class="voc-test">
         <div class="voc-customer">
@@ -20,22 +23,89 @@
         <p>VOC 처리상태: <span v-if="voc.vocProcessStatus === 1" class="processed">처리완료</span><span v-else class="unprocessed">미처리</span></p>
         </div>
       </div>
-      <form @submit.prevent="submitAnswer" class="answer-form">
-        <textarea v-model="answer" placeholder="답변을 입력해주세요." class="answer-textarea"></textarea>
-        <button type="submit" class="submit-btn">Submit</button>
-      </form>
+      <div class="voc-answer" v-if="voc.vocResponse && !editing">
+      <h4>답변:</h4>
+      <p style="text-align: right;">답변 등록일 : {{ new Date(voc.vocLastUpdatedDate).toLocaleString() }}</p>
+      <div class="voc-response">
+        <p v-html="voc.vocResponse.replace(/\n/g, '<br>')"></p>
+      </div>
+      <div class="editbtn-position">
+      <button class="edit-btn" @click="editAnswer">답변 수정</button>
+    </div>
+    </div>
+    <form @submit.prevent="submitAnswer" class="answer-form" v-else>
+    <textarea v-model="answer" placeholder="답변을 입력해주세요." class="answer-textarea"></textarea>
+    <button type="submit" class="submit-btn">답변 완료</button>
+  </form>
     </div>
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import axios from 'axios';
+  import { useAuthStore } from '@/store';
+  import { getEmployee } from '@/api/apiService.js';
+  import * as api from '@/api/apiService.js';
   
   const router = useRouter();
   const route = useRoute();
   const vocCodePk = route.params;
-  
+  const authStore = useAuthStore();
+  const userInfo = ref({});
+
+const editing = ref(false);
+
+const confirmDeleteVoc = (vocCodePk) => {
+  if (confirm('해당 VOC를 정말 삭제하시겠습니까?')) {
+    deleteVoc(vocCodePk);
+  }
+};
+
+const deleteVoc = async (vocCodePk) => {
+  try {
+    await api.deleteVoc(vocCodePk);
+    if (confirm('VOC가 성공적으로 삭제되었습니다. 확인을 누르면 창이 닫힙니다.')) {
+      window.close();
+      router.push('/voc');
+    }
+  } catch (error) {
+    console.error('Error deleting room:', error);
+  }
+};
+
+const submitAnswer = async () => {
+  console.log('1', voc.value)
+  console.log('2', voc)
+  console.log('employee')
+
+  const vocId = voc.value.vocCodePk;
+  const vocInfo = {
+    vocResponse: answer.value,
+    employeeCodeFk: userInfo.value.employeeCodePk, 
+  };
+
+
+  try {
+    if (!answer.value.trim()) {
+    alert('답변을 입력해주세요.');
+    return;
+  }
+    const response = await api.replyVoc(vocId, vocInfo);
+    console.log(response); 
+    voc.value.vocResponse = answer.value;
+    alert('답변이 등록되었습니다.');
+    editing.value = false;
+  } catch (e) {
+    console.error('Error submitting answer:', e); 
+  }
+};
+
+const editAnswer = () => {
+    answer.value = voc.value.vocResponse; // 기존 답변을 answer에 설정
+    editing.value = true; // 수정 모드로 전환
+  };
+
   const fetchVoc = async () => {
     try {
       const response = await axios.get(`http://localhost:8888/sales/vocs/${vocCodePk.id}/voc`);
@@ -51,16 +121,25 @@
   
   onMounted(async () => {
     voc.value = await fetchVoc();
+    setEmployeeInfo();
   });
   
-  // const submitAnswer = async () => {
-  //   try {
-  //     await axios.post(`/vocs/${voc.value.vocCodePk}/answer`, { answer: answer.value });
-  //     alert('Answer submitted successfully!');
-  //   } catch (error) {
-  //     console.error('Error submitting answer:', error);
-  //   }
-  // };
+  const setEmployeeInfo = () => {
+  const employeeInfo = authStore.$state.userInfo;
+  if (employeeInfo) {
+    getEmployee(authStore.$state.userInfo.employeeCode).then((res) => {
+      const imgElement = document.querySelector(".rounded-circle");
+      const imageSrc = res.data.employeeProfileImageLink;
+
+      if (imageSrc) {
+        imgElement.setAttribute('src', imageSrc);
+      }
+
+      userInfo.value = res.data;
+    });
+  }
+};
+
   </script>
   
   <style>
@@ -94,6 +173,8 @@
 }
   
 .voc-title {
+  display: flex;
+  justify-content: space-between;
   border-radius: 10px;
   padding: 10px;
   margin: 10px 0;
@@ -113,6 +194,14 @@
 
 .voc-content p{
   font-size: 15px;
+}
+
+.voc-response {
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+  height: auto;
+  background-color: #ffe4b53c;
 }
 
 .voc-process-status {
@@ -165,7 +254,7 @@
   }
   
   .answer-textarea {
-    height: 150px;
+    height: 220px;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -177,7 +266,7 @@
   .submit-btn {
     align-self: flex-end;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #3e9b6d;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -186,8 +275,28 @@
   }
   
   .submit-btn:hover {
-    background-color: #0056b3;
+    background-color: #508572;
   }
+
+  .edit-btn {
+  background-color: #3e9b6d;
+  color: #fff; 
+  padding: 10px 20px;
+  border: none; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+.edit-btn:hover {
+  background-color: #508572; 
+}
+
+.editbtn-position {
+  display: flex;
+  justify-content: end;
+}
+
   @media (max-width: 768px) {
   .voc-container {
     padding: 15px;
