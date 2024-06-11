@@ -174,7 +174,7 @@ export const downloadExcel = async (params) => {
             params: params,
             responseType: 'blob'
         });
-        return response;
+        return response.data;
     } catch (e) {
         console.error('Error downloading excel:', e);
         throw e;
