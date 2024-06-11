@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="guide-download-container">
-        <a href="#" class="guide-download">GUIDE DOWNLOAD</a>
+        <a href="#" class="guide-download" @click.prevent="downloadGuide">GUIDE DOWNLOAD</a>
         <a href="https://github.com/1oT-organization/hotelity-backend" class="github-link" target="_blank">
           <i class="fab fa-github"></i>
         </a>
@@ -20,6 +20,26 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import * as api from '@/api/apiService.js';
+
+async function downloadGuide() {
+  try {
+    const response = await api.downloadTutorial();
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'tutorial.pdf'); // or any other extension
+    document.body.appendChild(link);
+    link.click();
+
+  } catch (error) {
+    console.error('Error downloading tutorial:', error);
+  }
+}
+
 </script>
 
 <style scoped>
