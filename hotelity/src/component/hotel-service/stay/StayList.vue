@@ -182,49 +182,67 @@
             <div class="modal-body">
               <form @submit.prevent="submitForm">
                 <div class="row">
-                  <div class="col-md-3 mb-3">
-                    <label for="customerName" class="form-label">고객명</label>
-                    <input type="text" class="form-control" id="customerName" v-model="stayDetails.customerName" :disabled="!isEditable">
+                  <div class="col-md-6 mb-3">
+                    <label for="stayCodePk" class="form-label">투숙 코드</label>
+                    <input type="text" class="form-control" id="stayCodePk" v-model="stayDetails.stayCodePk" disabled>
                   </div>
-                  <div class="col-md-3 mb-3">
+                  <div class="col-md-6 mb-3">
+                    <label for="reservationCodeFk" class="form-label">예약 코드</label>
+                    <input type="text" class="form-control" id="reservationCodeFk" v-model="stayDetails.reservationCodeFk" disabled>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="customerCodeFk" class="form-label">고객 코드</label>
+                    <input type="text" class="form-control" id="customerCodeFk" v-model="stayDetails.customerCodeFk" :disabled="!isEditable">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="customerName" class="form-label">고객명</label>
+                    <input type="text" class="form-control" id="customerName" v-model="stayDetails.customerName" disabled>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
                     <label for="roomCodeFk" class="form-label">객실 코드</label>
                     <input type="text" class="form-control" id="roomCodeFk" v-model="stayDetails.roomCodeFk" :disabled="!isEditable">
                   </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="roomNumber" class="form-label">예약 객실 번호</label>
-                    <input type="text" class="form-control" id="roomNumber" v-model="stayDetails.roomNumber" :disabled="!isEditable">
+                  <div class="col-md-4 mb-3">
+                    <label for="roomNumber" class="form-label">객실 번호</label>
+                    <input type="text" class="form-control" id="roomNumber" v-model="stayDetails.roomNumber" disabled>
                   </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="roomName" class="form-label">예약 객실명</label>
-                    <input type="text" class="form-control" id="roomName" :value="stayDetails.roomName + ' ' + stayDetails.roomLevelName" :disabled="!isEditable">
+                  <div class="col-md-4 mb-3">
+                    <label for="roomName" class="form-label">객실명</label>
+                    <input type="text" class="form-control" id="roomName" v-model="stayDetails.roomName" disabled>
                   </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="stayPeopleCount" class="form-label">투숙 인원</label>
-                    <input type="text" class="form-control" id="stayPeopleCount" :value="stayDetails.stayPeopleCount" :disabled="!isEditable">
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="stayCheckinTime" class="form-label">체크인 일자</label>
-                    <input type="text" class="form-control" id="stayCheckinTime"
-                           v-model="stayDetails.stayCheckinTime" disabled>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="reservationCheckoutDate" class="form-label">체크아웃 예정일</label>
-                    <input type="text" class="form-control" id="reservationCheckoutDate"
-                           v-model="stayDetails.reservationCheckoutDate" disabled>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <label for="stayCheckoutTime" class="form-label">체크아웃 일자</label>
-                    <input type="text" class="form-control" id="stayCheckoutTime"
-                           v-model="stayDetails.stayCheckoutTime" :disabled="!isEditable">
-                  </div>
-<!--                  <div class="col-md-3 mb-3">-->
-<!--                    <label for="stayPeriod" class="form-label">숙박 일수</label>-->
-<!--                    <input type="text" class="form-control" id="stayPeriod"-->
-<!--                           v-model="stayDetails.stayCheckoutTime" disabled>-->
-<!--                  </div>-->
                 </div>
-                <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
-                <button class="btn btn-secondary checkin-btn" @click="handleClick" style="margin-left: 8px;"> {{ editButtonText }}</button>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="stayCheckinTime" class="form-label">체크인 일자</label>
+                    <input type="text" class="form-control" id="stayCheckinTime" v-model="stayDetails.stayCheckinTime" disabled>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="stayCheckoutTime" class="form-label">체크아웃 일자</label>
+                    <input type="text" class="form-control" id="stayCheckoutTime" v-model="stayDetails.stayCheckoutTime" disabled>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="stayPeopleCount" class="form-label">투숙 인원</label>
+                    <select class="form-control" id="stayPeopleCount" v-model="stayDetails.stayPeopleCount" style="background-color: white;" :class="{ editable: isEditable }" :disabled="!isEditable">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="reservationCheckoutDate" class="form-label">체크아웃 예정일</label>
+                    <input type="text" class="form-control" id="reservationCheckoutDate" v-model="stayDetails.reservationCheckoutDate" disabled>
+                  </div>
+                </div>
+                <div style="margin-top: 20px;">
+                  <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="checkOut"> 체크아웃</button>
+                  <button class="btn btn-secondary" @click="handleClick" style="margin-left: 8px;"> {{ editButtonText }}</button>
+                  <button class="btn btn-secondary delete-button" style="margin-left: 8px;" @click="confirmDelete">삭제</button>
+                </div>
                 <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
               </form>
             </div>
@@ -320,6 +338,7 @@ function closeModal() {
 // 모달에 들어갈 데이터
 const stayDetails = ref({
   stayCodePk: '',
+  customerCodeFk: '',
   customerName: '',
   roomCodeFk: '',
   roomNumber: '',
@@ -364,26 +383,54 @@ const checkOut = async () => {
   }
 };
 
-const modifyStay = {
-  stayCodePk: stayDetails.value.stayCodePk,
-  stayCheckinTime: stayDetails.value.stayCheckinTime,
-  stayCheckoutTime: stayDetails.value.stayCheckoutTime,
-  stayPeopleCount: stayDetails.value.stayPeopleCount,
-  employeeCodeFk: authStore.$state.userInfo.employeeCode
-}
+// const modifyStay = {
+//   stayCodePk: stayDetails.value.stayCodePk,
+//   stayCheckinTime: stayDetails.value.stayCheckinTime,
+//   stayCheckoutTime: stayDetails.value.stayCheckoutTime,
+//   stayPeopleCount: stayDetails.value.stayPeopleCount,
+//   reservationCodeFk: stayDetails.value.reservationCodeFk,
+//   employeeCodeFk: authStore.$state.userInfo.employeeCode,
+//   roomCodeFk: stayDetails.value.roomCodeFk
+// }
 
 // 투숙 수정
 async function updateStay() {
   if (editButtonText.value === '수정 등록') {
+    const modifyStay = {
+      stayCodePk: stayDetails.value.stayCodePk,
+      stayCheckinTime: stayDetails.value.stayCheckinTime,
+      stayCheckoutTime: stayDetails.value.stayCheckoutTime,
+      stayPeopleCount: stayDetails.value.stayPeopleCount,
+      reservationCodeFk: stayDetails.value.reservationCodeFk,
+      employeeCodeFk: authStore.$state.userInfo.employeeCode,
+      roomCodeFk: stayDetails.value.roomCodeFk
+    }
+
+    console.log("updateStay 실행됨")
+    console.log(modifyStay)
+
     try {
-      await api.updateStay(stayDetails.value.stayCodePk, modifyStay.value);
+      await api.updateStay(stayDetails.value.stayCodePk, modifyStay);
       closeModal();
+      window.location.reload(); // 페이지 새로 고침
       return true;
     } catch (error) {
       console.error('Error updating stay:', error);
     }
   }
   return false;
+}
+
+// 투숙 삭제
+async function confirmDelete() {
+  if (window.confirm('삭제 하시겠습니까?')) {
+    try {
+      await api.deleteStay(stayDetails.value.stayCodePk);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting stay:', error);
+    }
+  }
 }
 
 // fetch마다 다르게 리스트를 출력하기 위함
@@ -426,20 +473,19 @@ watch(stays, () => {
 }, {immediate: true});
 
 async function fetchData(params) {
-
-  // 필터의 dropdown에서 '지점 코드'를 선택했을 때 requestParam에서 branchCodeFk 제거
-  if (params.branchCodeFk === 'null') {
-    delete params.branchCodeFk;
-  }
-
   try {
     const response = await api.getStays(params);
-    console.log(response);
-    totalPages.value = response.data.totalPagesCount; // 총 페이지 수를 업데이트
-    isFetchDailyStay.value = false; // Add this line
-    return response.data;
+    if (response.data && response.data.content) {
+      totalPages.value = response.data.totalPagesCount;
+      isFetchDailyStay.value = false;
+      return response.data;
+    } else {
+      console.error('Unexpected response:', response);
+      return { content: [] };  // Return an empty array if the response is not as expected
+    }
   } catch (error) {
     console.error(error);
+    return { content: [] };  // Return an empty array in case of an error
   }
 }
 
@@ -467,7 +513,6 @@ async function updateDate(date) {
 // watch(selectedStayCheckinDate, loadStays, { immediate: true });
 
 async function loadStays(page = 1, orderByValue = 'stayCheckinTime', sortByValue = 0) {
-  // console.log('selectedReservationCheckinDate: ', selectedReservationCheckinDate.value);
   stays.value = await fetchData({
     ...defaultParams,
     orderBy: orderByValue,
@@ -697,5 +742,14 @@ table.table th, table.table td {
   border: 1px solid #dee2e6;
   word-wrap: break-word;
   text-align: center; /* Add this line to center text */
+}
+
+.modal-body {
+  margin: 30px;
+}
+
+.delete-button {
+  float: right;
+  background-color: darkred;
 }
 </style>
