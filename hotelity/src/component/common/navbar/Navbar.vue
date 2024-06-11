@@ -7,7 +7,7 @@
           <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
         </div>
         <div class="sidebar-toggler flex-shrink-0" @click="toggleOpenClass">
-          <span :class="isSidebarOpen ? 'arrow-left' : 'arrow-right'"></span>
+          <span :class="isSidebarOpen ? 'arrow-right' : 'arrow-left'"></span>
         </div>
 
         <div class="navbar-nav align-items-center ms-auto" style="display: flex; gap: 12px;">
