@@ -265,17 +265,16 @@ onMounted(() => {
                   발송 방식
                 </th>
                 <th scope="col" @click="sort('membershipLevelName')"
-                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1}" style="width: 100px;">
+                    :class="{ 'active-asc': orderBy === 'membershipLevelName' && sortBy === 0, 'active-desc': orderBy === 'membershipLevelName' && sortBy === 1}" style="width: 95px;">
                   멤버십 등급
                 </th>
-                <th scope="col" style="width: 500px;">제목</th>
+                <th scope="col" style="width: 250px;">제목</th>
                 <th scope="col" @click="sort('campaignSentDate')"
                     :class="{ 'active-asc': orderBy === 'campaignSentDate' && sortBy === 0, 'active-desc': orderBy === 'campaignSentDate' && sortBy === 1}" style="width: 200px;">
                   발송 일자
                 </th>
                 <th scope="col" style="width: 60px;">발송 여부</th>
-                <th scope="col" style="width: 60px;">템플릿 코드</th>
-                <th scope="col">템플릿 이름</th>
+                <th scope="col" style="width: 130px;">템플릿 이름</th>
                 <th scope="col" style="width: 80px;">발송직원</th>
               </tr>
               </thead>
@@ -298,7 +297,6 @@ onMounted(() => {
                   }}
                 </td>
                 <td>{{ campaign.campaignSentStatus }}</td>
-                <td>{{ campaign.templateCodeFk }}</td>
                 <td>{{ campaign.templateName }}</td>
                 <td>{{ campaign.employeeName }}</td>
               </tr>
@@ -401,6 +399,7 @@ onMounted(() => {
 
 tr {
   cursor: pointer;
+  vertical-align: middle;
 }
 
 .filter-container {

@@ -553,4 +553,103 @@ table.table th, table.table td {
 .bi-caret-up-fill, .bi-caret-down-fill {
   visibility: visible;
 }
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  table.table th, table.table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .search-container {
+    flex-wrap: wrap;
+  }
+
+  .search-container .form-control,
+  .search-container .btn {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .position-relative-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .position-relative-container .excel.button,
+  .position-relative-container #filter-icon {
+    margin-bottom: 10px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    margin: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  table.table th, table.table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-container .form-control,
+  .search-container .btn {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .position-relative-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .position-relative-container .excel.button,
+  .position-relative-container #filter-icon {
+    margin-bottom: 10px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    margin: 5px;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: block;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .table tbody tr td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .table tbody tr td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
 </style>

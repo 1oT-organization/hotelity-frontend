@@ -21,32 +21,50 @@
     <div class="ancillary-info">
       <table>
         <tr>
-          <th>지점</th>
+          <th style="width: 130px;">지점</th>
           <td>{{ ancillary.branchCodeFk }}</td>
         </tr>
         <tr>
-          <th>시설명</th>
-          <td><input type="text" v-model="ancillary.ancillaryName" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설명</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryName }}</span>
+            <input type="text" v-model="ancillary.ancillaryName" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 카테고리</th>
-          <td><input type="text" v-model="ancillary.ancillaryCategoryName" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 카테고리</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryCategoryName }}</span>
+            <input type="text" v-model="ancillary.ancillaryCategoryName" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 위치</th>
-          <td><input type="text" v-model="ancillary.ancillaryLocation" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 위치</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryLocation }}</span>
+            <input type="text" v-model="ancillary.ancillaryLocation" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>운영 시작 시간</th>
-          <td><input type="time" v-model="ancillary.ancillaryOpenTime" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">운영 시작 시간</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryOpenTime }}</span>
+            <input type="time" v-model="ancillary.ancillaryOpenTime" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>운영 종료 시간</th>
-          <td><input type="time" v-model="ancillary.ancillaryCloseTime" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">운영 종료 시간</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryCloseTime }}</span>
+            <input type="time" v-model="ancillary.ancillaryCloseTime" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 전화번호</th>
-          <td><input type="tel" v-model="ancillary.ancillaryPhoneNumber" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 전화번호</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryPhoneNumber }}</span>
+            <input type="tel" v-model="ancillary.ancillaryPhoneNumber" v-show="isEditMode" />
+          </td>
         </tr>
       </table>
     </div>
@@ -133,6 +151,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 .buttonset {
   display: flex;
   margin-top: 15px;
