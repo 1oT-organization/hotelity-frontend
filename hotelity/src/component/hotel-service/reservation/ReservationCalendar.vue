@@ -69,12 +69,15 @@ const updateEvents = () => {
     start: date
   })) : [];
 
-  const eventSource = calendar.getEventSourceById('reservations');
-  if (eventSource) {
-    eventSource.remove();
+  // 기존의 모든 이벤트를 제거합니다.
+  const currentEvents = calendar.getEvents();
+  if (currentEvents) {
+    currentEvents.forEach(event => event.remove());
   }
+
   console.log("addEventSource 실행됨")
-  calendar.addEventSource({events, id: 'reservations'});
+  // 새로운 이벤트를 추가합니다.
+  events.forEach(event => calendar.addEvent(event));
 
   change.value = false;
 };

@@ -19,8 +19,10 @@ watch(route, (newRoute, oldRoute) => {
     document.querySelector(".content").classList.add('open');
   }
 
-  setSidebarMenu(route.meta['category']);
-  setNavItemsActive(route.meta['category']);
+  if (!route.meta.hideSidebar) {
+    setSidebarMenu(route.meta['category']);
+    setNavItemsActive(route.meta['category']);
+  }
 });
 
 onMounted(() => {
@@ -38,7 +40,9 @@ const toggleOpenClass = () => {
 };
 
 const setSidebarMenu = (menuName) => {
-  sideBarRef.value.setSidebarMenu(menuName);
+  if (sideBarRef.value !== null) {
+    sideBarRef.value.setSidebarMenu(menuName);
+  }
 };
 
 const removeNavActiveClass = () => {
@@ -75,14 +79,15 @@ const setSideBarItemActive = () => {
 </script>
 
 <template>
-  <Sidebar ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
+
+  <Sidebar v-if="!$route.meta.hideSidebar" ref="sideBarRef" @removeNavActive="removeNavActiveClass" @setSideMenuActive="setSideBarItemActive"/>
 
   <div class="content">
     <Navbar v-if="!$route.meta.hideNavbar" @toggleOpen="toggleOpenClass" @setMenu="setSidebarMenu" />
     <div class="style-block">
       <RouterView/>
     </div>
-    <Footer/>
+    <Footer v-if="!$route.meta.hideFooter"/>
   </div>
 
 </template>

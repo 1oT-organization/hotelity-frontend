@@ -10,13 +10,13 @@ import CustomerList from '@/component/customer/CustomerList.vue';
 
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
-import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import AncillaryDetails from "@/component/hotel-management/AncillaryDetails.vue";
 
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
@@ -44,7 +44,9 @@ const routes = [
         name: 'Login',
         component: Login,
         meta: {
-            hideNavbar: true
+            hideSidebar: true,
+            hideNavbar: true,
+            hideFooter: true
         }
     },
 
@@ -107,15 +109,6 @@ const routes = [
             category: 'employee',
         },
     },
-    {
-        path: '/employeeStay/:id',
-        name: 'EmployeeStay',
-        component: EmployeeStay,
-        meta: {
-            requiresAuth: true,
-            category: 'employee',
-        },
-    },
 
     /* 호텔관리 */
     {
@@ -150,7 +143,9 @@ const routes = [
         name: 'RoomDetails',
         component: RoomDetails,
         meta: {
+            hideSidebar: true,
             hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
@@ -160,6 +155,18 @@ const routes = [
         name: 'FacilityList',
         component: Ancillary,
         meta: {
+            requiresAuth: true,
+            category: 'hotelManagement',
+        },
+    },
+    {
+        path: '/ancillaryDetails/:id',
+        name: 'ancillaryDetails',
+        component: AncillaryDetails,
+        meta: {
+            hideSidebar: true,
+            hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },

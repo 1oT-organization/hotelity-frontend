@@ -188,9 +188,6 @@ function sort(column) {
 
 onMounted(() => {
   loadCouponIssue(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
