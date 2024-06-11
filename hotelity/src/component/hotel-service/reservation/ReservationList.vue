@@ -67,22 +67,47 @@
             <thead>
             <tr style="vertical-align: middle;">
 <!--              <th scope="col">체크인</th>-->
-              <th scope="col" style="width: 60px;">예약 코드</th>
-              <th scope="col" style="width: 60px;">고객 코드</th>
+              <th scope="col" style="width: 60px;" @click="sort('reservationCodePk')"
+                  :class="{ 'active-asc': orderBy === 'reservationCodePk' && sortBy === 0, 'active-desc': orderBy === 'reservationCodePk' && sortBy === 1 }">
+                예약 코드
+              </th>
+              <th scope="col" style="width: 60px;" @click="sort('customerCodeFk')"
+                  :class="{ 'active-asc': orderBy === 'customerCodeFk' && sortBy === 0, 'active-desc': orderBy === 'customerCodeFk' && sortBy === 1 }">
+              고객 코드</th>
 <!--              <th scope="col">영문 이름</th>-->
-              <th scope="col">이름</th>
-              <th scope="col">객실 코드</th>
-              <th scope="col">객실 번호</th>
-              <th scope="col">객실명</th>
-              <th scope="col">객실 등급</th>
+              <th scope="col" @click="sort('customerName')"
+                  :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">
+              이름</th>
+              <th scope="col" @click="sort('roomCodeFk')"
+                  :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1 }">
+                  객실 코드</th>
+              <th scope="col" @click="sort('roomNumber')"
+                  :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1 }">
+                  객실 번호</th>
+              <th scope="col" @click="sort('roomName')"
+                  :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">
+                  객실명</th>
+              <th scope="col" @click="sort('roomLevelName')"
+                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }">
+                  객실 등급</th>
               <!--<th scope="col">객실 수용 인원</th>-->
 <!--              <th scope="col">지점 코드</th>-->
-              <th scope="col" style="width: 180px;">예약 일자</th>
-              <th scope="col" style="width: 180px;">체크인 일자</th>
-              <th scope="col" style="width: 180px;">체크아웃 일자</th>
-              <th scope="col" style="width: 60px;">예약 인원</th>
+              <th scope="col" style="width: 180px;" @click="sort('reservationDate')"
+                  :class="{ 'active-asc': orderBy === 'reservationDate' && sortBy === 0, 'active-desc': orderBy === 'reservationDate' && sortBy === 1 }">
+                  예약 일자</th>
+              <th scope="col" style="width: 180px;" @click="sort('reservationCheckinDate')"
+                  :class="{ 'active-asc': orderBy === 'reservationCheckinDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckinDate' && sortBy === 1 }">
+                  체크인 일자</th>
+              <th scope="col" style="width: 180px;" @click="sort('reservationCheckoutDate')"
+                  :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1 }">
+                  체크아웃 일자</th>
+              <th scope="col" style="width: 60px;" @click="sort('reservationPersonnel')"
+                  :class="{ 'active-asc': orderBy === 'reservationPersonnel' && sortBy === 0, 'active-desc': orderBy === 'reservationPersonnel' && sortBy === 1 }">
+                  예약 인원</th>
 <!--              <th scope="col">예약 취소</th>-->
-              <th scope="col" style="width: 60px;">투숙 등록</th>
+              <th scope="col" style="width: 60px;" @click="sort('stayStatus')"
+                  :class="{ 'active-asc': orderBy === 'stayStatus' && sortBy === 0, 'active-desc': orderBy === 'stayStatus' && sortBy === 1 }">
+                  투숙 등록</th>
             </tr>
             </thead>
             <tbody>
@@ -504,5 +529,26 @@ function formatDateTime(date) {
   text-align: right;
 }
 
+// 리스트 및 정렬 스타일
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
+}
 
 </style>
