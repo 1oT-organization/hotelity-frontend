@@ -1,46 +1,46 @@
 <template>
-    <div class="notice-container" v-if="notice">
-      <div class="notice-header">
-        <h2>공지 조회</h2>
-        <button class="close-btn" @click="closeNotice">✖</button>
+  <div class="notice-container" v-if="notice">
+    <div class="notice-header">
+      <h2>공지 조회</h2>
+      <button class="close-btn" @click="closeNotice">✖</button>
+    </div>
+    <div class="notice-info">
+      <div class="info-group">
+        <label>공지 코드:</label>
+        <span>{{ notice.noticeCodePk }}</span>
       </div>
-      <div class="notice-info">
-        <div class="info-group">
-          <label>공지 코드:</label>
-          <span>{{ notice.noticeCodePk }}</span>
-        </div>
-        <div class="info-group">
-          <label>작성자 직원 코드:</label>
-          <span>{{ notice.employeeCodeFk }}</span>
-        </div>
-        <div class="info-group">
-          <label>작성일자:</label>
-          <span>{{ notice.noticePostedDate }}</span>
-        </div>
-        <div class="info-group">
-          <label>작성자 직원명:</label>
-          <span>{{ notice.picemployeeName }}</span>
-        </div>
+      <div class="info-group">
+        <label>작성자 직원 코드:</label>
+        <span>{{ notice.employeeCodeFk }}</span>
       </div>
-      <div class="notice-content">
-        <div class="content-group">
-          <label>공지 제목</label>
-          <input type="text" v-model="notice.noticeTitle" />
-        </div>
-        <div class="content-group">
-          <label>공지 내용</label>
-          <textarea v-model="notice.noticeContent"></textarea>
-        </div>
+      <div class="info-group">
+        <label>작성일자:</label>
+        <span>{{ notice.noticePostedDate }}</span>
       </div>
-      <div class="notice-actions">
-        <button @click="modifyNotice">수정</button>
-        <button @click="deleteNotice">삭제</button>
+      <div class="info-group">
+        <label>작성자 직원명:</label>
+        <span>{{ notice.picemployeeName }}</span>
       </div>
     </div>
-    <div v-else>
-      <p>공지사항을 불러오는 중...</p>
+    <div class="notice-content">
+      <div class="content-group">
+        <label>공지 제목</label>
+        <input type="text" v-model="notice.noticeTitle" :disabled="!isEditMode" />
+      </div>
+      <div class="content-group">
+        <label>공지 내용</label>
+        <textarea v-model="notice.noticeContent" :disabled="!isEditMode"></textarea>
+      </div>
     </div>
-  </template>
+    <div class="notice-actions">
+      <button @click="toggleEditMode">{{ isEditMode ? '저장' : '수정' }}</button>
+      <button @click="confirmDeleteNotice">삭제</button>
+    </div>
+  </div>
+  <div v-else>
+    <p>공지사항을 불러오는 중...</p>
+  </div>
+</template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -50,15 +50,12 @@ import * as api from '@/api/apiService.js';
 const router = useRouter();
 const route = useRoute();
 const notice = ref(null);
+const isEditMode = ref(false); // 수정 모드 상태 관리
 const noticeCodePk = route.params;
-
-console.log('noticeCodePk',noticeCodePk);
 
 const fetchNotice = async () => {
   try {
     const response = await api.getNotice(noticeCodePk.id);
-    console.log(noticeCodePk.id);
-    console.log('response',response)
     notice.value = response;
   } catch (error) {
     console.error('Error fetching notice:', error);
@@ -69,16 +66,26 @@ const closeNotice = () => {
   router.push('/notice');
 };
 
-const modifyNotice = async () => {
-  try {
-    console.log(noticeCodePk.id)
-    console.log(notice.value)
+const toggleEditMode = async () => {
+  if (isEditMode.value) {
+    // 수정 모드가 활성화된 상태에서 저장을 수행
+    try {
+      await api.updateNotice(noticeCodePk.id, notice.value);
+      alert('공지사항이 저장되었습니다.');
+      closeNotice(); // 저장 후 창을 닫음
+    } catch (error) {
+      console.error('Error saving notice:', error);
+      alert('공지사항 저장 중 오류가 발생했습니다.');
+    }
+  }
+  // 수정 모드 토글
+  isEditMode.value = !isEditMode.value;
+};
 
-    await api.updateNotice(noticeCodePk.id, notice.value);
-    alert('공지사항이 저장되었습니다.');
-  } catch (error) {
-    console.error('Error saving notice:', error);
-    alert('공지사항 저장 중 오류가 발생했습니다.');
+const confirmDeleteNotice = () => {
+  const confirmed = window.confirm('정말로 이 공지사항을 삭제하시겠습니까?');
+  if (confirmed) {
+    deleteNotice();
   }
 };
 
