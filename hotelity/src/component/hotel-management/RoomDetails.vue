@@ -21,44 +21,68 @@
     <div class="room-info">
       <table>
         <tr>
-          <th>지점</th>
+          <th style="width: 120px;">지점</th>
           <td>{{ room.branchCodeFk }}</td>
         </tr>
         <tr>
-          <th>객실 코드</th>
+          <th style="width: 120px;">객실 코드</th>
           <td>{{ room.roomCodePk }}</td>
         </tr>
         <tr>
-          <th>객실</th>
-          <td><input type="text" v-model="room.roomLevelName" :disabled="!isEditMode" /> <input type="text" v-model="room.roomName" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">객실</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomLevelName }} {{ room.roomName }}</span>
+            <input type="text" v-model="room.roomLevelName" v-show="isEditMode" /> <input type="text" v-model="room.roomName" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>객실 호수</th>
-          <td><input type="text" v-model="room.roomNumber" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">객실 호수</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomNumber }}</span>
+            <input type="text" v-model="room.roomNumber" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>가격</th>
-          <td><input type="number" v-model="room.roomPrice" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">가격</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomPrice }}</span>
+            <input type="number" v-model="room.roomPrice" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>사용 가능 인원</th>
-          <td><input type="number" v-model="room.roomCapacity" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">사용 가능 인원</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomCapacity }}</span>
+            <input type="number" v-model="room.roomCapacity" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>방 갯수</th>
-          <td><input type="number" v-model="room.roomSubRoomsCount" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">방 갯수</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomSubRoomsCount }}</span>
+            <input type="number" v-model="room.roomSubRoomsCount" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>화장실 갯수</th>
-          <td><input type="number" v-model="room.roomBathroomCount" :disabled="!isEditMode" /></td>
+          <th style="width: 120px;">화장실 갯수</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomBathroomCount }}</span>
+            <input type="number" v-model="room.roomBathroomCount" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>할인율</th>
-          <td><input type="number" v-model="room.roomDiscountRate" :disabled="!isEditMode" />%</td>
+          <th style="width: 120px;">할인율</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomDiscountRate }}</span>
+            <input type="number" v-model="room.roomDiscountRate" v-show="isEditMode" />%
+          </td>
         </tr>
         <tr>
-          <th>객실 상세설명</th>
-          <td><textarea v-model="room.roomSpecificInfo" :disabled="!isEditMode"></textarea></td>
+          <th style="width: 120px;">객실 상세설명</th>
+          <td>
+            <span v-show="!isEditMode">{{ room.roomSpecificInfo }}</span>
+            <textarea v-model="room.roomSpecificInfo" v-show="isEditMode" ></textarea>
+          </td>
         </tr>
       </table>
     </div>

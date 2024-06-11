@@ -2,8 +2,17 @@
   <div v-if="ancillary" class="ancillary-detail">
     <div class="ancillary-image-container">
       <div class="ancillary-images">
-        <div class="ancillary-image" v-for="(image, index) in filledAncillaryImageUrls" :key="image.ancillaryImageLink || index">
-          <img :src="image.ancillaryImageLink || 'https://via.placeholder.com/150'" alt="Ancillary Image"/>
+        <div
+            class="ancillary-image"
+            v-for="(image, index) in filledAncillaryImageUrls"
+            :key="image.ancillaryImageLink || index"
+            @click="toggleFullScreen(index)"
+        >
+          <img
+              :src="image.ancillaryImageLink || 'https://via.placeholder.com/150'"
+              :class="{ 'full-screen': isFullScreen[index] }"
+              alt="Ancillary Image"
+          />
         </div>
       </div>
     </div>
@@ -21,32 +30,50 @@
     <div class="ancillary-info">
       <table>
         <tr>
-          <th>지점</th>
+          <th style="width: 130px;">지점</th>
           <td>{{ ancillary.branchCodeFk }}</td>
         </tr>
         <tr>
-          <th>시설명</th>
-          <td><input type="text" v-model="ancillary.ancillaryName" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설명</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryName }}</span>
+            <input type="text" v-model="ancillary.ancillaryName" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 카테고리</th>
-          <td><input type="text" v-model="ancillary.ancillaryCategoryName" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 카테고리</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryCategoryName }}</span>
+            <input type="text" v-model="ancillary.ancillaryCategoryName" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 위치</th>
-          <td><input type="text" v-model="ancillary.ancillaryLocation" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 위치</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryLocation }}</span>
+            <input type="text" v-model="ancillary.ancillaryLocation" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>운영 시작 시간</th>
-          <td><input type="time" v-model="ancillary.ancillaryOpenTime" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">운영 시작 시간</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryOpenTime }}</span>
+            <input type="time" v-model="ancillary.ancillaryOpenTime" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>운영 종료 시간</th>
-          <td><input type="time" v-model="ancillary.ancillaryCloseTime" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">운영 종료 시간</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryCloseTime }}</span>
+            <input type="time" v-model="ancillary.ancillaryCloseTime" v-show="isEditMode" />
+          </td>
         </tr>
         <tr>
-          <th>시설 전화번호</th>
-          <td><input type="tel" v-model="ancillary.ancillaryPhoneNumber" :disabled="!isEditMode" /></td>
+          <th style="width: 130px;">시설 전화번호</th>
+          <td>
+            <span v-show="!isEditMode">{{ ancillary.ancillaryPhoneNumber }}</span>
+            <input type="tel" v-model="ancillary.ancillaryPhoneNumber" v-show="isEditMode" />
+          </td>
         </tr>
       </table>
     </div>
@@ -54,14 +81,14 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import * as api from '@/api/apiService.js';
-import {updateFacility} from "@/api/apiService.js";
 
 const route = useRoute();
 const router = useRouter();
 const ancillary = ref({
+  ancillaryCodePk: '',
   branchCodeFk: '',
   ancillaryName: '',
   ancillaryLocation: '',
@@ -74,10 +101,11 @@ const ancillary = ref({
 
 const ancillaryImageUrls = ref([]);
 const isEditMode = ref(false); // 수정 모드 상태 관리
+const isFullScreen = ref([]); // 전체 화면 상태 관리
 
 const filledAncillaryImageUrls = computed(() => {
   const length = ancillaryImageUrls.value.length;
-  const emptyImage = {ancillaryImageLink: 'https://via.placeholder.com/150'};
+  const emptyImage = { ancillaryImageLink: 'https://via.placeholder.com/150' };
   const filledImages = ancillaryImageUrls.value.map(image => {
     return image.ancillaryImageLink ? image : emptyImage;
   });
@@ -107,7 +135,7 @@ const toggleEditMode = async () => {
   if (isEditMode.value) {
     // 수정 모드가 활성화된 상태에서 저장을 수행
     try {
-      await api.updateFacility(ancillary.value.ancillaryCodePk, ancillary.value);
+      await api.updateAncillary(ancillary.value.ancillaryCodePk, ancillary.value);
       alert('시설 정보가 저장되었습니다.');
       isEditMode.value = false;
     } catch (error) {
@@ -120,12 +148,17 @@ const toggleEditMode = async () => {
   }
 };
 
+const toggleFullScreen = (index) => {
+  isFullScreen.value[index] = !isFullScreen.value[index];
+};
+
 onMounted(async () => {
   const ancillaryCodePk = route.params.id;
   try {
     const response = await api.getAncillary(ancillaryCodePk);
     ancillary.value = response.data.content;
     ancillaryImageUrls.value = ancillary.value.ancillaryImageDTOList;
+    isFullScreen.value = ancillaryImageUrls.value.map(() => false); // 초기화
   } catch (error) {
     console.error(error);
   }
@@ -133,6 +166,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 .buttonset {
   display: flex;
   margin-top: 15px;
@@ -164,23 +198,46 @@ onMounted(async () => {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  justify-content: flex-start; /* Add this line */
+  justify-content: flex-start;
 }
 
 .ancillary-image {
-  flex: 0 0 auto; /* Make sure the images do not shrink or grow */
+  flex: 0 0 auto;
   width: 150px;
   height: 150px;
-  margin: 5px; /* Add some margin for spacing */
+  margin: 5px;
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .ancillary-image img {
   max-width: 100%;
   max-height: 100%;
+  object-fit: cover;
+}
+
+.full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.full-screen img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
 }
 
 .upload-button {
