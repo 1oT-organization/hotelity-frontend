@@ -652,6 +652,18 @@ export const downloadStayExcel = async (params) => {
 
 
 /* 마케팅 */
+/* 캠페인 발송 */
+export const sendCampaign = async (campaignInfo) => {
+    try {
+        const response = await apiClient.post('/mail/level', campaignInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error sending campaign:', e);
+        throw e;
+    }
+
+}
+
 /* 캠페인 발송 리스트 */
 export const getCampaigns = async (params) => {
     try {
@@ -674,9 +686,19 @@ export const getCampaign = async (campaignId) => {
 }
 
 /* 템플릿 리스트 */
-export const getTemplates = async (params) => {
+export const getTemplatePage = async (params) => {
     try {
         const response = await apiClient.get('/marketing/templates/page', {params});
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching templates:', e);
+        throw e;
+    }
+}
+
+export const getTemplates = async () => {
+    try {
+        const response = await apiClient.get('/marketing/templates');
         return response.data;
     } catch (e) {
         console.error('Error fetching templates:', e);
