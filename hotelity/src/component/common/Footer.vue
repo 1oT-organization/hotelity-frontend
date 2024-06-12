@@ -9,10 +9,10 @@
       </div>
       <div class="footer-info">
         <p class="system-support">
-          - 시스템지원:1oT
-          - Number:010-9874-3010
-          - Email:1ot@gmail.com
-          - Address:서울특별시동작구보라매로87
+          ◎ 시스템지원:1oT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Number:010-9874-3010 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Email:1ot@gmail.com &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Address:서울특별시 동작구 보라매로 87 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </p>
       </div>
     </div>
