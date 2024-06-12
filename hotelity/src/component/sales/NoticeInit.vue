@@ -81,6 +81,8 @@ const submitNotice = async () => {
   try {
     await api.createNotice(notice.value);
     alert('공지 작성이 완료되었습니다.');
+    localStorage.setItem('isNoticeRegistered', 'true'); // 플래그 설정
+    console.log('isNoticeRegistered 세팅 완', localStorage.getItem('isNoticeRegistered'));
     window.close();
   
   } catch (error) {

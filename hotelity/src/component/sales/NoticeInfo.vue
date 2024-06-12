@@ -76,7 +76,7 @@ const deleteNotice = async () => {
   try {
     await api.deleteNotice(noticeCodePk.id);
     alert('공지사항이 삭제되었습니다.');
-    router.push('/');
+    router.push('/notice');
   } catch (error) {
     console.error('Error deleting notice:', error);
     alert('공지사항 삭제 중 오류가 발생했습니다.');
