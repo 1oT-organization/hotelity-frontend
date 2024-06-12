@@ -1,58 +1,60 @@
 <template>
-    <div class="voc-container">
-      <div class="voc-details">
-        <div class="voc-title">
-          <h3>{{ voc.vocTitle }}</h3>
-          <button class="btn btn-danger btn-sm" @click="confirmDeleteVoc(voc.vocCodePk)">
+  <div class="voc-container">
+    <div class="voc-details">
+      <div class="voc-title">
+        <h3>{{ voc.vocTitle }}</h3>
+        <button class="btn btn-danger btn-sm" @click="confirmDeleteVoc(voc.vocCodePk)">
           <i class="bi bi-trash"></i>
-          </button>
-        </div>
-        <div class="voc-test">
+        </button>
+      </div>
+      <div class="voc-test">
         <div class="voc-customer">
-        <p>{{ voc.customerName }} 님</p>
+          <p>{{ voc.customerName }} 님</p>
         </div>
         <div class="voc-category">
-        <p>VOC 카테고리: {{ voc.vocCategory }}</p>
-        <p>VOC 작성일자: {{ new Date(voc.vocCreatedDate).toLocaleString() }}</p>
+          <p>VOC 카테고리: {{ voc.vocCategory }}</p>
+          <p>VOC 작성일자: {{ new Date(voc.vocCreatedDate).toLocaleString() }}</p>
+        </div>
+      </div>
+      <div class="voc-content">
+        <p>{{ voc.vocContent }}</p>
+      </div>
+      <div class="voc-process-status">
+        <p>VOC 처리상태: <span v-if="voc.vocProcessStatus === 1" class="processed">처리완료</span><span v-else
+                                                                                                class="unprocessed">미처리</span>
+        </p>
       </div>
     </div>
-        <div class="voc-content">
-          <p>{{ voc.vocContent }}</p>
-        </div>
-        <div class="voc-process-status">
-        <p>VOC 처리상태: <span v-if="voc.vocProcessStatus === 1" class="processed">처리완료</span><span v-else class="unprocessed">미처리</span></p>
-        </div>
-      </div>
-      <div class="voc-answer" v-if="voc.vocResponse && !editing">
+    <div class="voc-answer" v-if="voc.vocResponse && !editing">
       <h4>답변:</h4>
       <p style="text-align: right;">답변 등록일 : {{ new Date(voc.vocLastUpdatedDate).toLocaleString() }}</p>
       <div class="voc-response">
         <p v-html="voc.vocResponse.replace(/\n/g, '<br>')"></p>
       </div>
       <div class="editbtn-position">
-      <button class="edit-btn" @click="editAnswer">답변 수정</button>
-    </div>
+        <button class="edit-btn" @click="editAnswer">답변 수정</button>
+      </div>
     </div>
     <form @submit.prevent="submitAnswer" class="answer-form" v-else>
-    <textarea v-model="answer" placeholder="답변을 입력해주세요." class="answer-textarea"></textarea>
-    <button type="submit" class="submit-btn">답변 완료</button>
-  </form>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, computed } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import axios from 'axios';
-  import { useAuthStore } from '@/store';
-  import { getEmployee } from '@/api/apiService.js';
-  import * as api from '@/api/apiService.js';
-  
-  const router = useRouter();
-  const route = useRoute();
-  const vocCodePk = route.params;
-  const authStore = useAuthStore();
-  const userInfo = ref({});
+      <textarea v-model="answer" placeholder="답변을 입력해주세요." class="answer-textarea"></textarea>
+      <button type="submit" class="submit-btn">답변 완료</button>
+    </form>
+  </div>
+</template>
+
+<script setup>
+import {ref, onMounted, computed} from 'vue';
+import {useRouter, useRoute} from 'vue-router';
+import axios from 'axios';
+import {useAuthStore} from '@/store';
+import {getEmployee} from '@/api/apiService.js';
+import * as api from '@/api/apiService.js';
+
+const router = useRouter();
+const route = useRoute();
+const vocCodePk = route.params;
+const authStore = useAuthStore();
+const userInfo = ref({});
 
 const editing = ref(false);
 
@@ -82,49 +84,49 @@ const submitAnswer = async () => {
   const vocId = voc.value.vocCodePk;
   const vocInfo = {
     vocResponse: answer.value,
-    employeeCodeFk: userInfo.value.employeeCodePk, 
+    employeeCodeFk: userInfo.value.employeeCodePk,
   };
 
 
   try {
     if (!answer.value.trim()) {
-    alert('답변을 입력해주세요.');
-    return;
-  }
+      alert('답변을 입력해주세요.');
+      return;
+    }
     const response = await api.replyVoc(vocId, vocInfo);
-    console.log(response); 
+    console.log(response);
     voc.value.vocResponse = answer.value;
     alert('답변이 등록되었습니다.');
     editing.value = false;
   } catch (e) {
-    console.error('Error submitting answer:', e); 
+    console.error('Error submitting answer:', e);
   }
 };
 
 const editAnswer = () => {
-    answer.value = voc.value.vocResponse; // 기존 답변을 answer에 설정
-    editing.value = true; // 수정 모드로 전환
-  };
+  answer.value = voc.value.vocResponse; // 기존 답변을 answer에 설정
+  editing.value = true; // 수정 모드로 전환
+};
 
-  const fetchVoc = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8888/sales/vocs/${vocCodePk.id}/voc`);
-      console.log('리스폰스데이따', response.data)
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching VOC:', error);
-    }
-  };
-  
-  const voc = ref({});
-  const answer = ref('');
-  
-  onMounted(async () => {
-    voc.value = await fetchVoc();
-    setEmployeeInfo();
-  });
-  
-  const setEmployeeInfo = () => {
+const fetchVoc = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8888/sales/vocs/${vocCodePk.id}/voc`);
+    console.log('리스폰스데이따', response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching VOC:', error);
+  }
+};
+
+const voc = ref({});
+const answer = ref('');
+
+onMounted(async () => {
+  voc.value = await fetchVoc();
+  setEmployeeInfo();
+});
+
+const setEmployeeInfo = () => {
   const employeeInfo = authStore.$state.userInfo;
   if (employeeInfo) {
     getEmployee(authStore.$state.userInfo.employeeCode).then((res) => {
@@ -140,26 +142,26 @@ const editAnswer = () => {
   }
 };
 
-  </script>
-  
-  <style>
-  /*
-  .voc-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial, sans-serif';
-  }
-  */
-  .voc-details h3 {
+</script>
+
+<style>
+/*
+.voc-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial, sans-serif';
+}
+*/
+.voc-details h3 {
   font-size: 20px;
   font-weight: 600;
   color: #333;
-  text-transform: uppercase;  /* Uppercase text for the title */
-  letter-spacing: 1px;  /* Letter spacing for better readability */
+  text-transform: uppercase; /* Uppercase text for the title */
+  letter-spacing: 1px; /* Letter spacing for better readability */
 }
 
 .voc-details p {
@@ -167,18 +169,18 @@ const editAnswer = () => {
 }
 
 .voc-details p:first-of-type {
-  font-weight: 500;  /* Slightly bolder for emphasis */
-  color: #000;  /* Darker color for better contrast */
-  line-height: 1.5;  /* Improved line height for readability */
+  font-weight: 500; /* Slightly bolder for emphasis */
+  color: #000; /* Darker color for better contrast */
+  line-height: 1.5; /* Improved line height for readability */
 }
-  
+
 .voc-title {
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
-  padding: 10px;
+  padding: 1rem;
   margin: 10px 0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
 }
 
 .voc-title h3 {
@@ -186,20 +188,20 @@ const editAnswer = () => {
 }
 
 .voc-content {
-  padding: 10px;
+  padding: 1rem;
   margin: 10px 0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
   height: 300px;
 }
 
-.voc-content p{
+.voc-content p {
   font-size: 15px;
 }
 
 .voc-response {
   padding: 10px;
   margin: 10px 0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
   height: auto;
   background-color: #ffe4b53c;
 }
@@ -213,7 +215,7 @@ const editAnswer = () => {
 .voc-customer {
   padding: 10px;
   margin: 10px 0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 150px;
   height: 60px;
   border-radius: 50px;
@@ -238,58 +240,58 @@ const editAnswer = () => {
   margin-top: 10px;
 }
 
-  .processed {
-    color: #28a745;
-    font-weight: bold;
-  }
-  
-  .unprocessed {
-    color: #dc3545;
-    font-weight: bold;
-  }
-  
-  .answer-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .answer-textarea {
-    height: 220px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .submit-btn {
-    align-self: flex-end;
-    padding: 10px 20px;
-    background-color: #3e9b6d;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-btn:hover {
-    background-color: #508572;
-  }
+.processed {
+  color: #28a745;
+  font-weight: bold;
+}
 
-  .edit-btn {
-  background-color: #3e9b6d;
-  color: #fff; 
+.unprocessed {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.answer-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.answer-textarea {
+  height: 220px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  align-self: flex-end;
   padding: 10px 20px;
-  border: none; 
-  border-radius: 4px; 
-  cursor: pointer; 
-  transition: background-color 0.3s; 
+  background-color: #3e9b6d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #508572;
+}
+
+.edit-btn {
+  background-color: #3e9b6d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .edit-btn:hover {
-  background-color: #508572; 
+  background-color: #508572;
 }
 
 .editbtn-position {
@@ -297,9 +299,9 @@ const editAnswer = () => {
   justify-content: end;
 }
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
   .voc-container {
-    padding: 15px;
+    padding: 3rem;
   }
 
   .voc-details {
@@ -325,7 +327,7 @@ const editAnswer = () => {
 
 @media (max-width: 480px) {
   .voc-container {
-    padding: 10px;
+    padding: 3rem;
   }
 
   .voc-details {
