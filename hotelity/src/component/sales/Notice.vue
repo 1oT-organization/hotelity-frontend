@@ -40,6 +40,12 @@ watch(searchValue, (newValue) => {
   }
 });
 
+function openNoticeForm() {
+  const url = `/notice/noticeInit`;
+  const windowFeatures = "width=550,height=600,scrollbars=yes,resizable=yes";
+  window.open(url, '_blank', windowFeatures);
+}
+
 async function fetchData(params) {
   try {
     const response = await api.getNotices(params);
@@ -192,8 +198,7 @@ onMounted(() => {
           <button class="btn btn-primary ms-2" @click="loadNotice(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
-          <div class="excel button" style="display: flex;justify-content:left">
-          </div>
+          <button class="btn btn-primary" @click="openNoticeForm">공지 등록</button>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">
             <span class="bi bi-funnel">{{ selectedFilter }}</span>

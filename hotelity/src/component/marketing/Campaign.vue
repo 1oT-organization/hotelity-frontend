@@ -273,7 +273,7 @@ onMounted(() => {
                     :class="{ 'active-asc': orderBy === 'campaignSentDate' && sortBy === 0, 'active-desc': orderBy === 'campaignSentDate' && sortBy === 1}" style="width: 200px;">
                   발송 일자
                 </th>
-                <th scope="col" style="width: 60px;">발송 여부</th>
+                <th scope="col" style="width: 58px;">발송 여부</th>
                 <th scope="col" style="width: 130px;">템플릿 이름</th>
                 <th scope="col" style="width: 80px;">발송직원</th>
               </tr>
@@ -296,12 +296,15 @@ onMounted(() => {
                     })
                   }}
                 </td>
-                <td>{{ campaign.campaignSentStatus }}</td>
+                <td>
+                  <span v-if="campaign.campaignSentStatus === 1">완료</span>
+                  <span v-else>{{ campaign.campaignSentStatus }}</span>
+                </td>
                 <td>{{ campaign.templateName }}</td>
                 <td>{{ campaign.employeeName }}</td>
               </tr>
               <tr v-else>
-                <td colspan="8">켐페인 정보가 없습니다</td>
+                <td colspan="9">켐페인 정보가 없습니다</td>
               </tr>
               </tbody>
             </table>
