@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref, watch} from 'vue';
+import {onMounted, ref, watch, watchEffect} from 'vue';
 import * as api from '@/api/apiService.js';
 import router from '@/router/router.js';
 
@@ -40,10 +40,28 @@ watch(searchValue, (newValue) => {
   }
 });
 
+// 공지 등록 완료되면 새로고침
+// watchEffect(() => {
+//   console.log("watchEffect 실행됨");
+//   if (localStorage.getItem('isNoticeRegisted') === 'true') {
+//     localStorage.removeItem('isNoticeRegisted'); // 플래그 제거
+//     console.log("해치웠나?");
+//     location.reload();
+//   }
+// });
+
 function openNoticeForm() {
   const url = `/notice/noticeInit`;
   const windowFeatures = "width=550,height=600,scrollbars=yes,resizable=yes";
   window.open(url, '_blank', windowFeatures);
+
+  // // 등록창이 닫혔는지 확인
+  // const checkNewWindow = setInterval(function() {
+  //   if(newWindow.closed) {
+  //     clearInterval(checkNewWindow);
+  //     location.reload();
+  //   }
+  // }, 1000);
 }
 
 async function fetchData(params) {
@@ -152,7 +170,17 @@ const hideFilter = () => {
 };
 
 onMounted(() => {
+  console.log("onMounted 실행됨");
   loadNotice(currentPage.value, orderBy.value, sortBy.value);
+
+  // 공지 등록 시 페이지 새로고침
+  window.addEventListener('storage', () => {
+    if (localStorage.getItem('isNoticeRegistered') === 'true') {
+      localStorage.removeItem('isNoticeRegistered');
+      console.log("해치웠나?");
+      location.reload();
+    }
+  });
 });
 </script>
 
