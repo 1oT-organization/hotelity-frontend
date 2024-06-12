@@ -135,7 +135,7 @@ const toggleEditMode = async () => {
   if (isEditMode.value) {
     // 수정 모드가 활성화된 상태에서 저장을 수행
     try {
-      await api.updateAncillary(ancillary.value.ancillaryCodePk, ancillary.value);
+      await api.updateFacility(ancillary.value.ancillaryCodePk, ancillary.value);
       alert('시설 정보가 저장되었습니다.');
       isEditMode.value = false;
     } catch (error) {
