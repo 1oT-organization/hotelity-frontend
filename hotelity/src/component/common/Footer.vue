@@ -2,17 +2,17 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="guide-download-container">
-        <a href="#" class="guide-download">GUIDE DOWNLOAD</a>
+        <a href="#" class="guide-download" @click.prevent="downloadGuide">GUIDE DOWNLOAD</a>
         <a href="https://github.com/1oT-organization/hotelity-backend" class="github-link" target="_blank">
           <i class="fab fa-github"></i>
         </a>
       </div>
       <div class="footer-info">
         <p class="system-support">
-          - 시스템지원:1oT
-          - Number:010-9874-3010
-          - Email:1ot@gmail.com
-          - Address:서울특별시동작구보라매로87
+          ◎ 시스템지원:1oT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Number:010-9874-3010 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Email:1ot@gmail.com &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ◎ Address:서울특별시 동작구 보라매로 87 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </p>
       </div>
     </div>
@@ -20,6 +20,26 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import * as api from '@/api/apiService.js';
+
+async function downloadGuide() {
+  try {
+    const response = await api.downloadTutorial();
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'tutorial.pdf'); // or any other extension
+    document.body.appendChild(link);
+    link.click();
+
+  } catch (error) {
+    console.error('Error downloading tutorial:', error);
+  }
+}
+
 </script>
 
 <style scoped>

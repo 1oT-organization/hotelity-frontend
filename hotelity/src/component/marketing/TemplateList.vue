@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import {ref, watch, onMounted, computed} from 'vue';
 import axios from 'axios';
 import router from '@/router/router.js';
 
@@ -19,7 +19,17 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('templateCodePk'); 
+const orderBy = ref('templateCodePk');
+const maxContentLength = 50;
+
+const templateContentPreview = computed(() => {
+  return templates.value.content.map(template => {
+    if (template.templateContent.length > maxContentLength) {
+      return template.templateContent.substring(0, maxContentLength) + '...';
+    }
+    return template.templateContent;
+  });
+});
 
 const defaultParams = {
   templateCodePk: null,
@@ -169,11 +179,11 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="template in templates.content" :key="template.templateCodePk"
+              <tr v-for="(template, index) in templates.content" :key="template.templateCodePk"
                   @click=navigateToTemplate(template.templateCodePk)>
                 <td>{{ template.templateCodePk }}</td>
                 <td>{{ template.templateName }}</td>
-                <td>{{ template.templateContent }}</td>
+                <td>{{ templateContentPreview[index] }}</td>
               </tr>
               </tbody>
             </table>

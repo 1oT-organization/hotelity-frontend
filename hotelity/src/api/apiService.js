@@ -105,7 +105,18 @@ export const getTodayVoc = async () => {
     }
 }
 
-
+/* 사용자 가이드 다운로드 */
+export const downloadTutorial = async () => {
+    try {
+        const response = await apiClient.get('/file/download/tutorial.pdf', {
+            responseType: 'blob', // Important
+        });
+        return response;
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        throw error;
+    }
+};
 
 /* 고객 */
 /* 고객 리스트 */
@@ -917,6 +928,18 @@ export const getVoc = async (vocId) => {
         return response.data;
     } catch (e) {
         console.error('Error fetching voc:', e);
+        throw e;
+    }
+}
+
+/* VOC 수정 */
+export const replyVoc = async (vocId, vocInfo) => {
+    try {
+        console.log('vocInfo:', vocInfo);
+        const response = await apiClient.put(`/sales/vocs/${vocId}`, vocInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error updating employee:', e);
         throw e;
     }
 }
