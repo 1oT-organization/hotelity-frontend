@@ -25,6 +25,7 @@ import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
 import NoticeInfo from "@/component/sales/NoticeInfo.vue";
+import NoticeInit from "@/component/sales/NoticeInit.vue";
 import Membership from "@/component/sales/Membership.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
@@ -282,6 +283,18 @@ const routes = [
         name: 'Notice',
         component: Notice,
         meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
+        path: '/notice/noticeInit',
+        name: 'NoticeInit',
+        component: NoticeInit,
+        meta: {
+            hideFooter: true,
+            hideSidebar: true,
+            hideNavbar: true,
             requiresAuth: true,
             category: 'sales',
         },
