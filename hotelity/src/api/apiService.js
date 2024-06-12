@@ -152,6 +152,17 @@ export const createCustomer = async (customerInfo) => {
     }
 }
 
+/* 고객 수정 */
+export const updateCustomer = async (customerId, customerInfo) => {
+    try {
+        const response = await apiClient.put(`/customers/${customerId}`, customerInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error updating customer:', e);
+        throw e;
+    }
+}
+
 /* 고객 삭제 */
 export const deleteCustomer = async (customerId) => {
     try {

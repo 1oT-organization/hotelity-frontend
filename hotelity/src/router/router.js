@@ -201,6 +201,15 @@ const routes = [
             category: 'hotelService',
         },
     },
+    {
+        path: '/paymentList/:id',
+        name: 'PaymentListWithId',
+        component: PaymentList,
+        meta: {
+            requiresAuth: true,
+            category: 'hotelService',
+        },
+    },
 
     /* 마케팅 */
     {
@@ -253,6 +262,15 @@ const routes = [
     {
         path: '/voc',
         name: 'Voc',
+        component: Voc,
+        meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
+        path: '/voc/:id',
+        name: 'VocListWithId',
         component: Voc,
         meta: {
             requiresAuth: true,
