@@ -1,44 +1,27 @@
 <template>
-  <div class="notice-container" v-if="notice">
-    <div class="notice-header">
-      <h2>공지 조회</h2>
-      <button class="close-btn" @click="closeNotice">✖</button>
-    </div>
-    <div class="notice-info">
-      <div class="info-group">
-        <label>공지 코드:</label>
-        <span>{{ notice.noticeCodePk }}</span>
+  <div class="voc-container" v-if="notice">
+    <div class="voc-details">
+      <div class="voc-title">
+        <h3 v-if="!isEditMode">{{ notice.noticeTitle }}</h3>
+        <input v-else type="text" v-model="notice.noticeTitle" />
       </div>
-      <div class="info-group">
-        <label>작성자 직원 코드:</label>
-        <span>{{ notice.employeeCodeFk }}</span>
+      <div class="voc-test">
+        <div class="voc-category" >
+          <p style="color: #51566e;">작성자: {{ notice.picemployeeName }}</p>
+        </div>
+        <div class="voc-category">
+                    <p style="color: #51566e;">작성 일자: {{ formatDate(notice.noticePostedDate) }}</p>
+        </div>
       </div>
-      <div class="info-group">
-        <label>작성일자:</label>
-        <span>{{ notice.noticePostedDate }}</span>
-      </div>
-      <div class="info-group">
-        <label>작성자 직원명:</label>
-        <span>{{ notice.picemployeeName }}</span>
-      </div>
-    </div>
-    <div class="notice-content">
-      <div class="content-group">
-        <label>공지 제목</label>
-        <input type="text" v-model="notice.noticeTitle" :disabled="!isEditMode" />
-      </div>
-      <div class="content-group">
-        <label>공지 내용</label>
-        <textarea v-model="notice.noticeContent" :disabled="!isEditMode"></textarea>
+      <div class="voc-content">
+        <p v-if="!isEditMode">{{ notice.noticeContent }}</p>
+        <textarea v-else v-model="notice.noticeContent"></textarea>
       </div>
     </div>
     <div class="notice-actions">
       <button @click="toggleEditMode">{{ isEditMode ? '저장' : '수정' }}</button>
       <button @click="confirmDeleteNotice">삭제</button>
     </div>
-  </div>
-  <div v-else>
-    <p>공지사항을 불러오는 중...</p>
   </div>
 </template>
 
@@ -103,44 +86,20 @@ const deleteNotice = async () => {
 onMounted(() => {
   fetchNotice();
 });
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 </script>
 
 <style scoped>
-.notice-container {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-.notice-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .notice-header h2 {
   margin: 0;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.notice-info, .notice-content {
-  margin-top: 20px;
-}
-
-.info-group, .content-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
 .info-group label, .content-group label {
@@ -187,5 +146,86 @@ textarea {
 .notice-actions button:last-of-type {
   background-color: #f44336;
   color: white;
+}
+
+.voc-details h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.voc-details p {
+  color: #555;
+}
+
+.voc-details p:first-of-type {
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.voc-title {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.voc-title input {
+  font-size: 15px;
+  padding: 0.3rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  border-color: #ccc;
+  box-shadow: none;
+}
+
+.voc-content {
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+  height: 300px;
+}
+
+.voc-content p {
+  font-size: 15px;
+  padding: 1rem;
+  white-space: pre-wrap;
+}
+
+.voc-content textarea {
+  font-size: 15px;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.voc-customer p {
+  display: flex;
+  justify-content: center;
+  //margin-top: 8px;
+  font-size: 10px
+}
+
+.voc-test {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 0.8rem;
+  margin-right: 0.8rem;
+}
+
+.voc-test p {
+  font-size: 12px;
+}
+
+.voc-category {
+  display: grid;
+  justify-content: end;
+  margin-top: 10px;
 }
 </style>

@@ -47,11 +47,7 @@ async function downloadGuide() {
   background: #d3dcd6;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-
+  padding: 1rem;
   margin: 1rem;
 }
 
