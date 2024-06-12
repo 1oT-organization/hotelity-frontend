@@ -55,7 +55,8 @@ const toggleEditMode = async () => {
     try {
       await api.updateNotice(noticeCodePk.id, notice.value);
       alert('공지사항이 저장되었습니다.');
-      closeNotice(); // 저장 후 창을 닫음
+      router.push(`/noticeInfo/${noticeCodePk.id}`)
+      // closeNotice();
     } catch (error) {
       console.error('Error saving notice:', error);
       alert('공지사항 저장 중 오류가 발생했습니다.');
