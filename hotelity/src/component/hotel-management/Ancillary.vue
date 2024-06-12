@@ -131,7 +131,6 @@ function changePage(page) {
   loadancillary(page, orderBy.value, sortBy.value);
 }
 
-
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;

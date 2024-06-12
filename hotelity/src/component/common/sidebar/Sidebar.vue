@@ -175,6 +175,11 @@ const menu = {
         iconClass: 'emoji bi bi-envelope-fill'
       },
       {
+        text: '캠페인 발송',
+        path: '/campaignSend',
+        iconClass: 'emoji bi bi-envelope-arrow-up-fill'
+      },
+      {
         text: '템플릿',
         path: '/templateList',
         iconClass: 'emoji bi bi-file-earmark-text-fill'

@@ -1,7 +1,6 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import * as api from '@/api/apiService.js';
-import router from '@/router/router.js';
 
 onMounted(() => {
   // Initialize datepicker
@@ -50,6 +49,8 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
+const selectedItemName = ref('');
+const selectedFilter = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('paymentCodePk');  // default sorting by customerCodePk
 
@@ -78,8 +79,13 @@ async function fetchData(params) {
     const response = await api.getPayments(params);
     console.log(defaultParams.paymentDate)
     console.log(response);
-    totalPages.value = response.data.totalPagesCount;
-    return response.data;
+
+    if (response.status !== 200) {
+      return [];
+    }
+
+    totalPages.value = response.data.data.totalPagesCount;
+    return response.data.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -116,13 +122,21 @@ async function loadList() {
 
 async function loadPayments(page, orderByValue = 'paymentCodePk', sortByValue = 0) {
   try {
-    const data = await fetchData({
+
+    defaultParams.paymentMethod = document.getElementById('paymentMethod').value === '' ?
+        null : document.getElementById('paymentMethod').value;
+    defaultParams.paymentTypeName = document.getElementById('paymentTypeName').value === '' ?
+        null : document.getElementById('paymentTypeName').value;
+
+    selectedFilter.value = `${defaultParams.paymentMethod ? defaultParams.paymentMethod : ''}
+        ${defaultParams.paymentTypeName ? defaultParams.paymentTypeName : ''}`;
+
+    payments.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    payments.value = data;
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading payments:', error);
@@ -154,22 +168,25 @@ function prevPageGroup() {
   }
 }
 
-function setSearchCriteria(criteria) {
+function setSearchCriteria(criteria, event) {
   // 이전 검색 기준 값 초기화
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
+selectedItemName.value = event.target.textContent === '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
   isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
 }
 
-function toggleFilterContainer() {
+function toggleFilterContainer(event) {
+  event.stopPropagation()
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
 }
 
-function toggleDropdownMenu() {
+function toggleDropdownMenu(event) {
+  event.stopPropagation()
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
@@ -182,6 +199,18 @@ function sort(column) {
   }
   loadPayments(currentPage.value, orderBy.value, sortBy.value);
 }
+
+const hideDropdown = () => {
+  if (isDropdownOpen.value === true) {
+    isDropdownOpen.value = false;
+  }
+};
+
+const hideFilter = () => {
+  if (isFilterContainerVisible.value === true) {
+    isFilterContainerVisible.value = false;
+  }
+};
 
 onMounted(() => {
   loadPayments(currentPage.value, orderBy.value, sortBy.value);
@@ -202,25 +231,45 @@ onMounted(() => {
     <!-- Content Start -->
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">결제 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+            <button class="btn btn-secondary dropdown-toggle ms-2" type="button" id="dropdownMenuButton"
                     @click="toggleDropdownMenu"
                     :class="{ 'btn-primary': isDropdownOpen }"
                     style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
+              <span class="bi bi-search selected-item">{{ selectedItemName }}</span>
             </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentCodePk')">결제내역코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('customerName')">고객</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentAmount')">결제 금액</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentDate')">결제 일자</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentMethod')">결제 수단</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentTypeCodeFk')">결제 종류 코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentTypeName')">결제 종류 이름</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('paymentCancelStatus')">결제 취소 여부</a></li>
+            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }"
+                aria-labelledby="dropdownMenuButton">
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentCodePk', $event)">결제내역코드</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">고객</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentAmount', $event)">결제 금액</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentDate', $event)">결제 일자</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentMethod', $event)">결제 수단</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentTypeCodeFk', $event)">결제 종류 코드</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentTypeName', $event)">결제 종류 이름</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('paymentCancelStatus',$event)">결제 취소 여부</div>
+              </li>
             </ul>
           </div>
           <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
@@ -234,12 +283,12 @@ onMounted(() => {
           </div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">
-            <i class="bi bi-funnel"></i>
+            <span class="bi bi-funnel">{{ selectedFilter }}</span>
           </button>
-          <div class="filter-container" v-show="isFilterContainerVisible">
+          <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.paymentMethod">
-                <option v-bind:value=null>결제 수단</option>
+              <select id="paymentMethod" class="form-select">
+                <option value="">결제 수단</option>
                 <option value="카드">카드</option>
                 <option value="이체">이체</option>
                 <option value="현금">현금</option>
@@ -248,8 +297,8 @@ onMounted(() => {
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.paymentTypeName">
-                <option v-bind:value=null>결제 종류</option>
+              <select id="paymentTypeName" class="form-select">
+                <option value="">결제 종류</option>
                 <option value="객실예약">객실예약</option>
                 <option value="룸서비스">룸서비스</option>
                 <option value="시설이용료">시설이용료</option>
@@ -304,7 +353,8 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="payment in payments.content" :key="payments.paymentCodePk">
+              <tr v-if="payments.content && payments.content.length > 0" v-for="payment in payments.content"
+                  :key="payments.paymentCodePk">
                 <td>{{ payment.paymentCodePk }}</td>
                 <td>{{ payment.customerCodeFk }}</td>
                 <td>{{ payment.customerName }}</td>
@@ -328,20 +378,24 @@ onMounted(() => {
                             {{ payment.paymentCancelStatus === 0 ? '결제완료' : '취소' }}
                 </td>
               </tr>
+              <tr v-else>
+                <td colspan="8">결제 정보가 없습니다</td>
+              </tr>
               </tbody>
             </table>
           </div>
 
-         <!-- 페이징 컨트롤 -->
-         <div class="pagination modal-2">
-  <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
-  <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
-          @click="changePage((pageGroup - 1) * pageSize + page)"
-          :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-    {{ (pageGroup - 1) * pageSize + page }}
-  </button>
-  <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i class="bi bi-caret-right-fill"></i></button>
-</div>
+          <!-- 페이징 컨트롤 -->
+          <div class="pagination modal-2">
+            <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+            <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
+                    @click="changePage((pageGroup - 1) * pageSize + page)"
+                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
+              {{ (pageGroup - 1) * pageSize + page }}
+            </button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+                class="bi bi-caret-right-fill"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -362,6 +416,7 @@ onMounted(() => {
   text-align: center;
   justify-content: center;
 }
+
 .pagination button {
   display: inline;
   text-align: center;
@@ -375,12 +430,14 @@ onMounted(() => {
   line-height: 1.5;
   background: #fff;
 }
+
 .pagination button.selected {
   cursor: default;
   border-color: #909090;
   background: #b4b4b4;
   color: #fff;
 }
+
 .pagination button:active {
   outline: none;
 }
@@ -390,11 +447,13 @@ onMounted(() => {
   -webkit-border-radius: 50px;
   border-radius: 50px 0 0 50px;
 }
+
 .modal-2 button:last-child {
   -moz-border-radius: 0 50px 50px 0;
   -webkit-border-radius: 0;
   border-radius: 0 50px 50px 0;
 }
+
 .modal-2 button:hover {
   color: #000000;
   background-color: #eee;
@@ -417,7 +476,7 @@ tr {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: none;
   gap: 10px;
 }
 
@@ -446,6 +505,7 @@ tr {
   color: black;
 }
 
+.filter-container.show,
 .dropdown-menu.show {
   display: block;
 }
@@ -473,5 +533,17 @@ table.table th, table.table td {
   border: 1px solid #dee2e6;
   word-wrap: break-word;
   text-align: center; /* Add this line to center text */
+}
+
+.search-menu {
+  top: 40px;
+}
+
+.selected-item {
+  margin: 0 8px;
+}
+
+#dropdownMenuButton {
+  width: 160px;
 }
 </style>
