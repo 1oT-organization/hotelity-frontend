@@ -33,9 +33,6 @@
                 <div class="dropdown-item" @click="setSearchCriteria('employeeName', $event)">이름</div>
               </li>
               <li>
-                <div class="dropdown-item" @click="setSearchCriteria('employeePhoneNumber', $event)">전화번호</div>
-              </li>
-              <li>
                 <div class="dropdown-item" @click="setSearchCriteria('employeeOfficePhoneNumber', $event)">내선번호</div>
               </li>
               <li>
@@ -104,7 +101,7 @@
               <thead>
               <tr>
                 <th scope="col" @click="sort('employeeCodePk')"
-                    :class="{ 'active-asc': orderBy === 'employeeCode' && sortBy === 0, 'active-desc': orderBy === 'employeeCode' && sortBy === 1 }"
+                    :class="{ 'active-asc': orderBy === 'employeeCodePk' && sortBy === 0, 'active-desc': orderBy === 'employeeCodePk' && sortBy === 1 }"
                     style="width: 80px;">직원 코드
                 </th>
                 <th scope="col" @click="sort('employeeName')"
@@ -112,19 +109,19 @@
                   이름
                 </th>
                 <th scope="col" @click="sort('branch')"
-                    :class="{ 'active-asc': orderBy === 'branchCode' && sortBy === 0, 'active-desc': orderBy === 'branchCode' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'branch' && sortBy === 0, 'active-desc': orderBy === 'branch' && sortBy === 1 }">
                   지점
                 </th>
                 <th scope="col" @click="sort('rank')"
-                    :class="{ 'active-asc': orderBy === 'rankCode' && sortBy === 0, 'active-desc': orderBy === 'rankCode' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'rank' && sortBy === 0, 'active-desc': orderBy === 'rank' && sortBy === 1 }">
                   직급
                 </th>
                 <th scope="col" @click="sort('department')"
-                    :class="{ 'active-asc': orderBy === 'departmentCode' && sortBy === 0, 'active-desc': orderBy === 'departmentCode' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'department' && sortBy === 0, 'active-desc': orderBy === 'department' && sortBy === 1 }">
                   부서
                 </th>
                 <th scope="col" @click="sort('position')"
-                    :class="{ 'active-asc': orderBy === 'positionCode' && sortBy === 0, 'active-desc': orderBy === 'positionCode' && sortBy === 1 }">
+                    :class="{ 'active-asc': orderBy === 'position' && sortBy === 0, 'active-desc': orderBy === 'position' && sortBy === 1 }">
                   직책
                 </th>
                 <th scope="col" @click="sort('employeeOfficePhoneNumber')"

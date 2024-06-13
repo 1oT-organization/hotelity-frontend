@@ -27,12 +27,8 @@
 
         <div style="display: flex; justify-content:right">
           <!-- calendar icon -->
-          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i
+          <button class="btn btn-secondary" style="background-color: saddlebrown;" @click="toggleCalendarContainer"><i
               class="bi bi-calendar"></i></button>
-
-          <!-- StayFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer"><i class="bi bi-funnel"></i></button>
         </div>
 
         <!-- filter container -->

@@ -43,12 +43,11 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue';
-import {useRouter, useRoute} from 'vue-router';
-import axios from 'axios';
+import {onMounted, ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from '@/store';
-import {getEmployee} from '@/api/apiService.js';
 import * as api from '@/api/apiService.js';
+import {getEmployee, getVoc} from '@/api/apiService.js';
 
 const router = useRouter();
 const route = useRoute();
@@ -110,9 +109,7 @@ const editAnswer = () => {
 
 const fetchVoc = async () => {
   try {
-    const response = await axios.get(`http://localhost:8888/sales/vocs/${vocCodePk.id}/voc`);
-    console.log('리스폰스데이따', response.data)
-    return response.data;
+    return await getVoc(vocCodePk.id)
   } catch (error) {
     console.error('Error fetching VOC:', error);
   }

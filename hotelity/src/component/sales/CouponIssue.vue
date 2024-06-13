@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import axios from 'axios';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js';
 import {downloadCouponIssueExcel} from "@/api/apiService.js";
@@ -69,7 +68,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/coupons/issue/page', { params });
     const response = await api.getCouponIssues(params);
     console.log(response.data);
     totalPages.value = response.data.data.totalPagesCount;
@@ -82,10 +80,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/coupons/issue/page/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadCouponIssueExcel(defaultParams);
 
     // Get the current date and time
