@@ -33,9 +33,6 @@
                 <div class="dropdown-item" @click="setSearchCriteria('employeeName', $event)">이름</div>
               </li>
               <li>
-                <div class="dropdown-item" @click="setSearchCriteria('employeePhoneNumber', $event)">전화번호</div>
-              </li>
-              <li>
                 <div class="dropdown-item" @click="setSearchCriteria('employeeOfficePhoneNumber', $event)">내선번호</div>
               </li>
               <li>
