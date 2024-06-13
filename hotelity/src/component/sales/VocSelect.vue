@@ -1,4 +1,12 @@
 <template>
+  <!-- Spinner Start -->
+  <div v-if="isLoading" id="spinner"
+       class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <!-- Spinner End -->
   <div class="voc-container">
     <div class="voc-details">
       <div class="voc-title">
@@ -56,6 +64,8 @@ const userInfo = ref({});
 
 const editing = ref(false);
 
+const isLoading = ref(false);
+
 const confirmDeleteVoc = (vocCodePk) => {
   if (confirm('해당 VOC를 정말 삭제하시겠습니까?')) {
     deleteVoc(vocCodePk);
@@ -91,13 +101,29 @@ const submitAnswer = async () => {
       alert('답변을 입력해주세요.');
       return;
     }
+
+    isLoading.value = true;
+
     const response = await api.replyVoc(vocId, vocInfo);
     console.log(response);
-    voc.value.vocResponse = answer.value;
+
+    isLoading.value = false;
+
+    if (response.resultCode !== 201) {
+      alert('답변 등록에 실패했습니다.');
+      return;
+    }
+
     alert('답변이 등록되었습니다.');
+
+    voc.value.vocResponse = answer.value;
     editing.value = false;
+
+    voc.value = await fetchVoc();
   } catch (e) {
     console.error('Error submitting answer:', e);
+    alert('답변 등록에 실패했습니다.');
+    isLoading.value = false;
   }
 };
 
