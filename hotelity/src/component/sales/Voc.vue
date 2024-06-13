@@ -1,7 +1,13 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue';
 import router from '@/router/router.js';
+import {useRoute} from "vue-router";
 import * as api from '@/api/apiService.js';
+
+const route = useRoute();
+const customerCodePk = route.params;
+
+console.log(customerCodePk);
 
 function navigateToVocSelect(id) {
   router.push(`/vocSelect/${id}`);
@@ -100,6 +106,10 @@ async function loadList() {
 
 async function loadVoc(page, orderByValue = 'vocCodePk', sortByValue = 0) {
   try {
+
+    if (customerCodePk.id != null) {
+      defaultParams.customerCodeFk = customerCodePk.id;
+    }
 
     defaultParams.branchCodeFk = document.getElementById('branchCodeFk').value === '' ?
         null : document.getElementById('branchCodeFk').value;
