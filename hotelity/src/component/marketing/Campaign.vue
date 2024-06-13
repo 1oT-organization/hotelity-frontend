@@ -66,6 +66,7 @@ watch(searchValue, (newValue) => {
 async function fetchData(params) {
   try {
     const response = await api.getCampaigns(params);
+    console.log("캠펭")
     console.log(response);
 
     if (response.status !== 200) {
@@ -173,6 +174,15 @@ const hideFilter = () => {
 onMounted(() => {
   loadCampaigns(currentPage.value, orderBy.value, sortBy.value);
 });
+
+// LocalDateTime -> yyyy-MM-dd로 변환
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 </script>
 
 <template>
@@ -286,16 +296,9 @@ onMounted(() => {
                 <td>{{ campaign.campaignSentCustomerCodePk }}</td>
                 <td>{{ campaign.customerName }}</td>
                 <td>{{ campaign.campaignSendType }}</td>
-                <td>{{ campaign.MembershipLevelName }}</td>
+                <td>{{ campaign.membershipLevelName }}</td>
                 <td>{{ campaign.campaignTitle }}</td>
-                <td>{{
-                    new Date(campaign.campaignDate).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit'
-                    })
-                  }}
-                </td>
+                <td>{{ formatDate(campaign.campaignSentDate) }}</td>
                 <td>
                   <span v-if="campaign.campaignSentStatus === 1">완료</span>
                   <span v-else>{{ campaign.campaignSentStatus }}</span>
