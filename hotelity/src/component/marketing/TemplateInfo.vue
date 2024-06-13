@@ -1,8 +1,8 @@
 <script setup>
 
-import {useRouter, useRoute} from 'vue-router';
-import {ref, onMounted} from 'vue';
-import axios from "axios";
+import {useRoute, useRouter} from 'vue-router';
+import {onMounted, ref} from 'vue';
+import {getTemplate} from '@/api/apiService.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,13 +20,11 @@ const form = ref({
 onMounted(async () => {
 
   try {
-    const response = await axios.get(`http://localhost:8888/marketing/templates/${templateCodePk}/template`);
-    // template.value = response.data.data.content;
-    console.log('response: ', response);
-    template.value = response.data;
-    console.log('template.value: ', template.value)
+    template.value = await getTemplate(templateCodePk);
   } catch (error) {
-    console.error('이거 에러겠지?', error);
+    console.error('Error fetching template:', error);
+  } finally {
+    isLoading.value = false;
   }
 });
 

@@ -1,6 +1,5 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue';
-// import axios from 'axios';
 import * as api from '@/api/apiService.js'
 
 onMounted(() => {

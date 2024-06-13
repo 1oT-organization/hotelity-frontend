@@ -1,6 +1,5 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-// import axios from 'axios';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js'
 import {getMemberships} from "@/api/apiService.js";
@@ -35,7 +34,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/membership', {params});
     const response = await api.getMemberships(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;

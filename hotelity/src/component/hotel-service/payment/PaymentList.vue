@@ -99,10 +99,6 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-service/payments/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadPaymentExcel(defaultParams);
 
     const url = window.URL.createObjectURL(new Blob([response]));

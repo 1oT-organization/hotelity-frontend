@@ -1,6 +1,6 @@
 <script setup>
 import {ref, watch, onMounted, computed} from 'vue';
-import axios from 'axios';
+import {getTemplatePage} from '@/api/apiService.js';
 import router from '@/router/router.js';
 
 function navigateToTemplate(id) {
@@ -46,10 +46,10 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/marketing/templates/page', {params});
+    const response = await getTemplatePage(params);
     console.log('템플릿 리스트 데이터', response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
