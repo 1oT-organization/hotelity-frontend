@@ -87,8 +87,8 @@
               <th scope="col" style="width: 90px;" @click="sort('roomName')"
                   :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">
                   객실명</th>
-              <th scope="col" style="width: 90px;" @click="sort('roomLevelName')"
-                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }">
+              <th scope="col" @click="sort('roomLevelName')"
+                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }" style="width: 90px;">
                   객실 등급</th>
               <!--<th scope="col">객실 수용 인원</th>-->
 <!--              <th scope="col">지점 코드</th>-->
@@ -501,7 +501,6 @@ function formatDateTime(date) {
   border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
 }
 
-// 모달창 스타일
 .modal-body .row .col-md-4.mb-3 {
   margin: 20px;
 }
@@ -519,7 +518,6 @@ function formatDateTime(date) {
   margin-right: 30px; /* 오른쪽 마진 설정 */
 }
 
-// 수정 가능한 창 표시
 .editable {
   border: 2px solid limegreen; /* 초록색 테두리 적용 */
   box-shadow: 0 0 10px limegreen; /* 초록색 그림자 적용 */
@@ -529,7 +527,6 @@ function formatDateTime(date) {
   text-align: right;
 }
 
-// 리스트 및 정렬 스타일
 .active-asc {
   color: green;
   font-weight: bold;
