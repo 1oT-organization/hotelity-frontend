@@ -88,17 +88,17 @@
                   :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">
                   객실명</th>
               <th scope="col" @click="sort('roomLevelName')"
-                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }">
+                  :class="{ 'active-asc': orderBy === 'roomLevelName' && sortBy === 0, 'active-desc': orderBy === 'roomLevelName' && sortBy === 1 }" style="width: 90px;">
                   객실 등급</th>
               <!--<th scope="col">객실 수용 인원</th>-->
 <!--              <th scope="col">지점 코드</th>-->
-              <th scope="col" style="width: 180px;" @click="sort('reservationDate')"
+              <th scope="col" style="width: 150px;" @click="sort('reservationDate')"
                   :class="{ 'active-asc': orderBy === 'reservationDate' && sortBy === 0, 'active-desc': orderBy === 'reservationDate' && sortBy === 1 }">
                   예약 일자</th>
-              <th scope="col" style="width: 180px;" @click="sort('reservationCheckinDate')"
+              <th scope="col" style="width: 150px;" @click="sort('reservationCheckinDate')"
                   :class="{ 'active-asc': orderBy === 'reservationCheckinDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckinDate' && sortBy === 1 }">
                   체크인 일자</th>
-              <th scope="col" style="width: 180px;" @click="sort('reservationCheckoutDate')"
+              <th scope="col" style="width: 150px;" @click="sort('reservationCheckoutDate')"
                   :class="{ 'active-asc': orderBy === 'reservationCheckoutDate' && sortBy === 0, 'active-desc': orderBy === 'reservationCheckoutDate' && sortBy === 1 }">
                   체크아웃 일자</th>
               <th scope="col" style="width: 60px;" @click="sort('reservationPersonnel')"
