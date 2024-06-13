@@ -131,6 +131,8 @@ async function loadVoc(page, orderByValue = 'vocCodePk', sortByValue = 0) {
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading vocs:', error);
+    isLoading.value = false;
+    alert('VOC 리스트를 불러오는 중 오류가 발생했습니다.');
   }
 }
 
@@ -332,7 +334,7 @@ onMounted(() => {
                 </td>
                 <td>{{ voc.customerCodeFk }}</td>
                 <td>{{ voc.branchCodeFk }}</td>
-                <td>{{ voc.picemployeeName }}</td>
+                <td>{{ voc.picemployeeName ? voc.picemployeeName : "없음" }}</td>
                 <td>
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>
