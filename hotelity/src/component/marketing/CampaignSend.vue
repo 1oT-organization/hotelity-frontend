@@ -11,7 +11,7 @@
       <div class="form-group">
         <label for="template">템플릿:</label>
         <select id="template" v-model="form.templateCode">
-          <option disabled value="">템플릿 선택</option>
+          <option value="">템플릿 선택</option>
           <option v-for="template in templates.content" :key="template.templateCodePk" :value="template.templateCodePk">
             {{ template.templateName }}
           </option>
@@ -187,11 +187,17 @@ onMounted(async () => {
 
 watch(() => form.value.templateCode, (newTemplateId) => {
   const selectedTemplate = templates.value.content.find((template) => template.templateCodePk === newTemplateId);
+  console.log(selectedTemplate);
+
   if (selectedTemplate) {
     console.log(selectedTemplate.templateCodePk);
     currentTemplateId.value = selectedTemplate.templateCodePk;
     form.value.title = selectedTemplate.templateName;
     form.value.messageContent = selectedTemplate.templateContent;
+  } else {
+    currentTemplateId.value = null;
+    form.value.title = null;
+    form.value.messageContent = null;
   }
 });
 
