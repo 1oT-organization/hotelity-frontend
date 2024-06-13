@@ -63,12 +63,12 @@ export default {
 
         const stayResponse = await getDailyStays(formattedStayDate);
         const dailyStayInfo = stayResponse.data;
-        console.log(dailyStayInfo)
+        console.log('dailyStayInfo', dailyStayInfo)
         totalReservationCount.value = dailyReservationInfo.content.length;
 
         const actualStayCount = dailyStayInfo.content.length;
 
-        console.log(dailyStayInfo.content.length)
+        console.log('dailyStayInfo.content.length', dailyStayInfo.content.length)
 
         const remainingReservationCount = reservationCount - actualStayCount; // 아직 체크인하지 않은 예약 건수
 
