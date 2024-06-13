@@ -682,7 +682,6 @@ export const sendCampaign = async (campaignInfo) => {
         console.error('Error sending campaign:', e);
         throw e;
     }
-
 }
 
 /* 캠페인 발송 리스트 */

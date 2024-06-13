@@ -98,6 +98,8 @@ async function loadCampaigns(page, orderByValue = 'campaignSentCustomerCodePk', 
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading campaigns:', error);
+    alert("캠페인 정보를 불러오는데 실패했습니다.");
+    isLoading.value = false;
   }
 }
 
@@ -302,7 +304,7 @@ function formatDate(dateString) {
                   <span v-if="campaign.campaignSentStatus === 1">완료</span>
                   <span v-else>{{ campaign.campaignSentStatus }}</span>
                 </td>
-                <td>{{ campaign.templateName }}</td>
+                <td>{{ campaign.templateName ? campaign.templateName : "없음" }}</td>
                 <td>{{ campaign.employeeName }}</td>
               </tr>
               <tr v-else>
