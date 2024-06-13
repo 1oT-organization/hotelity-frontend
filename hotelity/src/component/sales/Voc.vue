@@ -293,13 +293,13 @@ onMounted(() => {
                     :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }"
                     style="width: 100px;">VOC 코드
                 </th>
-                <th scope="col" style="width: 80px;">고객 코드</th>
                 <th scope="col">VOC 제목</th>
                 <th scope="col" @click="sort('vocCategory')"
                     :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }"
                     style="width: 110px;">카테고리
                 </th>
                 <th scope="col" style="width: 200px;">VOC 일자</th>
+                <th scope="col" style="width: 80px;">고객 코드</th>
                 <th scope="col" @click="sort('branchCodeFk')"
                     :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }"
                     style="width: 80px;">지점
@@ -315,7 +315,6 @@ onMounted(() => {
               <tr v-if="vocs.content && vocs.content.length > 0" v-for="voc in vocs.content" :key="voc.vocCodePk"
                   @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
-                <td>{{ voc.customerCodeFk }}</td>
                 <td>{{ voc.vocTitle }}</td>
                 <td>{{ voc.vocCategory }}</td>
                 <td>{{
@@ -331,6 +330,7 @@ onMounted(() => {
                     })
                   }}
                 </td>
+                <td>{{ voc.customerCodeFk }}</td>
                 <td>{{ voc.branchCodeFk }}</td>
                 <td>{{ voc.picemployeeName }}</td>
                 <td>
