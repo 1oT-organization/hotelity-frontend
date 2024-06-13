@@ -75,16 +75,16 @@
                   :class="{ 'active-asc': orderBy === 'customerCodeFk' && sortBy === 0, 'active-desc': orderBy === 'customerCodeFk' && sortBy === 1 }">
               고객 코드</th>
 <!--              <th scope="col">영문 이름</th>-->
-              <th scope="col" @click="sort('customerName')"
+              <th scope="col" style="width: 100px;" @click="sort('customerName')"
                   :class="{ 'active-asc': orderBy === 'customerName' && sortBy === 0, 'active-desc': orderBy === 'customerName' && sortBy === 1 }">
               이름</th>
-              <th scope="col" @click="sort('roomCodeFk')"
+              <th scope="col" style="width: 90px;" @click="sort('roomCodeFk')"
                   :class="{ 'active-asc': orderBy === 'roomCodeFk' && sortBy === 0, 'active-desc': orderBy === 'roomCodeFk' && sortBy === 1 }">
                   객실 코드</th>
-              <th scope="col" @click="sort('roomNumber')"
+              <th scope="col" style="width: 60px;" @click="sort('roomNumber')"
                   :class="{ 'active-asc': orderBy === 'roomNumber' && sortBy === 0, 'active-desc': orderBy === 'roomNumber' && sortBy === 1 }">
                   객실 번호</th>
-              <th scope="col" @click="sort('roomName')"
+              <th scope="col" style="width: 90px;" @click="sort('roomName')"
                   :class="{ 'active-asc': orderBy === 'roomName' && sortBy === 0, 'active-desc': orderBy === 'roomName' && sortBy === 1 }">
                   객실명</th>
               <th scope="col" @click="sort('roomLevelName')"
@@ -501,7 +501,6 @@ function formatDateTime(date) {
   border-color: transparent transparent #fff transparent; /* 화살표 색상 조정 */
 }
 
-// 모달창 스타일
 .modal-body .row .col-md-4.mb-3 {
   margin: 20px;
 }
@@ -519,7 +518,6 @@ function formatDateTime(date) {
   margin-right: 30px; /* 오른쪽 마진 설정 */
 }
 
-// 수정 가능한 창 표시
 .editable {
   border: 2px solid limegreen; /* 초록색 테두리 적용 */
   box-shadow: 0 0 10px limegreen; /* 초록색 그림자 적용 */
@@ -529,7 +527,6 @@ function formatDateTime(date) {
   text-align: right;
 }
 
-// 리스트 및 정렬 스타일
 .active-asc {
   color: green;
   font-weight: bold;
