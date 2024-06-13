@@ -149,14 +149,16 @@ onMounted(() => {
           <h2>직원 정보</h2>
 
           <div class="employee-actions">
-            <button @click="editEmployee" class="btn btn-success me-2">직원 정보 수정</button>
-            <button @click="deleteEmployee" class="btn btn-success me-2">직원 정보 삭제</button>
+            <button @click="editEmployee" class="btn btn-success btn-sm"><i class="bi bi-pencil-square"></i></button>
+            <button @click="deleteEmployee" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
           </div>
 
           <div class="image-upload">
-            <input type="file" @change="uploadImage">
-<!--            <button>이미지 업로드</button>-->
-          </div>
+  <input type="file" id="file-upload" @change="uploadImage" style="display: none">
+  <label for="file-upload" class="custom-file-upload">
+    프로필 이미지 변경
+  </label>
+</div>
 
           <div class="col-sm-12">
             <div class="rounded h-100 p-4">
@@ -330,8 +332,19 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.custom-file-upload {
+  padding: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: inline-block;
+}
+
   .image-upload {
-    display: table-caption;
+    display: flex;
+    justify-content: end;
+    margin-top: 10px;
   }
 
   .form-group .half {
@@ -447,6 +460,12 @@ onMounted(() => {
 
   .emoji {
     margin-right: 10px;
+  }
+
+  .employee-actions {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
   }
 
 </style>
