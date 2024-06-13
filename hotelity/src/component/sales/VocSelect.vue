@@ -47,7 +47,6 @@ import {onMounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from '@/store';
 import * as api from '@/api/apiService.js';
-import {getEmployee, getVoc} from '@/api/apiService.js';
 
 const router = useRouter();
 const route = useRoute();
@@ -109,7 +108,9 @@ const editAnswer = () => {
 
 const fetchVoc = async () => {
   try {
-    return await getVoc(vocCodePk.id)
+    const response = await api.getVoc(vocCodePk.id);
+    console.log(response);
+    return response;
   } catch (error) {
     console.error('Error fetching VOC:', error);
   }
@@ -126,7 +127,7 @@ onMounted(async () => {
 const setEmployeeInfo = () => {
   const employeeInfo = authStore.$state.userInfo;
   if (employeeInfo) {
-    getEmployee(authStore.$state.userInfo.employeeCode).then((res) => {
+    api.getEmployee(authStore.$state.userInfo.employeeCode).then((res) => {
       const imgElement = document.querySelector(".rounded-circle");
       const imageSrc = res.data.employeeProfileImageLink;
 

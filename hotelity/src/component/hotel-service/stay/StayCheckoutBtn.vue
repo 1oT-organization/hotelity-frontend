@@ -6,7 +6,6 @@
 <script setup>
 import { ref } from 'vue';
 import * as api from '@/api/apiService.js';
-import axios from 'axios';
 
 const props = defineProps({
   checkedRows: Array,
