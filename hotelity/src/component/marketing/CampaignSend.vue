@@ -1,4 +1,10 @@
 <template>
+  <div v-if="isLoading" id="spinner"
+       class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <div class="campaign-form">
     <h2>캠페인 발송</h2>
     <form @submit.prevent="handleSubmit">
@@ -73,6 +79,7 @@ const currentTemplateId = ref(null);
 const currentMembershipLevel = ref(null);
 const templates = ref([]);
 const memberships = ref([]);
+const isLoading = ref(false);
 const authStore = useAuthStore();
 
 const params = {
@@ -88,17 +95,14 @@ const params = {
 const handleSubmit = async () => {
   console.log('Form submitted:', form.value);
 
-  if (!form.value.templateCode) {
-    alert('템플릿을 선택해주세요.');
+  if (!form.value.title) {
+    alert('제목을 입력해주세요.');
     return;
   } else if (!form.value.membershipLevelName) {
     alert('고객 등급을 선택해주세요.');
     return;
   } else if (!form.value.mailSendDate) {
     alert('발송 일자를 선택해주세요.');
-    return;
-  } else if (!form.value.title) {
-    alert('제목을 입력해주세요.');
     return;
   } else if (!form.value.messageContent) {
     alert('메시지 내용을 입력해주세요.');
@@ -117,10 +121,21 @@ const handleSubmit = async () => {
   console.log(params);
 
   try {
+    isLoading.value = true;
+
     const response = await sendCampaign(params);
     console.log(response);
+
+    isLoading.value = false;
+    if (response.status === 200 && response.data.resultCode === 200) {
+      alert("캠페인이 성공적으로 발송되었습니다.");
+    } else {
+      alert("캠페인 발송에 실패했습니다.");
+    }
   } catch (e) {
     console.error('Error sending campaign:', e);
+    isLoading.value = false;
+    alert("캠페인 발송에 실패했습니다.");
   }
 };
 

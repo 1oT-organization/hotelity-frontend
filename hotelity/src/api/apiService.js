@@ -677,8 +677,7 @@ export const downloadStayExcel = async (params) => {
 /* 캠페인 발송 */
 export const sendCampaign = async (campaignInfo) => {
     try {
-        const response = await apiClient.post('/mail/level', campaignInfo);
-        return response.data;
+        return await apiClient.post('/mail/level', campaignInfo);
     } catch (e) {
         console.error('Error sending campaign:', e);
         throw e;
