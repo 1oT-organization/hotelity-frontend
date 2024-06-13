@@ -15,6 +15,14 @@
 
       <div class="dashboard-container">
         <div class="dashboard dashboard1">
+           <!-- Spinner Start -->
+    <div v-if="isLoadingReservation" class="spinner">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+    <div v-else>
           <div class="buttons">
             <a style="margin-right: 10px; font-size: 20px;">예약</a>
             <button @click="fetchReservationDailyData">Day</button>
@@ -26,8 +34,16 @@
             <p v-else style="height: 120px;">AI 비서를 통해 예약 통계를 확인하세요</p>
           </div>
         </div>
-
+      </div>
         <div class="dashboard dashboard2">
+          <!-- Spinner Start -->
+    <div v-if="isLoadingPayment" class="spinner">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+    <div v-else>
           <div class="buttons">
             <a style="margin-right: 10px; font-size: 20px;">결제</a>
             <button @click="fetchPaymentDailyData">Day</button>
@@ -39,8 +55,17 @@
             <p v-else style="height: 120px;">AI 비서를 통해 결제 통계를 확인하세요</p>
           </div>
         </div>
+      </div>
 
         <div class="dashboard dashboard3">
+           <!-- Spinner Start -->
+    <div v-if="isLoadingNoticeVoc" class="spinner">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+    <div v-else>
           <div class="buttons">
             <a style="margin-right: 10px; font-size: 20px;">공지/VOC</a>
             <button @click="fetchNoticeData">공지</button>
@@ -50,6 +75,7 @@
             <pre v-if="noticeVocData" class="data-content">{{ noticeVocData.data }}</pre>
             <p v-else style="height: 120px;">AI 비서를 통해 VOC, 공지를 확인하세요</p>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -67,6 +93,9 @@ export default {
   data() {
     return {
       isLoading: true,
+      isLoadingReservation: false,
+      isLoadingPayment: false,
+      isLoadingNoticeVoc: false,
       reservationData: null,
       paymentData: null,
       noticeVocData: null,
@@ -75,82 +104,82 @@ export default {
   methods: {
     async fetchReservationDailyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingReservation = true;
         this.reservationData = await api.getTodayReservationAnalysis();
       } catch (error) {
         console.error("Error fetching daily data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingReservation = false;
       }
     },
     async fetchReservationMonthlyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingReservation = true;
         this.reservationData = await api.getMonthlyReservationsAnalysis();
       } catch (error) {
         console.error("Error fetching monthly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingReservation = false;
       }
     },
     async fetchReservationYearlyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingReservation = true;
         this.reservationData = await api.getYearlyReservationsAnalysis();
       } catch (error) {
         console.error("Error fetching yearly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingReservation = false;
       }
     },
     async fetchPaymentDailyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingPayment = true;
         this.paymentData = await api.getTodayPaymentAnalysis();
       } catch (error) {
         console.error("Error fetching daily data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingPayment = false;
       }
     },
     async fetchPaymentMonthlyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingPayment = true;
         this.paymentData = await api.getMonthlyPaymentsAnalysis();
       } catch (error) {
         console.error("Error fetching monthly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingPayment = false;
       }
     },
     async fetchPaymentYearlyData() {
       try {
-        this.isLoading = true;
+        this.isLoadingPayment = true;
         this.paymentData = await api.getYearlyPaymentsAnalysis();
       } catch (error) {
         console.error("Error fetching yearly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingPayment = false;
       }
     },
     async fetchNoticeData() {
       try {
-        this.isLoading = true;
+        this.isLoadingNoticeVoc = true;
         this.noticeVocData = await api.getTodayNotice();
       } catch (error) {
         console.error("Error fetching yearly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingNoticeVoc = false;
       }
     },
     async fetchVocData() {
       try {
-        this.isLoading = true;
+        this.isLoadingNoticeVoc = true;
         this.noticeVocData = await api.getTodayVoc();
       } catch (error) {
         console.error("Error fetching yearly data:", error);
       } finally {
-        this.isLoading = false;
+        this.isLoadingNoticeVoc = false;
       }
     },
   },

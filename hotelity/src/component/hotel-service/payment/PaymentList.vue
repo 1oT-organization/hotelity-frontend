@@ -1,6 +1,12 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue';
+import {useRoute} from "vue-router";
 import * as api from '@/api/apiService.js';
+
+const route = useRoute();
+const customerCodePk = route.params;
+
+console.log(customerCodePk);
 
 onMounted(() => {
   // Initialize datepicker
@@ -75,7 +81,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-service/payments/page', {params});
     const response = await api.getPayments(params);
     console.log(defaultParams.paymentDate)
     console.log(response);
@@ -122,6 +127,10 @@ async function loadList() {
 
 async function loadPayments(page, orderByValue = 'paymentCodePk', sortByValue = 0) {
   try {
+
+    if (customerCodePk.id != null) {
+      defaultParams.customerCodeFk = customerCodePk.id;
+    }
 
     defaultParams.paymentMethod = document.getElementById('paymentMethod').value === '' ?
         null : document.getElementById('paymentMethod').value;
