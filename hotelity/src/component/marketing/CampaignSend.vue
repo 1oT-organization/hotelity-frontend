@@ -55,6 +55,10 @@ import {ref, onMounted, watch} from 'vue';
 import {getTemplates, getMemberships, getEmployee, sendCampaign} from '@/api/apiService.js';
 import {useAuthStore} from "@/store/index.js";
 
+onMounted(() => {
+  form.value.mailSendDate = new Date().toISOString().substr(0, 10);
+});
+
 const form = ref({
   templateCode: null,
   title: null,
