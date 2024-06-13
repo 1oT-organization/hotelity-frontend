@@ -170,12 +170,13 @@
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="reservationPersonnel" class="form-label">예약 인원</label>
-                    <select class="form-control" id="reservationPersonnel" v-model="reservationDetails.reservationPersonnel" style="background-color: white;" :class="{ editable: isEditable }">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
+<!--                    <select class="form-control" id="reservationPersonnel" v-model="reservationDetails.reservationPersonnel" style="background-color: white;" :class="{ editable: isEditable }">-->
+<!--                      <option value="1">1</option>-->
+<!--                      <option value="2">2</option>-->
+<!--                      <option value="3">3</option>-->
+<!--                      <option value="4">4</option>-->
+<!--                    </select>-->
+                    <input type="text" class="form-control" id="reservationPersonnel" v-model="reservationDetails.reservationPersonnel" :disabled="!isEditable" :class="{ editable: isEditable }">
                   </div>
                   <div class="col-md-3 mb-3">
                     <label for="reservationCheckinDate" class="form-label">체크인 일자</label>
@@ -204,7 +205,7 @@
 <!--                <button type="submit" class="btn btn-primary checkin-btn">체크인</button>-->
                 <div style="margin-top: 10px; margin-bottom: 10px;">
                   <button class="btn btn-secondary checkin-btn" style="background-color: saddlebrown;" @click="checkIn"> 체크인</button>
-                  <button class="btn btn-secondary checkin-btn" @click="toggleEditable" style="margin-left: 8px;"> {{ editButtonText }}</button>
+<!--                  <button class="btn btn-secondary checkin-btn" @click="toggleEditable" style="margin-left: 8px;"> {{ editButtonText }}</button>-->
                 </div>
                 <div v-if="showPopup" class="popup">{{ popupMessage }}</div>
               </form>
