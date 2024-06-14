@@ -3,7 +3,7 @@
     <div class="footer-content">
       <div class="guide-download-container">
         <a href="#" class="guide-download" @click.prevent="downloadGuide">GUIDE DOWNLOAD</a>
-        <a href="https://github.com/1oT-organization/hotelity-backend" class="github-link" target="_blank">
+        <a href="https://github.com/beyond-sw-camp/be04-fin-1team-Hotelity?tab=readme-ov-file" class="github-link" target="_blank">
           <i class="fab fa-github"></i>
         </a>
       </div>
