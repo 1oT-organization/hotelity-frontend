@@ -127,30 +127,30 @@ onMounted(() => {
       <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">멤버십</h3>
         <div class="search-container d-flex align-items-center">
-          <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    @click="toggleDropdownMenu"
-                    :class="{ 'btn-primary': isDropdownOpen }"
-                    style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
-            </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('membershipLevelCodePk')">멤버십 코드</a></li>
-            </ul>
-          </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
-          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
+<!--          <div class="btn-group">-->
+<!--            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"-->
+<!--                    @click="toggleDropdownMenu"-->
+<!--                    :class="{ 'btn-primary': isDropdownOpen }"-->
+<!--                    style="background-color: saddlebrown;">-->
+<!--              <i class="bi bi-search"></i>-->
+<!--            </button>-->
+<!--            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">-->
+<!--              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('membershipLevelCodePk')">멤버십 코드</a></li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"-->
+<!--                 v-model="searchValue">-->
+<!--          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>-->
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
             <!--              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i-->
             <!--                  class="bi bi-download"></i></button>-->
           </div>
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer">
-            <i class="bi bi-funnel"></i>
-          </button>
+<!--          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"-->
+<!--                  @click="toggleFilterContainer">-->
+<!--            <i class="bi bi-funnel"></i>-->
+<!--          </button>-->
           <div class="filter-container" v-show="isFilterContainerVisible">
             <div class="btn-group me-2">
               <select class="form-select" v-model="defaultParams.membershipCriteriaAmount">

@@ -13,16 +13,16 @@
       <div class="position-relative-container mt-3">
         <ExcelButton/>
 
-        <div style="display: flex; justify-content:right">
-          <!-- calendar icon -->
-<!--          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i-->
-<!--              class="bi bi-calendar"></i></button>-->
+<!--        <div style="display: flex; justify-content:right">-->
+<!--          &lt;!&ndash; calendar icon &ndash;&gt;-->
+<!--&lt;!&ndash;          <button class="btn btn-secondary" style="background-color: saddlebrown; margin-right: 8px;" @click="toggleCalendarContainer"><i&ndash;&gt;-->
+<!--&lt;!&ndash;              class="bi bi-calendar"></i></button>&ndash;&gt;-->
 
-          <!--        ReservationFilter start -->
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer"><i
-              class="bi bi-funnel"></i></button>
-        </div>
+<!--          &lt;!&ndash;        ReservationFilter start &ndash;&gt;-->
+<!--          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"-->
+<!--                  @click="toggleFilterContainer"><i-->
+<!--              class="bi bi-funnel"></i></button>-->
+<!--        </div>-->
         <div class="filter-container" style="width: auto" v-show="isFilterContainerVisible">
           <div class="btn-group me-2">
             <select class="form-select">
