@@ -267,28 +267,10 @@ onMounted(() => {
                 <div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div>
               </li>
               <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentCodePk', $event)">결제내역코드</div>
+                <div class="dropdown-item" @click="setSearchCriteria('customerCodeFk', $event)">고객코드</div>
               </li>
               <li>
-                <div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">고객</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentAmount', $event)">결제 금액</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentDate', $event)">결제 일자</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentMethod', $event)">결제 수단</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentTypeCodeFk', $event)">결제 종류 코드</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentTypeName', $event)">결제 종류 이름</div>
-              </li>
-              <li>
-                <div class="dropdown-item" @click="setSearchCriteria('paymentCancelStatus',$event)">결제 취소 여부</div>
+                <div class="dropdown-item" @click="setSearchCriteria('customerName', $event)">고객명</div>
               </li>
             </ul>
           </div>
