@@ -54,14 +54,14 @@
           </button>
           <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
-              <select id="branchCode" class="form-select" @change="onChangeSelect">
+              <select id="branch" class="form-select" @change="onChangeSelect">
                 <option value="">지점 선택</option>
                 <option value="HQ">본사</option>
                 <option value="SE">서울점</option>
               </select>
             </div>
             <div class="btn-group me-2">
-              <select id="rankCode" class="form-select" @change="onChangeSelect">
+              <select id="rank" class="form-select" @change="onChangeSelect">
                 <option value="">직급 선택</option>
                 <option value="1">부장</option>
                 <option value="2">차장</option>
@@ -72,16 +72,17 @@
               </select>
             </div>
             <div class="btn-group me-2">
-              <select id="positionCode" class="form-select" @change="onChangeSelect">
+              <select id="position" class="form-select" @change="onChangeSelect">
                 <option value="">직책 선택</option>
                 <option value="1">CEO</option>
                 <option value="2">본부장</option>
                 <option value="3">실장</option>
+                <option value="4">팀장</option>
                 <option value="5">파트장</option>
               </select>
             </div>
             <div class="btn-group me-2">
-              <select id="departmentCode" class="form-select" @change="onChangeSelect">
+              <select id="department" class="form-select" @change="onChangeSelect">
                 <option value="">부서 선택</option>
                 <option value="1">운영팀</option>
                 <option value="2">기술팀</option>
@@ -204,18 +205,18 @@ const sortBy = ref(0);  // 0: ascending, 1: descending
 const orderBy = ref('employeeCodePk');  // default sorting by employeeCodePk
 
 const defaultParams = {
-  employeeCode: null,
+  employeeCodePk: null,
   employeeName: null,
   employeeAddress: null,
   employeePhoneNumber: null,
   employeeOfficePhoneNumber: null,
   employeeEmail: null,
   employeeResignStatus: null,
-  permissionCode: null,
-  positionCode: null,
-  rankCode: null,
-  departmentCode: null,
-  branchCode: null,
+  permissionCodeFk: null,
+  positionCodeFk: null,
+  rankCodeFk: null,
+  departmentCodeFk: null,
+  branchCodeFk: null,
 };
 
 watch(searchValue, (newValue) => {
@@ -283,24 +284,24 @@ async function loadList() {
 async function loadCustomers(page, orderByValue = 'employeeCodePk', sortByValue = 0) {
   try {
 
-    const branchCodeEl = document.getElementById('branchCode');
-    const rankCodeEl = document.getElementById('rankCode');
-    const positionCodeEl = document.getElementById('positionCode');
-    const departmentCodeEl = document.getElementById('departmentCode');
+    const branchCodeEl = document.getElementById('branch');
+    const rankCodeEl = document.getElementById('rank');
+    const positionCodeEl = document.getElementById('position');
+    const departmentCodeEl = document.getElementById('department');
 
-    defaultParams.branchCode = branchCodeEl.value === '' ?
+    defaultParams.branchCodeFk = branchCodeEl.value === '' ?
         null : branchCodeEl.value;
-    defaultParams.rankCode = rankCodeEl.value === '' ?
+    defaultParams.rankCodeFk = rankCodeEl.value === '' ?
         null : rankCodeEl.value;
-    defaultParams.positionCode = positionCodeEl.value === '' ?
+    defaultParams.positionCodeFk = positionCodeEl.value === '' ?
         null : positionCodeEl.value;
-    defaultParams.departmentCode = departmentCodeEl.value === '' ?
+    defaultParams.departmentCodeFk = departmentCodeEl.value === '' ?
         null : departmentCodeEl.value;
 
-    selectedFilter.value = `${defaultParams.branchCode ? filterNameObj.branchCode : ''}
-        ${defaultParams.rankCode ? filterNameObj.rankCode : ''}
-        ${defaultParams.positionCode ? filterNameObj.positionCode : ''}
-        ${defaultParams.departmentCode ? filterNameObj.departmentCode : ''}`;
+    selectedFilter.value = `${defaultParams.branchCodeFk ? filterNameObj.branch : ''}
+        ${defaultParams.rankCodeFk ? filterNameObj.rank : ''}
+        ${defaultParams.positionCodeFk ? filterNameObj.position : ''}
+        ${defaultParams.departmentCodeFk ? filterNameObj.department : ''}`;
 
     employees.value = await fetchData({
       ...defaultParams,
