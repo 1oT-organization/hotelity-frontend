@@ -23,7 +23,7 @@
         <button class="btn btn-primary ms-2" @click="onSearchButtonClick">검색</button>
       </div>
       <div class="position-relative-container mt-3">
-        <ExcelButton/>
+        <ExcelButton @click="downloadExcel"/>
 
         <div style="display: flex; justify-content:right">
           <!-- calendar icon -->
@@ -579,6 +579,38 @@ async function onSearchButtonClick() {
   }
 
   stays.value = await fetchData(params);
+}
+
+const downloadExcel = async () => {
+  try {
+    const response = await api.downloadStayExcel(defaultParams);
+    console.log(response);
+
+    // Get the current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}-${minutes}-${seconds}`;
+    const fileName = `stays_${formattedDate}_${formattedTime}.xlsx`;
+
+    // Create a link to download the file
+    const url = window.URL.createObjectURL(new Blob([response]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (e) {
+    console.error(error);
+  }
 }
 
 // 필터
