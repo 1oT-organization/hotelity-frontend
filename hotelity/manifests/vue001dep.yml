@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: vue-container
-          image: eodud3196/hotelity-frontend:v1.1.4
+          image: eodud3196/hotelity-frontend:v1.2.0
           imagePullPolicy: Always
           ports:
             - containerPort: 80
