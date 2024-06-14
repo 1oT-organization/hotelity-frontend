@@ -212,7 +212,6 @@ defineExpose({
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   padding: 1rem;
-  margin: 1rem;
 }
 .shadow-box {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);

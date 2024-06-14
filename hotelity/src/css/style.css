@@ -99,7 +99,7 @@
 
 @media (min-width: 992px) {
     .sidebar {
-        margin-left: 0;
+        margin: 1rem;
     }
 
     .sidebar.open {
