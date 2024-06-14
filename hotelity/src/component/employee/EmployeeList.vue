@@ -56,8 +56,8 @@
             <div class="btn-group me-2">
               <select id="branchCode" class="form-select" @change="onChangeSelect">
                 <option value="">지점 선택</option>
-                <option value="HQ">HQ</option>
-                <option value="SE">SE</option>
+                <option value="HQ">본사</option>
+                <option value="SE">서울점</option>
               </select>
             </div>
             <div class="btn-group me-2">
