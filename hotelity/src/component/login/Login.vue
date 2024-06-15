@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-          <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+          <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3" style="background: #f7f7f7;">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Hotelity</h3>
               <h3>Sign In</h3>
@@ -66,11 +66,10 @@
               employeeCode: employeeCode.value,
           });
 
-          document.querySelector(".sidebar").classList.remove('open');
           document.querySelector(".content").classList.remove('open');
 
           const redirect = router.currentRoute.value.query.redirect || '/';
-          router.push(redirect);
+          router.replace(redirect);
         } else {
           alert('로그인 실패');
         }
@@ -132,7 +131,7 @@
 <style>
 
   .container-fluid {
-    background-color: #F5EFE6;
+    background-color: #f7f7f7;
   }
 
   .employee-info-fields {

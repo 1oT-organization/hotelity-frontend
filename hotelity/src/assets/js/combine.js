@@ -21,11 +21,11 @@
 //     }
 //   }
 
-$(document).ready(function() {
-    $('#filter-icon').on('click', function() {
-        $('.filter-container').toggle();
-    });
-});
+// $(document).ready(function() {
+//     $('#filter-icon').on('click', function() {
+//         $('.filter-container').toggle();
+//     });
+// });
 
 (function ($) {
     "use strict";

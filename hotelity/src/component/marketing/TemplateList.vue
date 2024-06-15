@@ -1,6 +1,6 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
-import axios from 'axios';
+import {ref, watch, onMounted, computed} from 'vue';
+import {getTemplatePage} from '@/api/apiService.js';
 import router from '@/router/router.js';
 
 function navigateToTemplate(id) {
@@ -19,7 +19,17 @@ const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('templateCodePk'); 
+const orderBy = ref('templateCodePk');
+const maxContentLength = 50;
+
+const templateContentPreview = computed(() => {
+  return templates.value.content.map(template => {
+    if (template.templateContent.length > maxContentLength) {
+      return template.templateContent.substring(0, maxContentLength) + '...';
+    }
+    return template.templateContent;
+  });
+});
 
 const defaultParams = {
   templateCodePk: null,
@@ -36,10 +46,10 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    const response = await axios.get('http://localhost:8888/marketing/templates/page', {params});
+    const response = await getTemplatePage(params);
     console.log('템플릿 리스트 데이터', response.data);
-    totalPages.value = response.data.data.totalPagesCount;
-    return response.data.data;
+    totalPages.value = response.data.totalPagesCount;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -111,9 +121,6 @@ function sort(column) {
 
 onMounted(() => {
   loadTemplates(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
@@ -131,7 +138,7 @@ onMounted(() => {
     <!-- Content Start -->
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
         <h3 class="mb-4">발송 템플릿 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
@@ -172,26 +179,26 @@ onMounted(() => {
               </tr>
               </thead>
               <tbody>
-              <tr v-for="template in templates.content" :key="template.templateCodePk"
+              <tr v-for="(template, index) in templates.content" :key="template.templateCodePk"
                   @click=navigateToTemplate(template.templateCodePk)>
                 <td>{{ template.templateCodePk }}</td>
                 <td>{{ template.templateName }}</td>
-                <td>{{ template.templateContent }}</td>
+                <td>{{ templateContentPreview[index] }}</td>
               </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
+          <div class="pagination modal-2">
+            <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+            <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
                     @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
                     :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
               {{ (pageGroup - 1) * pageSize + page }}
             </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+                class="bi bi-caret-right-fill"></i></button>
           </div>
         </div>
       </div>
@@ -204,16 +211,52 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+
 .pagination {
+  list-style: none;
   display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
   justify-content: center;
-  margin-top: 20px;
+}
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+.pagination button:active {
+  outline: none;
 }
 
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -222,13 +265,14 @@ onMounted(() => {
 
 tr {
   cursor: pointer;
+  vertical-align: middle;
 }
 
 .filter-container {
   position: absolute;
   top: 50px;
-  right: 10px;
-  width: 500px;
+  right: -12px;
+  width: auto;
   padding: 10px;
   background-color: white;
   border-radius: 5px;
@@ -266,7 +310,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>

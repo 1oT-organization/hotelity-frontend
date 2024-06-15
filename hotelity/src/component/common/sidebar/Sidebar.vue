@@ -43,18 +43,6 @@ const navigateToHome = () => {
 onMounted(() => {
   console.log('Sidebar mounted');
 
-  fetchData().then(() => {
-    // isLoading.value = false;
-  });
-
-  function fetchData() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  }
-
   // Clock
   const h1 = document.getElementById("time");
 
@@ -182,13 +170,18 @@ const menu = {
     name: 'marketing',
     subMenu: [
       {
-        text: '발송 내역',
+        text: '캠페인',
         path: '/campaign',
         iconClass: 'emoji bi bi-envelope-fill'
       },
       {
+        text: '캠페인 발송',
+        path: '/campaignSend',
+        iconClass: 'emoji bi bi-envelope-arrow-up-fill'
+      },
+      {
         text: '템플릿',
-        path: '/campaign',
+        path: '/templateList',
         iconClass: 'emoji bi bi-file-earmark-text-fill'
       },
     ]
@@ -213,5 +206,16 @@ defineExpose({
 </script>
 
 <style>
+
+.sidebar {
+  background: #d3dcd6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.shadow-box {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
 
 </style>

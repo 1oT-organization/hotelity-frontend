@@ -1,11 +1,7 @@
 <script setup>
-
 import {useRouter} from 'vue-router';
-
 import {ref, onMounted, reactive} from 'vue';
-// import axios from "axios";
 import * as api from '@/api/apiService.js';
-import {createBranch} from "@/api/apiService.js";
 
 const isLoading = ref(true);
 const branches = ref([]);
@@ -17,9 +13,7 @@ const branchesInfo = {
 
 async function fetchData() {
   try {
-    // const response = await axios.get('http://localhost:8888/hotel-management/branches?pageNum=0');
     const response = await api.getBranches(branchesInfo);
-
     console.log(response);
     return response.data;
   } catch (error) {
@@ -64,7 +58,6 @@ const openModifyModal = (branch) => {
 const modifyBranch = async (branchCodePk) => {
   try {
     console.log('Selected Branch:', selectedBranch.value);
-    // const response = await axios.put(`http://localhost:8888/hotel-management/branches/${branchCodePk}`, selectedBranch.value);
     const response = await api.updateBranch(branchCodePk, selectedBranch.value);
 
     console.log('Response Data:', response);
@@ -78,7 +71,6 @@ const modifyBranch = async (branchCodePk) => {
 const deleteBranch = async (branchCodePk) => {
   if (confirm('해당 지점을 정말 삭제하시겠습니까?')) {
     try {
-      // await axios.delete(`http://localhost:8888/hotel-management/branches/${branchCodePk}`);
       await api.deleteBranch(branchCodePk);
       loadBranch();
     } catch (error) {
@@ -87,27 +79,8 @@ const deleteBranch = async (branchCodePk) => {
   }
 };
 
-onMounted(loadBranch);
-
 onMounted(() => {
-
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
-});
-
-onMounted(() => {
-  fetchData().then(() => {
-    isLoading.value = false;
-  });
-
-  function fetchData() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  }
+  loadBranch();
 });
 
 // 모달 가시성 상태
@@ -129,7 +102,6 @@ const toggleModal = () => {
 // 폼 제출 함수
 const submitForm = async () => {
   try {
-    // const response = await axios.post('http://localhost:8888/hotel-management/branches', formData.value);
     const response = await api.createBranch(formData.value);
     console.log('response.data:', response.data);
     console.log('formData.value:', formData.value);
@@ -139,14 +111,6 @@ const submitForm = async () => {
     console.error('Error registering branch:', error);
   }
 };
-
-const router = useRouter();
-
-$(document).ready(function () {
-  $('#filter-icon').on('click', function () {
-    $('.filter-container').toggle();
-  });
-});
 </script>
 
 <template>
@@ -163,7 +127,7 @@ $(document).ready(function () {
     <!-- Content Start -->
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">지점 리스트</h3>
         <div class="button" style="display: flex; justify-content: right;">
           <button @click="toggleModal" class="btn btn-success me-2">지점 등록</button>
@@ -174,11 +138,11 @@ $(document).ready(function () {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col">지점 코드</th>
+                <th scope="col" style="width: 100px;">지점 코드</th>
                 <th scope="col">지점명</th>
-                <th scope="col">주소</th>
+                <th scope="col" style="width: 500px;">주소</th>
                 <th scope="col">전화번호</th>
-                <th scope="col"></th>
+                <th scope="col" style="width: 120px;"></th>
               </tr>
               </thead>
               <tbody>
@@ -279,24 +243,79 @@ $(document).ready(function () {
   <!-- Content End -->
 </template>
 
-<style>
-.modal {
+<style scoped>
+/*
+.pagination {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+}
+*/
+.pagination {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
   justify-content: center;
 }
 
-.modal-dialog {
-  max-width: 500px;
-  margin: 1.75rem auto;
+.pagination button {
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
   transition: transform 0.5s;
 }
 
+tr {
+  cursor: pointer;
+}
+
 .filter-container {
-  display: none;
   position: absolute;
   top: 50px;
   right: 10px;
@@ -328,4 +347,35 @@ $(document).ready(function () {
 .emoji {
   margin-right: 10px;
 }
+
+.selected {
+  background-color: rgba(255, 170, 0, 0.38);
+  color: black;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
+}
 </style>
+

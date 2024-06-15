@@ -1,8 +1,13 @@
 <script setup>
-import {ref, watch, onMounted} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import router from '@/router/router.js';
+import {useRoute} from "vue-router";
 import * as api from '@/api/apiService.js';
-import {downloadVocExcel} from "@/api/apiService.js";
+
+const route = useRoute();
+const customerCodePk = route.params;
+
+console.log(customerCodePk);
 
 function navigateToVocSelect(id) {
   router.push(`/vocSelect/${id}`);
@@ -19,8 +24,10 @@ const searchValue = ref('');
 const isFilterContainerVisible = ref(false);
 const isDropdownOpen = ref(false);
 const selectedCriteria = ref('');
+const selectedItemName = ref('');
+const selectedFilter = ref('');
 const sortBy = ref(0);  // 0: ascending, 1: descending
-const orderBy = ref('vocCodePk');  // default sorting by customerCodePk
+const orderBy = ref('vocCodePk');  // default sorting by vocCodePk
 
 const defaultParams = {
   vocCodePk: null,
@@ -44,11 +51,15 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/vocs/page', {params});
     const response = await api.getVocs(params);
     console.log(response);
-    totalPages.value = response.data.totalPagesCount;
-    return response.data;
+
+    if (response.status !== 200) {
+      return [];
+    }
+
+    totalPages.value = response.data.data.totalPagesCount;
+    return response.data.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -57,16 +68,26 @@ async function fetchData(params) {
 
 async function downloadExcel() {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/vocs/page/excel/download', {
-    //   params: defaultParams,
-    //   responseType: 'blob'
-    // });
     const response = await api.downloadVocExcel(defaultParams);
+    // Get the current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
 
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}-${minutes}-${seconds}`;
+    const fileName = `voc_${formattedDate}_${formattedTime}.xlsx`;
+
+    // Create a link to download the file
     const url = window.URL.createObjectURL(new Blob([response]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'voc.xlsx');
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -83,56 +104,81 @@ async function loadList() {
   }
 }
 
-async function loadCoupon(page, orderByValue = 'vocCodePk', sortByValue = 0) {
+async function loadVoc(page, orderByValue = 'vocCodePk', sortByValue = 0) {
   try {
-    const data = await fetchData({
+
+    if (customerCodePk.id != null) {
+      defaultParams.customerCodeFk = customerCodePk.id;
+    }
+
+    defaultParams.branchCodeFk = document.getElementById('branchCodeFk').value === '' ?
+        null : document.getElementById('branchCodeFk').value;
+    defaultParams.vocCategory = document.getElementById('vocCategory').value === '' ?
+        null : document.getElementById('vocCategory').value;
+    defaultParams.vocProcessStatus = document.getElementById('vocProcessStatus').value === '' ?
+        null : document.getElementById('vocProcessStatus').value;
+
+    selectedFilter.value = `${defaultParams.branchCodeFk ? defaultParams.branchCodeFk : ''}
+        ${defaultParams.vocCategory ? defaultParams.vocCategory : ''}
+        ${defaultParams.vocProcessStatus ? defaultParams.vocProcessStatus : ''}`;
+
+    vocs.value = await fetchData({
       ...defaultParams,
       orderBy: orderByValue,
       sortBy: sortByValue,
       pageNum: page - 1
     });
-    vocs.value = data;
     isLoading.value = false;
   } catch (error) {
     console.error('Error loading vocs:', error);
+    isLoading.value = false;
+    alert('VOC 리스트를 불러오는 중 오류가 발생했습니다.');
   }
 }
 
 function changePage(page) {
   selectedPage.value = page;
   currentPage.value = page;
+  pageGroup.value = Math.ceil(page / pageSize);
   isLoading.value = true;
-  loadCoupon(page, orderBy.value, sortBy.value);
+  loadVoc(page, orderBy.value, sortBy.value);
 }
+
 
 function nextPageGroup() {
   if (pageGroup.value * pageSize < totalPages.value) {
     pageGroup.value += 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
 function prevPageGroup() {
   if (pageGroup.value > 1) {
     pageGroup.value -= 1;
+    const newPage = (pageGroup.value - 1) * pageSize + 1;
+    changePage(newPage);
   }
 }
 
-function setSearchCriteria(criteria) {
-  // 이전 검색 기준 값 초기화
+function setSearchCriteria(criteria, event) {
   if (selectedCriteria.value) {
     defaultParams[selectedCriteria.value] = null;
   }
 
+  selectedItemName.value = event.target.textContent === '선택' ? '' : event.target.textContent;
   selectedCriteria.value = criteria;
   searchValue.value = ''; // 검색값 초기화
-  isDropdownOpen.value = false;  // 선택 후 드롭다운 닫기
+  isDropdownOpen.value = false; // 선택 후 드롭다운 닫기
 }
 
-function toggleFilterContainer() {
+function toggleFilterContainer(event) {
+  event.stopPropagation();
   isFilterContainerVisible.value = !isFilterContainerVisible.value;
 }
 
-function toggleDropdownMenu() {
+function toggleDropdownMenu(event) {
+  event.stopPropagation();
   isDropdownOpen.value = !isDropdownOpen.value;
 }
 
@@ -143,14 +189,23 @@ function sort(column) {
     orderBy.value = column;
     sortBy.value = 0;
   }
-  loadCoupon(currentPage.value, orderBy.value, sortBy.value);
+  loadVoc(currentPage.value, orderBy.value, sortBy.value);
 }
 
-onMounted(() => {
-  loadCoupon(currentPage.value, orderBy.value, sortBy.value);
+const hideDropdown = () => {
+  if (isDropdownOpen.value === true) {
+    isDropdownOpen.value = false;
+  }
+};
 
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
+const hideFilter = () => {
+  if (isFilterContainerVisible.value === true) {
+    isFilterContainerVisible.value = false;
+  }
+};
+
+onMounted(() => {
+  loadVoc(currentPage.value, orderBy.value, sortBy.value);
 });
 </script>
 
@@ -168,24 +223,31 @@ onMounted(() => {
     <!-- Content Start -->
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">VOC 리스트</h3>
         <div class="search-container d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+            <button class="btn btn-secondary dropdown-toggle ms-2" type="button" id="dropdownMenuButton"
                     @click="toggleDropdownMenu"
                     :class="{ 'btn-primary': isDropdownOpen }"
                     style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
+              <span class="bi bi-search selected-item">{{ selectedItemName }}</span>
             </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('vocCodePk')">VOC 코드</a></li>
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('vocTitle')">VOC 제목</a></li>
+            <ul class="dropdown-menu search-menu" v-click-outside="hideDropdown" :class="{ show: isDropdownOpen }"
+                aria-labelledby="dropdownMenuButton">
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('', $event)">선택</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('vocCodePk', $event)">VOC 코드</div>
+              </li>
+              <li>
+                <div class="dropdown-item" @click="setSearchCriteria('vocTitle', $event)">VOC 제목</div>
+              </li>
             </ul>
           </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
-          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
+          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;" v-model="searchValue">
+          <button class="btn btn-primary ms-2" @click="loadVoc(1, orderBy.value, sortBy.value)">검색</button>
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
@@ -194,19 +256,19 @@ onMounted(() => {
           </div>
           <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
                   @click="toggleFilterContainer">
-            <i class="bi bi-funnel"></i>
+            <span class="bi bi-funnel">{{ selectedFilter }}</span>
           </button>
-          <div class="filter-container" v-show="isFilterContainerVisible">
+          <div class="filter-container" v-click-outside="hideFilter" :class="{show: isFilterContainerVisible}">
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.branchCodeFk">
-                <option :value="null">지점</option>
+              <select id="branchCodeFk" class="form-select">
+                <option value="">지점</option>
                 <option value="HQ">HQ</option>
                 <option value="SE">SE</option>
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.vocCategory">
-                <option v-bind:value="null">카테고리</option>
+              <select id="vocCategory" class="form-select">
+                <option value="">카테고리</option>
                 <option value="객실 문의">객실 문의</option>
                 <option value="시설 문의">시설 문의</option>
                 <option value="비즈니스 문의">비즈니스 문의</option>
@@ -214,13 +276,13 @@ onMounted(() => {
               </select>
             </div>
             <div class="btn-group me-2">
-              <select class="form-select" v-model="defaultParams.vocProcessStatus">
-                <option v-bind:value="null">처리상태</option>
+              <select id="vocProcessStatus" class="form-select">
+                <option value="">처리상태</option>
                 <option value="0">미처리</option>
                 <option value="1">처리</option>
               </select>
             </div>
-            <button class="btn btn-primary" @click="loadCoupon(1, orderBy.value, sortBy.value)">적용</button>
+            <button class="btn btn-primary" @click="loadVoc(1, orderBy.value, sortBy.value)">적용</button>
           </div>
         </div>
         <br>
@@ -229,25 +291,34 @@ onMounted(() => {
             <table class="table table-striped">
               <thead>
               <tr>
-                <th scope="col" @click="sort('vocCodePk')">VOC 코드
-                  <i class="bi bi-caret-up-fill"
-                     :class="{ active: orderBy === 'vocCodePk' && sortBy === 0 }"></i>
-                  <i class="bi bi-caret-down-fill"
-                     :class="{ active: orderBy === 'vocCodePk' && sortBy === 1 }"></i>
+                <th scope="col" @click="sort('vocCodePk')"
+                    :class="{ 'active-asc': orderBy === 'vocCodePk' && sortBy === 0, 'active-desc': orderBy === 'vocCodePk' && sortBy === 1 }"
+                    style="width: 100px;">VOC 코드
                 </th>
-                <th scope="col">VOC 일자</th>
-                <th scope="col">지점 이름</th>
-                <th scope="col">담당 직원</th>
-                <th scope="col">고객 코드</th>
-                <th scope="col">VOC 카테고리</th>
                 <th scope="col">VOC 제목</th>
-                <th scope="col">VOC 처리상태</th>
+                <th scope="col" @click="sort('vocCategory')"
+                    :class="{ 'active-asc': orderBy === 'vocCategory' && sortBy === 0, 'active-desc': orderBy === 'vocCategory' && sortBy === 1 }"
+                    style="width: 110px;">카테고리
+                </th>
+                <th scope="col" style="width: 200px;">VOC 일자</th>
+                <th scope="col" style="width: 80px;">고객 코드</th>
+                <th scope="col" @click="sort('branchCodeFk')"
+                    :class="{ 'active-asc': orderBy === 'branchCodeFk' && sortBy === 0, 'active-desc': orderBy === 'branchCodeFk' && sortBy === 1 }"
+                    style="width: 80px;">지점
+                </th>
+                <th scope="col" style="width: 100px;">답변 직원</th>
+                <th scope="col" @click="sort('vocProcessStatus')"
+                    :class="{ 'active-asc': orderBy === 'vocProcessStatus' && sortBy === 0, 'active-desc': orderBy === 'vocProcessStatus' && sortBy === 1 }"
+                    style="width: 100px;">처리상태
+                </th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="voc in vocs.content" :key="voc.vocCodePk"
+              <tr v-if="vocs.content && vocs.content.length > 0" v-for="voc in vocs.content" :key="voc.vocCodePk"
                   @click=navigateToVocSelect(voc.vocCodePk)>
                 <td>{{ voc.vocCodePk }}</td>
+                <td>{{ voc.vocTitle }}</td>
+                <td>{{ voc.vocCategory }}</td>
                 <td>{{
                     new Date(voc.vocCreatedDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
@@ -261,31 +332,31 @@ onMounted(() => {
                     })
                   }}
                 </td>
-                <td>{{ voc.branchCodeFk }}</td>
-                <td>{{ voc.employeeName }}</td>
                 <td>{{ voc.customerCodeFk }}</td>
-                <td>{{ voc.vocCategory }}</td>
-                <td>{{ voc.vocTitle }}</td>
+                <td>{{ voc.branchCodeFk }}</td>
+                <td>{{ voc.picemployeeName ? voc.picemployeeName : "없음" }}</td>
                 <td>
                   <span v-if="voc.vocProcessStatus === 0">미처리</span>
                   <span v-else-if="voc.vocProcessStatus === 1">처리</span>
                 </td>
-
+              </tr>
+              <tr v-else>
+                <td colspan="8">VOC가 없습니다</td>
               </tr>
               </tbody>
             </table>
           </div>
 
           <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
+          <div class="pagination modal-2">
+            <button @click="prevPageGroup" :disabled="pageGroup === 1"><i class="bi bi-caret-left-fill"></i></button>
+            <button v-for="page in Math.min(pageSize, totalPages - (pageGroup - 1) * pageSize)" :key="page"
                     @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
                     :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
               {{ (pageGroup - 1) * pageSize + page }}
             </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
+            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages"><i
+                class="bi bi-caret-right-fill"></i></button>
           </div>
         </div>
       </div>
@@ -297,16 +368,57 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
+<style scoped>
+
 .pagination {
+  list-style: none;
   display: flex;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
   justify-content: center;
-  margin-top: 20px;
 }
 
 .pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
+  display: inline;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #999;
+  margin-left: -6px;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  background: #fff;
+}
+
+.pagination button.selected {
+  cursor: default;
+  border-color: #909090;
+  background: #b4b4b4;
+  color: #fff;
+}
+
+.pagination button:active {
+  outline: none;
+}
+
+.modal-2 button:first-child {
+  -moz-border-radius: 50px 0 0 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px 0 0 50px;
+}
+
+.modal-2 button:last-child {
+  -moz-border-radius: 0 50px 50px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 50px 50px 0;
+}
+
+.modal-2 button:hover {
+  color: #000000;
+  background-color: #eee;
 }
 
 .dropdown-icon {
@@ -320,13 +432,13 @@ tr {
 .filter-container {
   position: absolute;
   top: 50px;
-  right: 10px;
-  width: 500px;
+  right: -12px;
+  width: auto;
   padding: 10px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
+  display: none;
   gap: 10px;
 }
 
@@ -355,11 +467,41 @@ tr {
   color: black;
 }
 
+.filter-container.show,
 .dropdown-menu.show {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
+}
+
+.search-menu {
+  top: 40px;
+}
+
+.selected-item {
+  margin: 0 8px;
+}
+
+#dropdownMenuButton {
+  width: 130px;
 }
 </style>

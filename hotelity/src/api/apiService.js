@@ -105,7 +105,18 @@ export const getTodayVoc = async () => {
     }
 }
 
-
+/* 사용자 가이드 다운로드 */
+export const downloadTutorial = async () => {
+    try {
+        const response = await apiClient.get('/file/download/tutorial.pdf', {
+            responseType: 'blob', // Important
+        });
+        return response;
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        throw error;
+    }
+};
 
 /* 고객 */
 /* 고객 리스트 */
@@ -137,6 +148,17 @@ export const createCustomer = async (customerInfo) => {
         return response.data;
     } catch (e) {
         console.error('Error creating customer:', e);
+        throw e;
+    }
+}
+
+/* 고객 수정 */
+export const updateCustomer = async (customerId, customerInfo) => {
+    try {
+        const response = await apiClient.put(`/customers/${customerId}`, customerInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error updating customer:', e);
         throw e;
     }
 }
@@ -198,8 +220,7 @@ export const getNations = async () => {
 /* 직원 리스트 */
 export const getEmployees = async (params) => {
     try {
-        const response = await apiClient.get('/employees/page', {params});
-        return response.data;
+        return await apiClient.get('/employees/page', {params});
     } catch (e) {
         console.error('Error fetching employees:', e);
         throw e;
@@ -295,10 +316,21 @@ export const deleteEmployeeImage = async (employeeId) => {
 /* 부대시설 리스트 */
 export const getFacilities = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-management/facilities', {params});
-        return response.data;
+        return await apiClient.get('/hotel-management/facilities', {params});
     } catch (e) {
         console.error('Error fetching facilities:', e);
+        throw e;
+    }
+}
+
+/* 부대시설 상세 */
+
+export const getAncillary = async (AncillaryId) => {
+    try {
+        const response = await apiClient.get(`/hotel-management/facilities/${AncillaryId}`);
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching ancillary:', e);
         throw e;
     }
 }
@@ -397,8 +429,7 @@ export const deleteBranch = async (branchId) => {
 /* 객실 리스트 */
 export const getRooms = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-management/rooms', {params});
-        return response.data;
+        return await apiClient.get('/hotel-management/rooms', {params});
     } catch (e) {
         console.error('Error fetching rooms:', e);
         throw e;
@@ -458,8 +489,7 @@ export const downloadRoomExcel = async (params) => {
 /* 결제 내역 리스트 */
 export const getPayments = async (params) => {
     try {
-        const response = await apiClient.get('/hotel-service/payments/page', {params});
-        return response.data;
+        return await apiClient.get('/hotel-service/payments/page', {params});
     } catch (e) {
         console.error('Error fetching payments:', e);
         throw e;
@@ -608,6 +638,7 @@ export const checkout = async (stayId) => {
 export const updateStay = async (stayId, stayInfo) => {
     try {
         const response = await apiClient.put(`/hotel-service/stays/${stayId}`, stayInfo);
+        console.log(response.data)
         return response.data;
     } catch (e) {
         console.error('Error updating stay:', e);
@@ -643,11 +674,20 @@ export const downloadStayExcel = async (params) => {
 
 
 /* 마케팅 */
+/* 캠페인 발송 */
+export const sendCampaign = async (campaignInfo) => {
+    try {
+        return await apiClient.post('/mail/level', campaignInfo);
+    } catch (e) {
+        console.error('Error sending campaign:', e);
+        throw e;
+    }
+}
+
 /* 캠페인 발송 리스트 */
 export const getCampaigns = async (params) => {
     try {
-        const response = await apiClient.get('/marketing/campaigns/search/page', {params});
-        return response.data;
+        return await apiClient.get('/marketing/campaigns/search/page', {params});
     } catch (e) {
         console.error('Error fetching campaigns:', e);
         throw e;
@@ -666,9 +706,19 @@ export const getCampaign = async (campaignId) => {
 }
 
 /* 템플릿 리스트 */
-export const getTemplates = async (params) => {
+export const getTemplatePage = async (params) => {
     try {
         const response = await apiClient.get('/marketing/templates/page', {params});
+        return response.data;
+    } catch (e) {
+        console.error('Error fetching templates:', e);
+        throw e;
+    }
+}
+
+export const getTemplates = async () => {
+    try {
+        const response = await apiClient.get('/marketing/templates');
         return response.data;
     } catch (e) {
         console.error('Error fetching templates:', e);
@@ -702,8 +752,7 @@ export const createTemplate = async (templateInfo) => {
 /* 쿠폰 리스트 */
 export const getCoupons = async (params) => {
     try {
-        const response = await apiClient.get('/sales/coupons/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/coupons/page', {params});
     } catch (e) {
         console.error('Error fetching coupons:', e);
         throw e;
@@ -796,8 +845,7 @@ export const getMemberships = async (params) => {
 /* 공지사항 리스트 */
 export const getNotices = async (params) => {
     try {
-        const response = await apiClient.get('/sales/notices/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/notices/page', {params});
     } catch (e) {
         console.error('Error fetching notices:', e);
         throw e;
@@ -864,8 +912,7 @@ export const deleteNotice = async (noticeId) => {
 /* VOC 리스트 */
 export const getVocs = async (params) => {
     try {
-        const response = await apiClient.get('/sales/vocs/page', {params});
-        return response.data;
+        return await apiClient.get('/sales/vocs/page', {params});
     } catch (e) {
         console.error('Error fetching vocs:', e);
         throw e;
@@ -890,6 +937,18 @@ export const getVoc = async (vocId) => {
         return response.data;
     } catch (e) {
         console.error('Error fetching voc:', e);
+        throw e;
+    }
+}
+
+/* VOC 수정 */
+export const replyVoc = async (vocId, vocInfo) => {
+    try {
+        console.log('vocInfo:', vocInfo);
+        const response = await apiClient.put(`/sales/vocs/${vocId}`, vocInfo);
+        return response.data;
+    } catch (e) {
+        console.error('Error updating employee:', e);
         throw e;
     }
 }

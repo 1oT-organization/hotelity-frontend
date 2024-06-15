@@ -1,8 +1,8 @@
 <script setup>
 
-import {useRouter, useRoute} from 'vue-router';
-import {ref, onMounted} from 'vue';
-import axios from "axios";
+import {useRoute, useRouter} from 'vue-router';
+import {onMounted, ref} from 'vue';
+import {getTemplate} from '@/api/apiService.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,13 +20,11 @@ const form = ref({
 onMounted(async () => {
 
   try {
-    const response = await axios.get(`http://localhost:8888/marketing/templates/${templateCodePk}/template`);
-    // template.value = response.data.data.content;
-    console.log('response: ', response);
-    template.value = response.data;
-    console.log('template.value: ', template.value)
+    template.value = await getTemplate(templateCodePk);
   } catch (error) {
-    console.error('이거 에러겠지?', error);
+    console.error('Error fetching template:', error);
+  } finally {
+    isLoading.value = false;
   }
 });
 
@@ -47,12 +45,11 @@ onMounted(async () => {
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4"  style="background: #f7f7f7;">
         <h3 class="mb-4">템플릿 정보</h3>
         <div class="form-submit">
           <form @submit.prevent="handleSubmit">
-            <!-- 등록 버튼 누를 시 고객 데이터 저장 -->
-            <button type="submit" class="btn-submit">등록</button>
+            <button type="submit" class="btn-submit">수정</button>
             <br/><br/>
           </form>
         </div>
@@ -65,12 +62,12 @@ onMounted(async () => {
           <div class="template-container" v-if="template">
 
           <div class="form-group">
-            <label for="templateName">템플릿 제목 : </label>
-            <span>{{ template.templateName }}</span>
+            <label for="templateName">템플릿 제목 :&nbsp;&nbsp;</label>
+            <span> {{ template.templateName }}</span>
           </div>
           <div class="form-group">
-            <label for="templateContent">템플릿 내용 : </label><br>
-            <span>{{ template.templateContent }}</span>
+            <label for="templateContent">템플릿 내용 : </label><br><br>
+            <pre style="font-weight: bold;">{{ template.templateContent }}</pre>
           </div>
           </div>
         </form>

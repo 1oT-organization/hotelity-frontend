@@ -5,7 +5,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import * as api from '@/api/apiService.js';
 
 const props = defineProps({
   checkedRows: Array,
@@ -25,7 +25,7 @@ const checkout = async () => {
     if (props.checkedRows[i]) {
       const stayCodePk = props.stays[i].stayCodePk;
       try {
-        await axios.put(`http://localhost:8888/hotel-service/stays/${stayCodePk}/checkout`);
+        await api.checkout(stayCodePk);
         showPopup.value = true;
         popupMessage.value = '체크아웃 되었습니다';
         setTimeout(() => {

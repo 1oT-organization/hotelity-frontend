@@ -10,13 +10,13 @@ import CustomerList from '@/component/customer/CustomerList.vue';
 
 import EmployeeList from '@/component/employee/EmployeeList.vue';
 import EmployeeInfo from '@/component/employee/EmployeeInfo.vue';
-import EmployeeStay from "@/component/employee/EmployeeStay.vue";
 
 import BranchList from '@/component/hotel-management/BranchList.vue';
 import BranchInfo from '@/component/hotel-management/BranchInfo.vue';
 import RoomList from "@/component/hotel-management/RoomList.vue";
 import RoomDetails from "@/component/hotel-management/RoomDetails.vue";
 import Ancillary from "@/component/hotel-management/Ancillary.vue";
+import AncillaryDetails from "@/component/hotel-management/AncillaryDetails.vue";
 
 import ReservationList from "@/component/hotel-service/reservation/ReservationList.vue";
 import StayList from "@/component/hotel-service/stay/StayList.vue";
@@ -25,6 +25,7 @@ import PaymentList from "@/component/hotel-service/payment/PaymentList.vue";
 import Voc from "@/component/sales/Voc.vue";
 import Notice from "@/component/sales/Notice.vue";
 import NoticeInfo from "@/component/sales/NoticeInfo.vue";
+import NoticeInit from "@/component/sales/NoticeInit.vue";
 import Membership from "@/component/sales/Membership.vue";
 import Coupon from "@/component/sales/Coupon.vue";
 import CouponIssue from "@/component/sales/CouponIssue.vue";
@@ -44,7 +45,9 @@ const routes = [
         name: 'Login',
         component: Login,
         meta: {
-            hideNavbar: true
+            hideSidebar: true,
+            hideNavbar: true,
+            hideFooter: true
         }
     },
 
@@ -107,15 +110,6 @@ const routes = [
             category: 'employee',
         },
     },
-    {
-        path: '/employeeStay/:id',
-        name: 'EmployeeStay',
-        component: EmployeeStay,
-        meta: {
-            requiresAuth: true,
-            category: 'employee',
-        },
-    },
 
     /* 호텔관리 */
     {
@@ -150,7 +144,9 @@ const routes = [
         name: 'RoomDetails',
         component: RoomDetails,
         meta: {
+            hideSidebar: true,
             hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
@@ -160,6 +156,18 @@ const routes = [
         name: 'FacilityList',
         component: Ancillary,
         meta: {
+            requiresAuth: true,
+            category: 'hotelManagement',
+        },
+    },
+    {
+        path: '/ancillaryDetails/:id',
+        name: 'ancillaryDetails',
+        component: AncillaryDetails,
+        meta: {
+            hideSidebar: true,
+            hideNavbar: true,
+            hideFooter: true,
             requiresAuth: true,
             category: 'hotelManagement',
         },
@@ -188,6 +196,15 @@ const routes = [
     {
         path: '/paymentList',
         name: 'PaymentList',
+        component: PaymentList,
+        meta: {
+            requiresAuth: true,
+            category: 'hotelService',
+        },
+    },
+    {
+        path: '/paymentList/:id',
+        name: 'PaymentListWithId',
         component: PaymentList,
         meta: {
             requiresAuth: true,
@@ -253,10 +270,31 @@ const routes = [
         },
     },
     {
+        path: '/voc/:id',
+        name: 'VocListWithId',
+        component: Voc,
+        meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
         path: '/notice',
         name: 'Notice',
         component: Notice,
         meta: {
+            requiresAuth: true,
+            category: 'sales',
+        },
+    },
+    {
+        path: '/notice/noticeInit',
+        name: 'NoticeInit',
+        component: NoticeInit,
+        meta: {
+            hideFooter: true,
+            hideSidebar: true,
+            hideNavbar: true,
             requiresAuth: true,
             category: 'sales',
         },

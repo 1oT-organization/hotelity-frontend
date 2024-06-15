@@ -1,6 +1,5 @@
 <script setup>
 import {ref, watch, onMounted} from 'vue';
-// import axios from 'axios';
 import router from '@/router/router.js';
 import * as api from '@/api/apiService.js'
 import {getMemberships} from "@/api/apiService.js";
@@ -35,7 +34,6 @@ watch(searchValue, (newValue) => {
 
 async function fetchData(params) {
   try {
-    // const response = await axios.get('http://localhost:8888/sales/membership', {params});
     const response = await api.getMemberships(params);
     console.log(response);
     totalPages.value = response.data.totalPagesCount;
@@ -110,9 +108,6 @@ function sort(column) {
 
 onMounted(() => {
   loadCoupon(currentPage.value, orderBy.value, sortBy.value);
-
-  // Bootstrap 드롭다운 초기화
-  new bootstrap.Dropdown(document.getElementById('dropdownMenuButton'));
 });
 </script>
 
@@ -129,33 +124,33 @@ onMounted(() => {
 
     <!-- Table Start -->
     <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
+      <div class="bg-secondary rounded-top p-4" style="background: #f7f7f7;">
         <h3 class="mb-4">멤버십</h3>
         <div class="search-container d-flex align-items-center">
-          <div class="btn-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    @click="toggleDropdownMenu"
-                    :class="{ 'btn-primary': isDropdownOpen }"
-                    style="background-color: saddlebrown;">
-              <i class="bi bi-search"></i>
-            </button>
-            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('membershipLevelCodePk')">멤버십 코드</a></li>
-            </ul>
-          </div>
-          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"
-                 v-model="searchValue">
-          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>
+<!--          <div class="btn-group">-->
+<!--            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"-->
+<!--                    @click="toggleDropdownMenu"-->
+<!--                    :class="{ 'btn-primary': isDropdownOpen }"-->
+<!--                    style="background-color: saddlebrown;">-->
+<!--              <i class="bi bi-search"></i>-->
+<!--            </button>-->
+<!--            <ul class="dropdown-menu" :class="{ show: isDropdownOpen }" aria-labelledby="dropdownMenuButton">-->
+<!--              <li><a class="dropdown-item" href="#" @click="setSearchCriteria('membershipLevelCodePk')">멤버십 코드</a></li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <input type="text" class="form-control ms-2" placeholder="Search" style="width: 200px;"-->
+<!--                 v-model="searchValue">-->
+<!--          <button class="btn btn-primary ms-2" @click="loadCoupon(1, orderBy.value, sortBy.value)">검색</button>-->
         </div>
         <div class="position-relative-container mt-3">
           <div class="excel button" style="display: flex;justify-content:left">
             <!--              <button id="download-icon" class="btn btn-success me-2" @click="loadList">Excel <i-->
             <!--                  class="bi bi-download"></i></button>-->
           </div>
-          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"
-                  @click="toggleFilterContainer">
-            <i class="bi bi-funnel"></i>
-          </button>
+<!--          <button id="filter-icon" class="btn btn-secondary" style="background-color: saddlebrown;"-->
+<!--                  @click="toggleFilterContainer">-->
+<!--            <i class="bi bi-funnel"></i>-->
+<!--          </button>-->
           <div class="filter-container" v-show="isFilterContainerVisible">
             <div class="btn-group me-2">
               <select class="form-select" v-model="defaultParams.membershipCriteriaAmount">
@@ -203,17 +198,7 @@ onMounted(() => {
             </table>
           </div>
 
-          <!-- 페이징 컨트롤 -->
-          <div class="pagination">
-            <button @click="prevPageGroup" :disabled="pageGroup === 1">Prev</button>
-            <button v-for="page in pageSize" :key="page"
-                    @click="changePage((pageGroup - 1) * pageSize + page)"
-                    :disabled="(pageGroup - 1) * pageSize + page > totalPages"
-                    :class="{ 'selected': (pageGroup - 1) * pageSize + page === selectedPage }">
-              {{ (pageGroup - 1) * pageSize + page }}
-            </button>
-            <button @click="nextPageGroup" :disabled="pageGroup * pageSize >= totalPages">Next</button>
-          </div>
+         
         </div>
       </div>
     </div>
@@ -224,17 +209,7 @@ onMounted(() => {
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </template>
 
-<style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-}
+<style scoped>
 
 .dropdown-icon {
   transition: transform 0.5s;
@@ -247,8 +222,8 @@ tr {
 .filter-container {
   position: absolute;
   top: 50px;
-  right: 10px;
-  width: 500px;
+  right: -12px;
+  width: auto;
   padding: 10px;
   background-color: white;
   border-radius: 5px;
@@ -286,7 +261,24 @@ tr {
   display: block;
 }
 
-.bi-caret-up-fill, .bi-caret-down-fill {
-  visibility: visible;
+.active-asc {
+  color: green;
+  font-weight: bold;
+}
+
+.active-desc {
+  color: red;
+  font-weight: bold;
+}
+
+table.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.table th, table.table td {
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
+  text-align: center; /* Add this line to center text */
 }
 </style>
